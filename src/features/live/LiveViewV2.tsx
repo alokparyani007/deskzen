@@ -44,7 +44,7 @@ export function LiveViewV2() {
   if (!model.live && camera.status !== 'paused') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-stage p-6">
-        <div className="rounded-3xl bg-white">
+        <div className="rounded-3xl border border-white/10 bg-[#0f261d] text-white shadow-2xl">
           <PrivacyCard status={camera.status} errorName={camera.errorName} onStart={() => void camera.start()} onLeave={() => navigate('/app')} />
         </div>
       </div>

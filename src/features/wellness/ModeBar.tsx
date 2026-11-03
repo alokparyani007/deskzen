@@ -16,22 +16,22 @@ export function ModeBar() {
   return (
     <div className="flex flex-wrap items-center gap-2 px-4 pt-3 lg:px-8">
       {features.standingSection ? (
-        <div className="inline-flex items-center gap-1 rounded-full bg-surface p-1 text-sm" role="group" aria-label="Posture mode">
+        <div className="inline-flex items-center gap-1 rounded-full bg-white/10 p-1 text-sm" role="group" aria-label="Posture mode">
           <ModeButton label="Sitting" on={session.posture === 'sitting'} onClick={() => session.choosePosture('sitting')} />
           <ModeButton label="Standing" on={standing} onClick={() => session.choosePosture('standing')} />
           {session.settings.workStyle === 'mixed' ? (
-            <button type="button" className="rounded-full px-2 py-1 text-xs font-semibold text-ink-muted" onClick={session.followPosture}>
+            <button type="button" className="rounded-full px-2 py-1 text-xs font-semibold text-white/60" onClick={session.followPosture}>
               {session.postureManual ? 'Manual' : 'Auto'}
             </button>
           ) : null}
         </div>
       ) : null}
       {session.settings.intervalsOn && features.intervalSection ? (
-        <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm text-ink shadow-sm">
+        <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white">
           <Ring turn={turn} />
           <span>
             {standing ? 'Standing' : wellness.interval.phase === 'move' ? 'Move' : 'Sitting'}
-            <span className="text-ink-muted"> · {wellness.interval.due ? 'time to switch' : `${minutes} min left`}</span>
+            <span className="text-white/60"> · {wellness.interval.due ? 'time to switch' : `${minutes} min left`}</span>
           </span>
         </p>
       ) : null}
@@ -43,7 +43,7 @@ function ModeButton({ label, on, onClick }: { label: string; on: boolean; onClic
   return (
     <button
       type="button"
-      className={`rounded-full px-3 py-1 font-semibold ${on ? 'bg-brand text-white' : 'text-ink-muted'}`}
+      className={`rounded-full px-3 py-1 font-semibold ${on ? 'bg-print text-white' : 'text-white/70'}`}
       aria-pressed={on}
       onClick={onClick}
     >

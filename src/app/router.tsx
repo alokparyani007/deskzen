@@ -1,14 +1,12 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom';
 import { AppShell } from './AppShell';
 import { AuthGate } from './AuthGate';
 import { OnboardingGate } from './OnboardingGate';
-import { CalibratePage } from '../features/calibrate/CalibratePage';
 import { ZenFlowV2 } from '../features/zen2/ZenFlowV2';
 import { LiveViewV2 } from '../features/live/LiveViewV2';
 import { DebugPage } from '../features/debug/DebugPage';
 import { EyeBreakPage } from '../features/home/EyeBreakPage';
 import { HomePage } from '../features/home/HomePage';
-import { LiveViewPage } from '../features/live/LiveViewPage';
 import { NeckCheckPage } from '../features/neck/NeckCheckPage';
 import { PrivacyPage } from '../features/privacy/PrivacyPage';
 import { LoginPage } from '../features/site/LoginPage';
@@ -21,6 +19,18 @@ import { SpotFixPage } from '../features/spotcheck/SpotFixPage';
 import { BreakPlayerPage } from '../features/stretches/BreakPlayerPage';
 import { StretchDetailPage } from '../features/stretches/StretchDetailPage';
 import { StretchLibraryPage } from '../features/stretches/StretchLibraryPage';
+
+/** Old Welcome, Calibrate, and legacy Set my Zen links open the new Set my Zen. Keeps ?pose= and ?from=. */
+function ToZen() {
+  const params = new URLSearchParams(useLocation().search);
+  const keep = new URLSearchParams();
+  const pose = params.get('pose');
+  const from = params.get('from');
+  if (pose === 'sit' || pose === 'stand') keep.set('pose', pose);
+  if (from) keep.set('from', from);
+  const query = keep.toString();
+  return <Navigate to={query ? `/set-my-zen?${query}` : '/set-my-zen'} replace />;
+}
 
 export const router = createBrowserRouter([
   // Public website: marketing home, sign-in, and draft legal pages.
@@ -41,16 +51,17 @@ export const router = createBrowserRouter([
               { path: '/app', element: <HomePage /> },
               { path: '/eye', element: <EyeBreakPage /> },
               { path: '/live', element: <LiveViewV2 /> },
-              { path: '/live-legacy', element: <LiveViewPage /> },
+              { path: '/live-legacy', element: <Navigate to="/live" replace /> },
               { path: '/progress', element: <ProgressPage /> },
               { path: '/reminders', element: <RemindersPage /> },
               { path: '/settings', element: <SettingsPage /> },
               { path: '/spot-fix', element: <SpotFixPage /> },
               { path: '/app/privacy', element: <PrivacyPage /> },
-              { path: '/calibrate', element: <Navigate to="/set-my-zen" replace /> },
+              { path: '/calibrate', element: <ToZen /> },
+              { path: '/calibrate/*', element: <ToZen /> },
               { path: '/set-my-zen', element: <ZenFlowV2 /> },
-              { path: '/set-my-zen-legacy', element: <CalibratePage /> },
-              { path: '/welcome', element: <Navigate to="/set-my-zen" replace /> },
+              { path: '/set-my-zen-legacy', element: <ToZen /> },
+              { path: '/welcome', element: <ToZen /> },
               { path: '/break', element: <BreakPlayerPage /> },
               { path: '/stretches', element: <StretchLibraryPage /> },
               { path: '/stretches/:id', element: <StretchDetailPage /> },

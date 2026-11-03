@@ -25,7 +25,7 @@ export function GlowHomeCard() {
               Set my Zen
             </Link>
             {due ? (
-              <Link to={`/calibrate?pose=${pose}&check=1`} className="rounded-xl bg-surface px-4 py-2.5 text-sm font-semibold text-ink">
+              <Link to={`/set-my-zen?pose=${pose}`} className="rounded-xl bg-surface px-4 py-2.5 text-sm font-semibold text-ink">
                 Quick Glow check
               </Link>
             ) : null}

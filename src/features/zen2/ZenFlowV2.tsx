@@ -3,7 +3,9 @@ import { Shield } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { useLandmarks } from '../../hooks/useLandmarks';
-import type { Landmarks, NormPoint } from '../../lib/posture/types';
+import type { Baseline, Landmarks, NormPoint } from '../../lib/posture/types';
+import { computeBaseline } from '../../lib/posture/baseline';
+import { postureConfig } from '../../lib/posture/config';
 import { loadVisionSession } from '../../lib/vision/session';
 import { readPersonMaskFrom } from '../../lib/vision/segment';
 import { readMulticlassPersonMask } from '../../lib/vision/multiclass';
@@ -85,7 +87,7 @@ export function ZenFlowV2() {
   const debugOn = params.get('debug') === '1';
   const backTo = printReturnPath(params.get('from'));
   const camera = useCamera();
-  const { activeProfileId } = useBaseline();
+  const { activeProfileId, save: saveSitBaseline, saveStanding: saveStandBaseline } = useBaseline();
   const live = camera.status === 'live';
   const [step, setStep] = useState<Step>('snap');
   const { landmarks, wallMs } = useLandmarks(camera.videoElement, live && step !== 'outline');
@@ -108,6 +110,7 @@ export function ZenFlowV2() {
   const holdRef = useRef(initialHold());
   const emaRef = useRef<number | null>(null);
   const goodRef = useRef<PoseBaseline[]>([]);
+  const goodFramesRef = useRef<Landmarks[]>([]);
   const locking = useRef(false);
   const stage = useStageBox();
   voiceRef.current = voice;
@@ -252,7 +255,10 @@ export function ZenFlowV2() {
     holdRef.current = ring;
     setHoldFraction(ring.fraction);
     const sample = baselineFromMeasures(measures);
-    if (sample && smoothed !== null && smoothed >= zenConfig.fitGood) goodRef.current = [...goodRef.current, sample].slice(-40);
+    if (sample && smoothed !== null && smoothed >= zenConfig.fitGood) {
+      goodRef.current = [...goodRef.current, sample].slice(-40);
+      goodFramesRef.current = [...goodFramesRef.current, landmarks].slice(-40);
+    }
     if (ring.done) void finishRef.current(smoothed);
   }, [landmarks, mode, outlineLive.points, step]);
 
@@ -276,6 +282,14 @@ export function ZenFlowV2() {
     if (!pictureIsGone(shotRef.current?.capture ?? null)) wipe();
     try {
       await saveZenPrint({ zen, frame: current.frame, deskProfileId: activeProfileId, deviceLabel: cameraLabel(camera.devices, camera.deviceId) });
+      const numbers = legacyBaseline(goodFramesRef.current, current.frame);
+      if (numbers) {
+        try {
+          await (mode === 'stand' ? saveStandBaseline({ ...numbers, pose: 'stand' }) : saveSitBaseline({ ...numbers, pose: 'sit' }));
+        } catch {
+          // The Zen print is saved. Spot checks pick up the numbers on the next Set my Zen.
+        }
+      }
       setSaved(zen);
       setStep('done');
       playLockIn();
@@ -332,7 +346,7 @@ export function ZenFlowV2() {
   if (!live && camera.status !== 'paused') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-stage p-6">
-        <div className="rounded-3xl bg-white">
+        <div className="rounded-3xl border border-white/10 bg-[#0f261d] text-white shadow-2xl">
           <PrivacyCard status={camera.status} errorName={camera.errorName} onStart={() => void camera.start()} onLeave={() => navigate(backTo)} />
         </div>
       </div>
@@ -375,6 +389,7 @@ export function ZenFlowV2() {
     draftRef.current = next;
     setDraft(next);
     goodRef.current = [];
+    goodFramesRef.current = [];
     holdRef.current = initialHold();
     emaRef.current = null;
     locking.current = false;
@@ -607,4 +622,16 @@ function snapBadges(shot: { rules: RuleResult[]; reason: OutlineReason }, mode: 
     { label: mode === 'stand' ? 'Standing tall' : 'Sitting tall', pass: passed(shot.rules, ['R10', 'R11']) },
     { label: 'Good distance', pass: shot.reason !== 'shoulder-cut' && passed(shot.rules, ['R12', 'R12b', 'R12c']) },
   ];
+}
+
+/**
+ * Spot checks, posture nudges, Home and Settings read the numeric baseline (numbers only, no picture),
+ * so Set my Zen saves one beside the Zen print. Live frames from the fit step first; the snapshot
+ * landmarks are the fallback.
+ */
+function legacyBaseline(frames: readonly Landmarks[], still: Landmarks): Baseline | null {
+  const live = computeBaseline([...frames]);
+  if (live.ok) return live.baseline;
+  const fromStill = computeBaseline(Array.from({ length: postureConfig.calibration.minSamples }, () => still));
+  return fromStill.ok ? fromStill.baseline : null;
 }

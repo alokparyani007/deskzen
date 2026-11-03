@@ -1,23 +1,9 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { cameraWasSkipped } from '../lib/storage/local-data';
-import { calibrationNeeded } from '../lib/settings/visibility';
-import { useBaseline } from '../features/posture/baseline-context';
-import { useSession } from '../features/session/session-context';
+import { Outlet } from 'react-router-dom';
 
+/**
+ * Every signed-in person lands on the dark Home dashboard. Without a Posture Print, Home,
+ * the sidebar and the camera card point to Set my Zen (/set-my-zen) instead of redirecting.
+ */
 export function OnboardingGate() {
-  const location = useLocation();
-  const { baseline, standing, ready } = useBaseline();
-  const { settings } = useSession();
-  const needed = calibrationNeeded(settings.workStyle, baseline !== null, standing !== null);
-
-  if (
-    ready &&
-    needed &&
-    !cameraWasSkipped() &&
-    location.pathname === '/app'
-  ) {
-    return <Navigate to={`/set-my-zen?pose=${needed}`} replace />;
-  }
-
   return <Outlet />;
 }

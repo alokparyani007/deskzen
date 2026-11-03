@@ -64,16 +64,16 @@ export function SessionChrome() {
         </p>
       ) : null}
       {!quietPage && !cameraPage && session.spotCountdown !== null && !session.spotChecking ? (
-        <p className="pointer-events-auto rounded-full bg-white px-4 py-2 text-center text-sm font-semibold text-ink shadow-lg" role="status">
+        <p className="pointer-events-auto rounded-full border border-white/10 bg-[#0f261d] px-4 py-2 text-center text-sm font-semibold text-white shadow-lg" role="status">
           Posture check in {session.spotCountdown}...{' '}
-          <button type="button" className="font-semibold text-brand" onClick={session.skipSpot}>
+          <button type="button" className="font-semibold text-outline" onClick={session.skipSpot}>
             Skip
           </button>
         </p>
       ) : null}
       {session.spotDenied ? (
-        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-white p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">The camera permission is off.</p>
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">The camera permission is off.</p>
           <button type="button" className="mt-3 rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white" onClick={session.reenableCamera}>
             Re-enable camera
           </button>
@@ -88,16 +88,16 @@ export function SessionChrome() {
         </p>
       ) : null}
       {!quietPage && session.spotFixCopy ? (
-        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-glow-tint p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">{session.spotFixCopy}</p>
+        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">{session.spotFixCopy}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link to={`/spot-fix?issue=${session.spotFixIssue ?? 'lean'}`} className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white">
               Guide me
             </Link>
-            <button type="button" className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-ink" onClick={session.snoozeSpot}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.snoozeSpot}>
               Snooze checks 1 hr
             </button>
-            <button type="button" className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-ink" onClick={session.dismissSpotFix}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.dismissSpotFix}>
               Not now
             </button>
           </div>
@@ -105,8 +105,8 @@ export function SessionChrome() {
       ) : null}
       {!quietPage && session.spotStretchId && !isZenPath(location.pathname) ? <StretchHint id={session.spotStretchId} onDismiss={session.dismissSpotStretch} /> : null}
       {!quietPage && session.switchToast && !isZenPath(location.pathname) ? (
-        <article className="pointer-events-auto rounded-2xl border border-brand/20 bg-white p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">
             {session.switchToast === 'standing' && !standing
               ? 'Set my Zen - standing'
               : session.switchToast === 'standing'
@@ -115,22 +115,22 @@ export function SessionChrome() {
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {session.switchToast === 'standing' && !standing ? (
-              <Link to="/calibrate?pose=stand" className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white">
+              <Link to="/set-my-zen?pose=stand" className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white">
                 Set my Zen - standing
               </Link>
             ) : null}
-            <button type="button" className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold text-ink" onClick={session.undoSwitch}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.undoSwitch}>
               {session.switchToast === 'standing' ? "Actually I'm sitting" : "Actually I'm standing"}
             </button>
-            <button type="button" className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-ink" onClick={session.dismissSwitch}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.dismissSwitch}>
               Dismiss
             </button>
           </div>
         </article>
       ) : null}
       {!quietPage && session.suggestStand && !isZenPath(location.pathname) ? (
-        <article className="pointer-events-auto rounded-2xl border border-sky-brand/40 bg-white p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">Looks like you&apos;re standing. Switch to Sit and stand?</p>
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">Looks like you&apos;re standing. Switch to Sit and stand?</p>
           <div className="mt-3 flex gap-2">
             <button
               type="button"
@@ -142,67 +142,67 @@ export function SessionChrome() {
             >
               Switch
             </button>
-            <button type="button" className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold text-ink" onClick={session.dismissStandSuggest}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.dismissStandSuggest}>
               Not now
             </button>
           </div>
         </article>
       ) : null}
       {!quietPage && session.glowAsk && !isZenPath(location.pathname) ? (
-        <article className="pointer-events-auto rounded-2xl border border-brand/20 bg-white p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">You looked great just now. Use this as your Glow?</p>
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">You looked great just now. Use this as your Glow?</p>
           <div className="mt-3 flex gap-2">
             <button type="button" className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white" onClick={session.acceptGlow}>
               Yes
             </button>
-            <button type="button" className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold text-ink" onClick={session.dismissGlowOffer}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.dismissGlowOffer}>
               Not now
             </button>
           </div>
         </article>
       ) : null}
       {!quietPage && session.strictAsk && !isZenPath(location.pathname) ? (
-        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-white p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">Feels too strict? Let&apos;s tune it to you (15 sec)</p>
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">Feels too strict? Let&apos;s tune it to you (15 sec)</p>
           <div className="mt-3 flex gap-2">
-            <Link to="/calibrate?tune=1" className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white" onClick={session.dismissStrict}>
+            <Link to="/set-my-zen" className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white" onClick={session.dismissStrict}>
               Tune it
             </Link>
-            <button type="button" className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold text-ink" onClick={session.dismissStrict}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.dismissStrict}>
               Not now
             </button>
           </div>
         </article>
       ) : null}
       {!quietPage && session.setupAsk && !isZenPath(location.pathname) ? (
-        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-white p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">Looks like your setup changed. Quick 10 second recheck?</p>
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">Looks like your setup changed. Quick 10 second recheck?</p>
           <div className="mt-3 flex gap-2">
             <Link
-              to={session.posture === 'standing' ? '/calibrate?pose=stand&recheck=1' : '/calibrate?pose=sit&recheck=1'}
+              to={session.posture === 'standing' ? '/set-my-zen?pose=stand' : '/set-my-zen?pose=sit'}
               className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white"
             >
               Recheck
             </Link>
-            <button type="button" className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold text-ink" onClick={session.dismissSetup}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.dismissSetup}>
               Not now
             </button>
           </div>
         </article>
       ) : null}
       {fixedGlow ? (
-        <article className="pointer-events-auto rounded-2xl border border-brand/20 bg-white p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">Quick Glow check. Hold still for 3 seconds.</p>
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">Quick Glow check. Hold still for 3 seconds.</p>
           <div className="mt-3 flex gap-2">
             <Link
-              to={session.posture === 'standing' ? '/calibrate?pose=stand&check=1' : '/calibrate?pose=sit&check=1'}
+              to={session.posture === 'standing' ? '/set-my-zen?pose=stand' : '/set-my-zen?pose=sit'}
               className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white"
             >
               Start
             </Link>
             <button
               type="button"
-              className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold text-ink"
+              className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15"
               onClick={() => {
                 saveGlowCheckDay(today);
                 setCheckDay(today);
@@ -223,49 +223,49 @@ export function SessionChrome() {
         </p>
       ) : null}
       {!quietPage && !quiet && session.posture === 'standing' && session.score?.cue ? (
-        <p className="pointer-events-auto rounded-2xl border border-glow/40 bg-glow-tint px-4 py-3 text-sm font-semibold text-ink shadow-lg" role="status">
+        <p className="pointer-events-auto rounded-2xl border border-glow/40 bg-[#0f261d] px-4 py-3 text-sm font-semibold text-white shadow-lg" role="status">
           {session.score.cue}
         </p>
       ) : null}
       {!quietPage && !quiet && still ? (
-        <p className="pointer-events-auto rounded-2xl border border-glow/40 bg-glow-tint px-4 py-3 text-sm font-semibold text-ink shadow-lg" role="status">
+        <p className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] px-4 py-3 text-sm font-semibold text-white shadow-lg" role="status">
           You&apos;ve been still for a while. Shift your weight or sit for a few minutes.
         </p>
       ) : null}
       {!quietPage && !quiet && !held('stand') && wellness.message ? (
-        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-glow-tint p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">{wellness.message}</p>
+        <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">{wellness.message}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {wellness.interval.nudge === 'move' && session.settings.stretchSuggestions ? (
               <Link to="/break" className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white">
                 Quick stretch
               </Link>
             ) : null}
-            <button type="button" className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-ink" onClick={wellness.snooze}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={wellness.snooze}>
               Snooze 10 min
             </button>
-            <button type="button" className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-ink" onClick={wellness.skip}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={wellness.skip}>
               Skip this one
             </button>
           </div>
         </article>
       ) : null}
       {!quietPage && !quiet && wellness.note ? (
-        <p className="pointer-events-auto rounded-2xl bg-sky-tint px-4 py-3 text-sm text-ink shadow-lg" role="status">
+        <p className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] px-4 py-3 text-sm text-white shadow-lg" role="status">
           {wellness.note}
-          <button type="button" className="ml-3 font-semibold text-brand" onClick={wellness.dismissNote}>
+          <button type="button" className="ml-3 font-semibold text-outline" onClick={wellness.dismissNote}>
             Got it
           </button>
         </p>
       ) : null}
       {!quietPage && session.nudgePhase === 'nudging' && !quiet && !held('posture') ? (
-        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-glow-tint p-4 shadow-lg" aria-live="polite">
-          <p className="text-sm font-semibold text-ink">{message}</p>
+        <article className="pointer-events-auto rounded-2xl border border-glow/40 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+          <p className="text-sm font-semibold text-white">{message}</p>
           <div className="mt-3 flex gap-2">
             <button type="button" className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white" onClick={session.fixedIt}>
               Fixed it
             </button>
-            <button type="button" className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-ink" onClick={session.snooze}>
+            <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={session.snooze}>
               Snooze 15 min
             </button>
           </div>
@@ -294,9 +294,9 @@ export function SessionChrome() {
         </article>
       ) : null}
       {!quietPage && session.distanceAlertIn !== null ? (
-        <p className="pointer-events-auto rounded-2xl bg-sky-tint px-4 py-3 text-sm text-ink shadow-lg" role="status">
+        <p className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] px-4 py-3 text-sm text-white shadow-lg" role="status">
           You&apos;re about {session.distanceAlertIn} in from your screen. Try sitting back to about 20-25 in.
-          <button type="button" className="ml-3 font-semibold text-brand" onClick={session.dismissDistance}>
+          <button type="button" className="ml-3 font-semibold text-outline" onClick={session.dismissDistance}>
             Got it
           </button>
         </p>
@@ -318,10 +318,10 @@ function SpotHoldNote({ hold, onAllow }: { hold: 'glow' | 'workday' | 'quiet' | 
             : 'Focus time is on, so this check waits.';
   const canAllow = hold === 'workday' || hold === 'quiet' || hold === 'paused';
   return (
-    <article className="pointer-events-auto rounded-2xl border border-ink/10 bg-white p-4 shadow-lg" aria-live="polite">
-      <p className="text-sm font-semibold text-ink">{copy}</p>
+    <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
+      <p className="text-sm font-semibold text-white">{copy}</p>
       {hold === 'glow' ? (
-        <Link to="/calibrate" className="mt-3 inline-flex rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white">
+        <Link to="/set-my-zen" className="mt-3 inline-flex rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white">
           Set my Zen
         </Link>
       ) : canAllow ? (
@@ -337,16 +337,16 @@ function StretchHint({ id, onDismiss }: { id: string; onDismiss: () => void }) {
   const stretch = stretchById(id);
   if (!stretch) return null;
   return (
-    <article className="pointer-events-auto rounded-2xl border border-brand/20 bg-white p-4 shadow-lg" aria-live="polite">
+    <article className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0f261d] p-4 text-white shadow-lg" aria-live="polite">
       <div className="flex gap-3">
         {stretch.image ? <img src={stretch.image} alt="" className="size-16 rounded-xl object-cover" /> : null}
-        <p className="text-sm font-semibold text-ink">That spot has come up a few times. A short {stretch.name.toLowerCase()} may help you feel looser.</p>
+        <p className="text-sm font-semibold text-white">That spot has come up a few times. A short {stretch.name.toLowerCase()} may help you feel looser.</p>
       </div>
       <div className="mt-3 flex gap-2">
         <Link to={`/stretches/${stretch.id}`} className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white">
           Try it
         </Link>
-        <button type="button" className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold text-ink" onClick={onDismiss}>
+        <button type="button" className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15" onClick={onDismiss}>
           Not now
         </button>
       </div>

@@ -39,9 +39,17 @@ export function LiveHero({ nowMs }: { nowMs: number }) {
   if (!print) {
     return (
       <article className="flex h-full min-h-0 flex-col">
-        <div className="flex flex-1 flex-col justify-center rounded-2xl border border-white/10 bg-dock p-6">
-          <h2 className="text-xl font-semibold">Set my Zen to save your Posture Print</h2>
-          <p className="mt-2 text-sm text-white/70">Sit the way you want DeskZen to remember. Your video never leaves this computer.</p>
+        <div className="relative flex min-h-72 flex-1 flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-black p-6 text-center lg:min-h-[520px]">
+          <svg viewBox="0 0 100 120" className="h-36 text-outline/25" aria-hidden="true">
+            <path d="M50 18c8 0 14 7 14 16 0 6-3 11-7 14 12 3 24 9 28 16 4 6 5 14 5 24v22H10V88c0-10 1-18 5-24 4-7 16-13 28-16-4-3-7-8-7-14 0-9 6-16 14-16Z" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
+          </svg>
+          <div>
+            <h2 className="text-xl font-semibold text-white">Set my Zen to save your Posture Print</h2>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-white/70">About 20 seconds. Sit the way you want DeskZen to remember. Your video never leaves this computer.</p>
+          </div>
+          <Link to={`/set-my-zen?pose=${mode}&from=home`} className="rounded-full bg-print px-5 py-2.5 text-sm font-semibold text-white">
+            Set my Zen
+          </Link>
         </div>
         <HeroActions mode={mode} postureManual={postureManual} chosenPosture={chosenPosture} onSit={() => choosePosture('sitting')} onStand={() => choosePosture('standing')} onAuto={followPosture} />
       </article>

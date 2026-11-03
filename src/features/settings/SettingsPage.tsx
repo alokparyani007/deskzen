@@ -38,7 +38,7 @@ export function SettingsPage() {
         const next = applyWorkStyle(settings, style);
         updateSettings(next);
         const pose = calibrationNeeded(next.workStyle, baseline !== null, standing !== null);
-        if (pose) navigate(`/calibrate?pose=${pose}&from=settings`);
+        if (pose) navigate(`/set-my-zen?pose=${pose}&from=settings`);
       }}
       cameras={camera.devices}
       cameraId={camera.deviceId}
@@ -65,7 +65,7 @@ export function SettingsPage() {
       onDeleteAll={() => {
         void clear()
           .then(() => deleteAllLocalData())
-          .then(() => navigate('/welcome'));
+          .then(() => navigate('/app'));
       }}
       onReset={() => {
         const name = settings.name;

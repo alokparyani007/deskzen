@@ -78,8 +78,6 @@ export function useSpotCheck(input: SpotInput): SpotView {
   const lastTick = useRef('');
   const deferLog = useRef(false);
   const postponed = useRef(false);
-  const holdLog = useRef('');
-  const pathLog = useRef('');
   const sawFrame = useRef(false);
   const sawPose = useRef(false);
   const [countdownSec, setCountdownSec] = useState<number | null>(null);
@@ -169,19 +167,6 @@ export function useSpotCheck(input: SpotInput): SpotView {
                   ? 'glow'
                   : null;
       setHold(nextHold);
-      // #region agent log
-      const tickKey = `${nextHold}|${Boolean(current.baseline)}|${stepped.action}|${current.enabled}`;
-      if (tickKey !== holdLog.current) {
-        holdLog.current = tickKey;
-        fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',runId:'pre-fix',hypothesisId:'B',location:'useSpotCheck.ts:tick',message:'spot hold tick',data:{nextHold,hasBaseline:Boolean(current.baseline),action:stepped.action,enabled:current.enabled,quietNow,workDay},timestamp:Date.now()})}).catch(()=>{});
-      }
-      const pathKey = `${window.location.pathname}|${stepped.action}|${onLive}|${onHome}`;
-      if (pathKey !== pathLog.current) {
-        pathLog.current = pathKey;
-        fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',runId:'post-fix',hypothesisId:'E',location:'useSpotCheck.ts:path',message:'spot path',data:{path:window.location.pathname,action:stepped.action,onLive},timestamp:Date.now()})}).catch(()=>{});
-        fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',runId:'post-fix',hypothesisId:'F',location:'useSpotCheck.ts:home',message:'home spot',data:{path:window.location.pathname,action:stepped.action,onHome},timestamp:Date.now()})}).catch(()=>{});
-      }
-      // #endregion
       if (nextHold === 'glow' && (stepped.action === 'countdown' || stepped.action === 'fire')) {
         setCountdownSec(null);
         if (stepped.action === 'fire') {

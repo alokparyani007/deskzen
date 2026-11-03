@@ -158,15 +158,10 @@ export function CameraProvider({ children }: { children: ReactNode }) {
     const video = videoRef.current;
     const park = parkRef.current;
     if (!video || !park) return;
-    const target = slot ? 'slot' : 'park';
-    const before = video.paused;
     (slot ?? park).appendChild(video);
     skipPauseRef.current = true;
     restartAfterMove(video);
     skipPauseRef.current = false;
-    // #region agent log
-    fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',hypothesisId:'A',location:'camera-context.tsx:placeVideo',message:'video moved',data:{target,pausedBefore:before,pausedAfter:video.paused,readyState:video.readyState,status:statusRef.current},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
   }, []);
 
   useEffect(() => stopTracks, [stopTracks]);
@@ -175,15 +170,7 @@ export function CameraProvider({ children }: { children: ReactNode }) {
     const video = videoElement;
     if (!video) return;
     let resuming = false;
-    let lastPauseLog = 0;
     const onPause = () => {
-      const now = Date.now();
-      if (now - lastPauseLog > 400) {
-        lastPauseLog = now;
-        // #region agent log
-        fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',hypothesisId:'B',location:'camera-context.tsx:pause',message:'video pause event',data:{paused:video.paused,readyState:video.readyState,status:statusRef.current,hidden:document.hidden,hasStream:Boolean(video.srcObject)},timestamp:now})}).catch(()=>{});
-        // #endregion
-      }
       if (skipPauseRef.current || resuming || statusRef.current !== 'live' || document.hidden) return;
       resuming = true;
       resumeIfPaused(video);

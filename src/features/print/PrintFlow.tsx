@@ -186,7 +186,7 @@ export function PrintFlow() {
       {step === 'privacy' ? (
         <div className="flex min-h-full items-center justify-center p-4">
           <div className="w-full max-w-xl rounded-3xl bg-white text-ink shadow-lg">
-            <PrivacyCard status={camera.status} errorName={camera.errorName} onStart={() => void camera.start().then((ok) => { if (ok) goSetup(); })} onLeave={() => navigate(backTo)} />
+            <PrivacyCard status={camera.status} errorName={camera.errorName} onStart={() => void camera.start().then((ok) => { if (ok) goSetup(); })} onLeave={() => navigate(backTo)} tone="light" />
             <p className="px-4 pb-6 text-center text-xs text-ink-muted">DeskZen is a wellness tool, not a medical device.</p>
           </div>
         </div>
