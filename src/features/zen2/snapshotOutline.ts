@@ -34,6 +34,8 @@ export interface Body {
   head: { cx: number; cy: number; rx: number; top: number; chin: number; faceHalf: number };
   /** Clean multiclass snapshot: also apply the measured neck-to-shoulder profile (see shoulderProfile). */
   profile?: boolean;
+  /** Arm limit past each shoulder point (x shoulder width). The clean multiclass mask gets a wider one. */
+  armMargin?: number;
 }
 
 /**
@@ -67,8 +69,11 @@ export function outlineFromMask(mask: SnapshotMask, frame: Landmarks, _mode: Pos
   const videoHeight = frame.videoHeight;
   if (!(videoWidth > 0) || !(videoHeight > 0) || mask.width <= 0 || mask.height <= 0 || mask.values.length < mask.width * mask.height) return fail;
   const grid = upsampleMask(mask, videoWidth, videoHeight, zenConfig.traceGrid);
-  const body = placement(frame, grid);
-  if (!body) return fail;
+  const placed = placement(frame, grid);
+  if (!placed) return fail;
+  // Clean multiclass mask: the chair is already left out, so the arms may reach further past the
+  // shoulders (sitting close to the camera) before the clamp, the shoulder check and the width check.
+  const body: Body = options.clean ? { ...placed, armMargin: zenConfig.multiclass.armMargin } : placed;
   let binary: Uint8Array;
   if (options.clean) {
     // Glasses or a hat come back as "others": count them as the person inside the head zone only,
@@ -130,7 +135,9 @@ export function outlineFromMask(mask: SnapshotMask, frame: Landmarks, _mode: Pos
   const video = loop.map((point) => ({ x: point.x / grid.scale, y: point.y / grid.scale }));
   const shoulderX = (body.leftX + body.rightX) / 2 / grid.scale;
   const shoulderWidth = body.sw / grid.scale;
-  const sane = outlineIsSane(video, shoulderX, shoulderWidth) && areaOk(video, videoWidth, videoHeight) && headAbove(video, body.shoulderY / grid.scale);
+  // The width check grows with the arm limit (2.2 x shoulder width at the default armMargin).
+  const maxWidth = 2.2 + 2 * Math.max(0, (body.armMargin ?? zenConfig.armMargin) - zenConfig.armMargin);
+  const sane = outlineIsSane(video, shoulderX, shoulderWidth, maxWidth) && areaOk(video, videoWidth, videoHeight) && headAbove(video, body.shoulderY / grid.scale);
   // Sanity: the line must go over the head. If its top above the face is below the eyes, the mask
   // lost the head (a glasses gap split it off): reject, so the caller falls back to the binary mask.
   if (!headCovered(video, body, frame, grid.scale)) return { ...fail, guided };
@@ -613,8 +620,9 @@ function loosenHead(body: Body): Body {
 }
 
 function clampToBody(grid: Uint8Array, values: Float32Array, width: number, height: number, body: Body): void {
-  const left = Math.min(body.leftX, body.rightX) - zenConfig.armMargin * body.sw;
-  const right = Math.max(body.leftX, body.rightX) + zenConfig.armMargin * body.sw;
+  const arm = body.armMargin ?? zenConfig.armMargin;
+  const left = Math.min(body.leftX, body.rightX) - arm * body.sw;
+  const right = Math.max(body.leftX, body.rightX) + arm * body.sw;
   const bottom = Math.min(height, body.shoulderY + zenConfig.torsoDepth * body.sw);
   const { cx, cy, rx, top, faceHalf } = body.head;
   const sy = body.shoulderY;
@@ -729,7 +737,7 @@ export function guideShoulders(grid: Uint8Array, width: number, height: number, 
   const result = { left: false, right: false };
   for (const side of [-1, 1] as const) {
     const sx = side < 0 ? Math.min(body.leftX, body.rightX) : Math.max(body.leftX, body.rightX);
-    const limit = sx + side * zenConfig.armMargin * sw;
+    const limit = sx + side * (body.armMargin ?? zenConfig.armMargin) * sw;
     const needed = sx + side * 0.05 * sw;
     let reaches = false;
     let atLimit = 0;

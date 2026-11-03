@@ -32,7 +32,7 @@ const TARGET = { mean: 0.8, max: 2 };
  */
 const KNOWN: Record<string, Partial<Record<Region, { mean?: number; max?: number }>>> = {
   'navy-849': { headSides: { max: 3.3 }, neck: { mean: 1.35 }, shoulderR: { mean: 1.1 }, arms: { max: 3.1 } },
-  'navy-835': { headSides: { max: 2.3 }, neck: { mean: 2.1, max: 3.2 }, arms: { max: 3 } },
+  'navy-835': { headSides: { max: 2.3 }, neck: { mean: 2.1, max: 3.2 }, arms: { max: 3.2 } },
   'grey-tee': { headSides: { max: 2.6 }, neck: { mean: 1.5, max: 2.8 }, shoulderL: { mean: 2.75, max: 5.9 }, shoulderR: { mean: 1.25, max: 2.4 }, arms: { mean: 1.3, max: 3.6 } },
 };
 

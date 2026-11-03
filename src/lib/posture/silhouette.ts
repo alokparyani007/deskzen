@@ -534,7 +534,7 @@ export function levelShoulderLine(points: Point[], left: Point, right: Point): {
 }
 
 /** Too wide, or a head top that is not over the shoulders, is a chair or background trace. */
-export function outlineIsSane(points: Point[], shoulderX: number, shoulderWidth: number): boolean {
+export function outlineIsSane(points: Point[], shoulderX: number, shoulderWidth: number, maxWidth = 2.2): boolean {
   if (points.length < 8 || shoulderWidth <= 0) return false;
   let minX = Infinity;
   let maxX = -Infinity;
@@ -544,7 +544,7 @@ export function outlineIsSane(points: Point[], shoulderX: number, shoulderWidth:
     maxX = Math.max(maxX, point.x);
     minY = Math.min(minY, point.y);
   }
-  if (maxX - minX > 2.2 * shoulderWidth) return false;
+  if (maxX - minX > maxWidth * shoulderWidth) return false;
   const crown = points.filter((point) => point.y <= minY + shoulderWidth * 0.08);
   const crownX = crown.reduce((sum, point) => sum + point.x, 0) / Math.max(1, crown.length);
   return Math.abs(crownX - shoulderX) <= 0.3 * shoulderWidth;

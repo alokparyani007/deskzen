@@ -119,6 +119,13 @@ export const zenConfig = {
     /** No clothes beside the face (outside clothesBesideFace x half the face width) above chin - this x shoulder width. */
     clothesAboveChin: 0.1,
     clothesBesideFace: 1,
+    /**
+     * Arm limit past each shoulder point (x shoulder width) for the clean mask only. Sitting close to
+     * the camera the upper arms reach well past shoulder + armMargin (0.35); that limit cut them into
+     * straight vertical sides and made the shoulder check repaint the side as the landmark-guided
+     * shape (a flat shoulder ledge). The multiclass mask already leaves the chair out, so allow more.
+     */
+    armMargin: 0.9,
   },
   /** Snapshot shirt edge may lower the line at most this much (x frame height). */
   edgeMaxDrop: 0.025,

@@ -22,7 +22,7 @@ const seated: Landmarks = {
 };
 
 /** Synthetic multiclass-style person confidence: body 0.96, a merged chair edge at 0.7 above the right shoulder. */
-function personGrid(width: number, height: number, options: { hairHalf?: number; chair?: number } = {}) {
+function personGrid(width: number, height: number, options: { hairHalf?: number; chair?: number; armSpread?: number } = {}) {
   const values = new Float32Array(width * height);
   const hair = options.hairHalf ?? 80;
   for (let y = 0; y < height; y += 1) {
@@ -33,7 +33,7 @@ function personGrid(width: number, height: number, options: { hairHalf?: number;
       let v = 0.04;
       if ((dx / hair) ** 2 + ((vy - 250) / 104) ** 2 <= 1) v = 0.96;
       else if (vy >= 320 && Math.abs(dx) <= 50) v = 0.96;
-      else if (vy >= 420 && Math.abs(dx) <= 200 + 40 * ((vy - 420) / 300)) v = 0.96;
+      else if (vy >= 420 && Math.abs(dx) <= 200 + (options.armSpread ?? 40) * ((vy - 420) / 300)) v = 0.96;
       else if (options.chair !== undefined && vx >= 690 && vx < 860 && vy >= 360 && vy < 420) v = options.chair;
       values[y * width + x] = v;
     }
@@ -55,6 +55,20 @@ function topAt(points: readonly NormPoint[], vx: number): number {
 }
 
 describe('multiclass snapshot mask', () => {
+  it('follows arms that reach well past the shoulders (sitting close), no straight box sides', async () => {
+    // Shoulders 470..810 (340 px wide). The arms spread to 640 +- 440 at the frame bottom, far past
+    // the old shoulder + 0.35 x width limit (351..929) that cut them into straight vertical sides.
+    const wide = personGrid(256, 256, { armSpread: 240 });
+    const traced = await traceSnapshot({ multiclass: async () => wide, binary: async () => null }, seated, 'sit', null);
+    expect(traced.source).toBe('multiclass');
+    expect(traced.guided).toEqual({ left: false, right: false });
+    const points = traced.points!;
+    expect(points).not.toBeNull();
+    const low = points.filter((p) => p.y * VH > 640 && p.y * VH < 700);
+    expect(Math.min(...low.map((p) => p.x * VW))).toBeLessThan(300);
+    expect(Math.max(...low.map((p) => p.x * VW))).toBeGreaterThan(980);
+  });
+
   it('merges hair, body skin, face skin and clothes; leaves background and others out', () => {
     expect(PERSON_CLASSES).toEqual([1, 2, 3, 4]);
     const n = 4;
