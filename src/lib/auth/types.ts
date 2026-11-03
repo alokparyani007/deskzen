@@ -24,6 +24,8 @@ export type AuthResult =
 export type AuthAdapter = {
   /** True while sign-in is a local stub (no real accounts yet). */
   readonly isStub: boolean;
+  /** False until the saved session (or a magic-link return) has been read. */
+  isReady(): boolean;
   getSession(): AuthSession | null;
   signInWithGoogle(): Promise<AuthResult>;
   /** Apple comes later. Kept here so the UI and adapter stay in step. */
@@ -32,4 +34,6 @@ export type AuthAdapter = {
   sendMagicLink(email: string): Promise<AuthResult>;
   signOut(): Promise<void>;
   subscribe(listener: () => void): () => void;
+  /** A friendly message if a sign-in link or redirect came back with an error. Shown once per page load. */
+  takeRedirectError(): string | null;
 };

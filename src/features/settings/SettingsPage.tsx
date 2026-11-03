@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePageTitle } from '../../hooks/usePageTitle';
+import { auth, useAuthSession } from '../../lib/auth';
 import type { DeskId } from '../../lib/posture/profiles';
 import { applyWorkStyle, calibrationNeeded } from '../../lib/settings/visibility';
 import { deleteAllLocalData } from '../../lib/storage/local-data';
@@ -23,6 +24,7 @@ export function SettingsPage() {
   const camera = useCamera();
   const [notification, setNotification] = useState<NotificationStatus>(permission);
   const refreshDevices = camera.refreshDevices;
+  const account = useAuthSession();
 
   useEffect(() => {
     void refreshDevices();
@@ -71,6 +73,8 @@ export function SettingsPage() {
         if (name) updateSettings({ name });
       }}
       version={__APP_VERSION__}
+      accountEmail={account?.user.email ?? null}
+      onSignOut={account ? () => void auth.signOut().then(() => navigate('/login', { replace: true })) : undefined}
     />
   );
 }

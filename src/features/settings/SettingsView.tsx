@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Camera, Info, RotateCcw, ShieldCheck, User, Volume2, type LucideIcon } from 'lucide-react';
+import { Bell, Camera, Info, LogOut, RotateCcw, ShieldCheck, User, Volume2, type LucideIcon } from 'lucide-react';
 import type { AppSettings, CameraMode, Sensitivity, WorkStyle } from '../../lib/settings/defaults';
 import { featuresFor, styleChangeCopy } from '../../lib/settings/visibility';
 import { Switch } from '../reminders/RemindersView';
@@ -31,6 +31,10 @@ export interface SettingsViewProps {
   onDeleteAll: () => void;
   onReset: () => void;
   version: string;
+  /** The signed-in email, shown above Sign out. */
+  accountEmail?: string | null;
+  /** Shown as a Sign out button when set (only while signed in). */
+  onSignOut?: () => void;
   /** Opens a confirm dialog on first render (for tests). */
   initialConfirm?: ConfirmKind | null;
 }
@@ -216,6 +220,25 @@ export function SettingsView(props: SettingsViewProps) {
                 </button>
               </div>
             </section>
+
+            {props.onSignOut ? (
+              <section className={`${card} p-5`} aria-labelledby="account-title">
+                <div className="flex items-start gap-3">
+                  <LogOut className="mt-0.5 size-5 shrink-0 text-white/60" aria-hidden="true" />
+                  <div className="min-w-0 flex-1">
+                    <h2 id="account-title" className="font-semibold">
+                      Account
+                    </h2>
+                    <p className="mt-1 break-words text-sm text-white/60">
+                      {props.accountEmail ? `Signed in as ${props.accountEmail}.` : 'You are signed in.'} Your posture data stays on this device.
+                    </p>
+                  </div>
+                </div>
+                <button type="button" className={`mt-4 rounded-xl border border-white/15 px-4 py-2 text-sm font-semibold text-white hover:bg-white/[0.06] ${focus}`} onClick={props.onSignOut}>
+                  Sign out
+                </button>
+              </section>
+            ) : null}
 
             <section className={`${card} p-5`} aria-labelledby="reset-title">
               <div className="flex items-start gap-3">

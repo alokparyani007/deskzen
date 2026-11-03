@@ -2,7 +2,7 @@ import { useEffect, useId, useState } from 'react';
 import type { FormEvent } from 'react';
 import { ShieldCheck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AFTER_SIGN_IN, auth, isValidEmail, useAuthSession } from '../../lib/auth';
+import { AFTER_SIGN_IN, auth, isValidEmail, stubAllowed, useAuthSession } from '../../lib/auth';
 import type { AuthResult } from '../../lib/auth';
 import { CONTACT_EMAIL, siteFocus } from './SiteChrome';
 
@@ -15,7 +15,8 @@ export function LoginPage() {
   const statusId = useId();
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState<Busy>(null);
-  const [error, setError] = useState<string | null>(null);
+  // e.g. an expired magic link sends people back here with a reason.
+  const [error, setError] = useState<string | null>(() => auth.takeRedirectError());
   const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
@@ -130,7 +131,7 @@ export function LoginPage() {
             <Link to="/terms" className={`rounded hover:text-white ${siteFocus}`}>Terms</Link>
             <a href={`mailto:${CONTACT_EMAIL}`} className={`rounded hover:text-white ${siteFocus}`}>Contact</a>
           </p>
-          {auth.isStub ? (
+          {auth.isStub && stubAllowed ? (
             <p className="mt-5 text-center text-xs text-white/40">Preview: accounts aren&rsquo;t connected yet, so this opens the app on this device.</p>
           ) : null}
         </div>

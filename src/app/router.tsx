@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AppShell } from './AppShell';
+import { AuthGate } from './AuthGate';
 import { OnboardingGate } from './OnboardingGate';
 import { CalibratePage } from '../features/calibrate/CalibratePage';
 import { ZenFlowV2 } from '../features/zen2/ZenFlowV2';
@@ -28,30 +29,36 @@ export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
   { path: '/privacy', element: <PrivacyPolicyPage /> },
   { path: '/terms', element: <TermsPage /> },
+  // Everything below needs a signed-in account; signed-out visitors go to /login.
   {
-    element: <AppShell />,
+    element: <AuthGate />,
     children: [
       {
-        element: <OnboardingGate />,
+        element: <AppShell />,
         children: [
-          { path: '/app', element: <HomePage /> },
-          { path: '/eye', element: <EyeBreakPage /> },
-          { path: '/live', element: <LiveViewV2 /> },
-          { path: '/live-legacy', element: <LiveViewPage /> },
-          { path: '/progress', element: <ProgressPage /> },
-          { path: '/reminders', element: <RemindersPage /> },
-          { path: '/settings', element: <SettingsPage /> },
-          { path: '/spot-fix', element: <SpotFixPage /> },
-          { path: '/app/privacy', element: <PrivacyPage /> },
-          { path: '/calibrate', element: <CalibratePage /> },
-          { path: '/set-my-zen', element: <ZenFlowV2 /> },
-          { path: '/set-my-zen-legacy', element: <CalibratePage /> },
-          { path: '/welcome', element: <WelcomePage /> },
-          { path: '/break', element: <BreakPlayerPage /> },
-          { path: '/stretches', element: <StretchLibraryPage /> },
-          { path: '/stretches/:id', element: <StretchDetailPage /> },
-          { path: '/neck', element: <NeckCheckPage /> },
-          { path: '/debug', element: <DebugPage /> },
+          {
+            element: <OnboardingGate />,
+            children: [
+              { path: '/app', element: <HomePage /> },
+              { path: '/eye', element: <EyeBreakPage /> },
+              { path: '/live', element: <LiveViewV2 /> },
+              { path: '/live-legacy', element: <LiveViewPage /> },
+              { path: '/progress', element: <ProgressPage /> },
+              { path: '/reminders', element: <RemindersPage /> },
+              { path: '/settings', element: <SettingsPage /> },
+              { path: '/spot-fix', element: <SpotFixPage /> },
+              { path: '/app/privacy', element: <PrivacyPage /> },
+              { path: '/calibrate', element: <CalibratePage /> },
+              { path: '/set-my-zen', element: <ZenFlowV2 /> },
+              { path: '/set-my-zen-legacy', element: <CalibratePage /> },
+              { path: '/welcome', element: <WelcomePage /> },
+              { path: '/break', element: <BreakPlayerPage /> },
+              { path: '/stretches', element: <StretchLibraryPage /> },
+              { path: '/stretches/:id', element: <StretchDetailPage /> },
+              { path: '/neck', element: <NeckCheckPage /> },
+              { path: '/debug', element: <DebugPage /> },
+            ],
+          },
         ],
       },
     ],

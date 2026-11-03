@@ -29,6 +29,8 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+# Public Supabase URL + publishable key for production builds (never the service_role key)
+!.env.production
 *.pem
 *.key
 *.p12

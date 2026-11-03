@@ -1,32 +1,38 @@
 import { useSyncExternalStore } from 'react';
 import { createStubAuth } from './stub';
+import { createSupabaseAuth } from './supabase';
 import type { AuthAdapter, AuthSession } from './types';
 
 export type { AuthAdapter, AuthResult, AuthSession, AuthUser } from './types';
 export { isValidEmail } from './stub';
 
+/** Where people land after signing in. */
+export const AFTER_SIGN_IN = '/app';
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.trim() ?? '';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() ?? '';
+
+/** True when this build talks to real Supabase accounts (never in unit tests). */
+export const supabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY) && import.meta.env.MODE !== 'test';
+
+/**
+ * The local stub is allowed in dev (npm run dev) and in a production build only
+ * when VITE_AUTH_STUB=true (for preview deploys). It is only used when Supabase
+ * isn't configured.
+ */
+export const stubAllowed = import.meta.env.DEV || import.meta.env.VITE_AUTH_STUB === 'true';
+
 /**
  * The one sign-in adapter the app uses.
  *
- * Today: a local stub. In dev (npm run dev) it lets you straight into the app.
- * A production build only allows it when VITE_AUTH_STUB=true (for preview deploys).
- *
- * TODO(supabase):
- *  1. npm i @supabase/supabase-js
- *  2. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (Vercel project env + .env.local)
- *  3. Create src/lib/auth/supabase.ts implementing AuthAdapter with supabase.auth
- *     (signInWithOAuth for Google/Apple, signInWithOtp for the email link,
- *     onAuthStateChange for subscribe, getSession for the cached session)
- *  4. Pick it here when the env vars are present, and keep the stub for tests.
- *  5. In Supabase: enable Google (and later Apple), and add
- *     https://<your-domain>/app and http://localhost:5173/app as redirect URLs.
+ * With VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY set (see .env.production and
+ * .env.local): real Supabase Auth, with Google and email magic links.
+ * Without them: the local stub (lets you straight in during dev, says
+ * "not available yet" in a production build).
  */
-export const auth: AuthAdapter = createStubAuth({
-  allowed: import.meta.env.DEV || import.meta.env.VITE_AUTH_STUB === 'true',
-});
-
-/** Where people land after signing in. */
-export const AFTER_SIGN_IN = '/app';
+export const auth: AuthAdapter = supabaseConfigured
+  ? createSupabaseAuth({ url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY, redirectPath: AFTER_SIGN_IN })
+  : createStubAuth({ allowed: stubAllowed });
 
 let cachedSession: AuthSession | null = null;
 let cachedKey = '';
@@ -44,4 +50,9 @@ function snapshot(): AuthSession | null {
 /** Current session, re-rendering when it changes. */
 export function useAuthSession(): AuthSession | null {
   return useSyncExternalStore(auth.subscribe, snapshot, () => null);
+}
+
+/** False until the saved session (or a magic-link return) has been read. */
+export function useAuthReady(): boolean {
+  return useSyncExternalStore(auth.subscribe, () => auth.isReady(), () => false);
 }

@@ -14,8 +14,8 @@ export function isValidEmail(value: string): boolean {
  * by saving a small marker in this browser, then the app opens. When false
  * (a production build without Supabase) it says sign-in isn't ready yet.
  *
- * TODO(supabase): replace with createSupabaseAuth() in ./supabase.ts once
- * the project URL and anon key are set (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY).
+ * Real accounts live in ./supabase.ts; ./index.ts picks it when
+ * VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.
  */
 export function createStubAuth(options: { allowed: boolean; storage?: StorageLike | null; now?: () => number }): AuthAdapter {
   const storage = options.storage === undefined ? safeStorage() : options.storage;
@@ -59,23 +59,20 @@ export function createStubAuth(options: { allowed: boolean; storage?: StorageLik
 
   return {
     isStub: true,
+    isReady: () => true,
     getSession: read,
+    takeRedirectError: () => null,
     async signInWithGoogle() {
-      // TODO(supabase): supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${location.origin}/app` } })
       return signIn('google', null);
     },
     async signInWithApple() {
-      // TODO(supabase): supabase.auth.signInWithOAuth({ provider: 'apple', ... }) once Apple sign-in is set up.
       return { ok: false, error: 'Apple sign-in is coming soon.' };
     },
     async sendMagicLink(email: string) {
       if (!isValidEmail(email)) return { ok: false, error: 'Please enter a valid email address.' };
-      // TODO(supabase): supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: `${location.origin}/app` } })
-      // and return { ok: true, session: null, message: 'Check your email for a sign-in link.' }
       return signIn('email', email.trim());
     },
     async signOut() {
-      // TODO(supabase): await supabase.auth.signOut()
       write(null);
     },
     subscribe(listener) {
