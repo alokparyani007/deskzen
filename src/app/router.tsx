@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppShell } from './AppShell';
 import { AuthGate } from './AuthGate';
 import { OnboardingGate } from './OnboardingGate';
@@ -10,7 +10,6 @@ import { EyeBreakPage } from '../features/home/EyeBreakPage';
 import { HomePage } from '../features/home/HomePage';
 import { LiveViewPage } from '../features/live/LiveViewPage';
 import { NeckCheckPage } from '../features/neck/NeckCheckPage';
-import { WelcomePage } from '../features/onboarding/WelcomePage';
 import { PrivacyPage } from '../features/privacy/PrivacyPage';
 import { LoginPage } from '../features/site/LoginPage';
 import { PrivacyPolicyPage, TermsPage } from '../features/site/LegalPage';
@@ -48,10 +47,10 @@ export const router = createBrowserRouter([
               { path: '/settings', element: <SettingsPage /> },
               { path: '/spot-fix', element: <SpotFixPage /> },
               { path: '/app/privacy', element: <PrivacyPage /> },
-              { path: '/calibrate', element: <CalibratePage /> },
+              { path: '/calibrate', element: <Navigate to="/set-my-zen" replace /> },
               { path: '/set-my-zen', element: <ZenFlowV2 /> },
               { path: '/set-my-zen-legacy', element: <CalibratePage /> },
-              { path: '/welcome', element: <WelcomePage /> },
+              { path: '/welcome', element: <Navigate to="/set-my-zen" replace /> },
               { path: '/break', element: <BreakPlayerPage /> },
               { path: '/stretches', element: <StretchLibraryPage /> },
               { path: '/stretches/:id', element: <StretchDetailPage /> },
