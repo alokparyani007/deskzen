@@ -35,7 +35,7 @@ describe('sidebar nav', () => {
     for (const path of ['/set-my-zen', '/set-my-zen-legacy', '/calibrate', '/calibrate/step', '/live', '/live-legacy']) {
       expect(isImmersivePath(path)).toBe(true);
     }
-    for (const path of ['/app', '/progress', '/reminders', '/settings', '/privacy', '/stretches']) {
+    for (const path of ['/app', '/progress', '/reminders', '/settings', '/app/privacy', '/stretches']) {
       expect(isImmersivePath(path)).toBe(false);
     }
   });

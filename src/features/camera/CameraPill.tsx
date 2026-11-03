@@ -19,7 +19,7 @@ export function CameraPill() {
           Resume
         </button>
       ) : null}
-      <Link className="text-ink-muted underline-offset-2 hover:underline" to="/privacy">
+      <Link className="text-ink-muted underline-offset-2 hover:underline" to="/app/privacy">
         Privacy
       </Link>
     </div>

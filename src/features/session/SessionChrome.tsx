@@ -30,31 +30,6 @@ export function SessionChrome() {
   const quietPage = location.pathname === '/reminders' || location.pathname === '/progress';
   const cameraPage = location.pathname === '/live' || location.pathname === '/app';
   const fixedGlow = checkDue && !quietPage && location.pathname !== '/live';
-  // #region agent log
-  useEffect(() => {
-    fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',runId:'pre-fix',hypothesisId:'A',location:'SessionChrome.tsx:check',message:'chrome cards',data:{path:location.pathname,spotHold:session.spotHold,hasBaseline:Boolean(baseline),checkDue,ready,checkDay,today},timestamp:Date.now()})}).catch(()=>{});
-  }, [location.pathname, session.spotHold, baseline, checkDue, ready, checkDay, today]);
-  useEffect(() => {
-    fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',runId:'post-fix',hypothesisId:'C',location:'SessionChrome.tsx:cover',message:'page cover',data:{path:location.pathname,quietPage,checkDue,hasToast:Boolean(session.spotToast),spotHold:session.spotHold},timestamp:Date.now()})}).catch(()=>{});
-  }, [location.pathname, quietPage, checkDue, session.spotToast, session.spotHold]);
-  useEffect(() => {
-    fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',runId:'post-fix',hypothesisId:'D',location:'SessionChrome.tsx:fixedGlow',message:'fixed glow popup',data:{path:location.pathname,fixedGlow,checkDue},timestamp:Date.now()})}).catch(()=>{});
-  }, [location.pathname, fixedGlow, checkDue]);
-  useEffect(() => {
-    const cards = [
-      session.spotCountdown !== null ? 'countdown' : '',
-      session.spotChecking ? 'checking' : '',
-      session.spotToast ? 'toast' : '',
-      session.spotFixCopy ? 'fix' : '',
-      session.spotHold ? 'hold' : '',
-      session.nudgePhase === 'nudging' ? 'nudge' : '',
-      session.banner ? 'banner' : '',
-      wellness.message ? 'wellness' : '',
-      session.toast ? 'sessionToast' : '',
-    ].filter(Boolean);
-    fetch('http://127.0.0.1:7679/ingest/221158fa-c39f-4432-bae7-b525f5f13e2e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'aaefe4'},body:JSON.stringify({sessionId:'aaefe4',runId:'post-fix',hypothesisId:'H',location:'SessionChrome.tsx:cards',message:'visible card flags',data:{path:location.pathname,cameraPage,cards},timestamp:Date.now()})}).catch(()=>{});
-  }, [location.pathname, cameraPage, session.spotCountdown, session.spotChecking, session.spotToast, session.spotFixCopy, session.spotHold, session.nudgePhase, session.banner, wellness.message, session.toast]);
-  // #endregion
   const quiet = isQuietHour(session.settings);
   const [holds] = useReminderHolds();
   // Snoozes from Reminders (one type or Snooze all) hold these cards too.

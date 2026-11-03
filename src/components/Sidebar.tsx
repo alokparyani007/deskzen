@@ -158,7 +158,7 @@ function NextReminderCard() {
 function PrivacyNote() {
   return (
     <Link
-      to="/privacy"
+      to="/app/privacy"
       className={`group relative mb-1 flex items-center justify-center gap-2 rounded-lg py-2 text-xs text-white/50 transition-colors hover:text-white/80 lg:justify-start lg:px-3 ${focus}`}
     >
       <Shield className="size-4 shrink-0 text-outline/70" aria-hidden="true" />

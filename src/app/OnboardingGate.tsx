@@ -10,7 +10,7 @@ export function OnboardingGate() {
   const { settings } = useSession();
   const needed = calibrationNeeded(settings.workStyle, baseline !== null, standing !== null);
   const onboarded = isOnboardingDone();
-  const alwaysOpen = location.pathname === '/welcome' || location.pathname === '/privacy';
+  const alwaysOpen = location.pathname === '/welcome' || location.pathname === '/app/privacy';
 
   if (!onboarded && !alwaysOpen && !import.meta.env.DEV) {
     return <Navigate to="/welcome" replace />;

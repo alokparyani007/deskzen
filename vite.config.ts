@@ -23,7 +23,7 @@ export default defineConfig({
         theme_color: '#047857',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/app',
         lang: 'en-US',
         icons: [
           {
@@ -46,7 +46,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,webp}'],
         navigateFallback: 'index.html',
       },
       devOptions: {

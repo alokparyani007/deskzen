@@ -202,7 +202,7 @@ export function SettingsView(props: SettingsViewProps) {
                     Your camera stays on this device
                   </h2>
                   <p className="mt-1 text-sm text-white/75">Photos and video are never saved or uploaded. DeskZen keeps only simple numbers, here in this browser.</p>
-                  <Link to="/privacy" className={`mt-2 inline-block rounded text-sm font-semibold text-outline hover:text-white ${focus}`}>
+                  <Link to="/app/privacy" className={`mt-2 inline-block rounded text-sm font-semibold text-outline hover:text-white ${focus}`}>
                     Privacy details
                   </Link>
                 </div>
