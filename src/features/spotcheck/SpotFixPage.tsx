@@ -40,11 +40,11 @@ export function SpotFixPage() {
   return (
     <section className="mx-auto max-w-3xl px-4 py-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-2xl font-semibold text-ink">A quick fix</h1>
+        <h1 className="text-2xl font-semibold text-white">A quick fix</h1>
         <DeviceLock />
       </div>
-      <p className="mt-2 text-sm text-ink-muted">{spotAlertCopy(issue)}</p>
-      <p className="mt-1 text-sm font-semibold text-ink" aria-live="polite">
+      <p className="mt-2 text-sm text-white/70">{spotAlertCopy(issue)}</p>
+      <p className="mt-1 text-sm font-semibold text-white" aria-live="polite">
         {left === 0 ? 'Camera off.' : `${seconds} seconds left. The camera turns off when this ends.`}
       </p>
       {status === 'live' ? (
@@ -53,12 +53,12 @@ export function SpotFixPage() {
           <p className="absolute left-3 top-3 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-white">Checking posture</p>
         </div>
       ) : (
-        <p className="mt-4 text-sm text-ink-muted">{errorName ? 'The camera needs permission before this fix can start.' : 'Turning the camera on…'}</p>
+        <p className="mt-4 text-sm text-white/70">{errorName ? 'The camera needs permission before this fix can start.' : 'Turning the camera on…'}</p>
       )}
       <Link to="/app" className="mt-4 inline-flex rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white" onClick={() => pause()}>
         Done
       </Link>
-      <p className="mt-4 text-xs text-ink-muted">DeskZen is a wellness tool, not a medical device. Nothing is recorded.</p>
+      <p className="mt-4 text-xs text-white/70">DeskZen is a wellness tool, not a medical device. Nothing is recorded.</p>
     </section>
   );
 }

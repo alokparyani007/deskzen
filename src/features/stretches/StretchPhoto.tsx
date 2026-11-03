@@ -14,7 +14,7 @@ export function StretchPhoto({ stretch, className = '' }: { stretch: Stretch; cl
   }
   return (
     <div className={`flex aspect-[4/3] w-full items-center justify-center rounded-2xl bg-gradient-to-br from-brand-tint to-brand-light/25 ${className}`}>
-      <PersonStanding className="size-10 text-brand" aria-hidden="true" />
+      <PersonStanding className="size-10 text-outline" aria-hidden="true" />
     </div>
   );
 }

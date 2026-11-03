@@ -18,10 +18,10 @@ export function EyeBreakPage() {
   }, []);
   return (
     <section className="mx-auto max-w-lg px-4 py-10 text-center">
-      <h1 className="text-3xl font-semibold text-ink">Eye break</h1>
-      <p className="mt-2 text-sm text-ink-muted">Look about 20 feet away. This stays on your device.</p>
+      <h1 className="text-3xl font-semibold text-white">Eye break</h1>
+      <p className="mt-2 text-sm text-white/70">Look about 20 feet away. This stays on your device.</p>
       <p className="mt-8 text-6xl font-semibold text-print" aria-live="polite">{left}</p>
-      <p className="mt-2 text-sm text-ink-muted">{left === 0 ? 'Nice reset.' : 'seconds left'}</p>
+      <p className="mt-2 text-sm text-white/70">{left === 0 ? 'Nice reset.' : 'seconds left'}</p>
       <Link to="/app" className="mt-8 inline-flex rounded-xl bg-print px-4 py-3 text-sm font-semibold text-white">Back home</Link>
     </section>
   );

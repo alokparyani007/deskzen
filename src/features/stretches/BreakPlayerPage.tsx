@@ -48,11 +48,11 @@ export function BreakPlayerPage() {
 
   return (
     <section className="mx-auto flex min-h-[70vh] max-w-lg flex-col px-4 py-6">
-      <h1 className="text-3xl font-semibold text-ink">{routine.name}</h1>
+      <h1 className="text-3xl font-semibold text-white">{routine.name}</h1>
       {done ? (
-        <div className="mt-8 rounded-3xl bg-glow-tint px-6 py-10 text-center shadow-[0_0_40px_var(--color-glow)]">
-          <p className="text-2xl font-semibold text-ink">Nice reset.</p>
-          <p className="mt-2 text-sm text-ink-muted">That may help you feel looser. This counts as a break.</p>
+        <div className="mt-8 rounded-3xl bg-white/5 px-6 py-10 text-center shadow-[0_0_40px_var(--color-glow)]">
+          <p className="text-2xl font-semibold text-white">Nice reset.</p>
+          <p className="mt-2 text-sm text-white/70">That may help you feel looser. This counts as a break.</p>
           <button
             type="button"
             className="mt-6 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white"
@@ -72,19 +72,19 @@ export function BreakPlayerPage() {
               <StretchPhoto stretch={current} />
             </div>
           ) : null}
-          <h2 className="mt-4 text-xl font-semibold text-ink">{current?.name}</h2>
-          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+          <h2 className="mt-4 text-xl font-semibold text-white">{current?.name}</h2>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-white/70">
             {current?.steps.map((step) => (
               <li key={step}>{step}</li>
             ))}
           </ol>
-          <p className="mt-6 text-6xl font-semibold tabular-nums text-brand" aria-live="polite">
+          <p className="mt-6 text-6xl font-semibold tabular-nums text-outline" aria-live="polite">
             {Math.max(left, 0)}
           </p>
           <div className="mt-6 flex gap-2">
             <button
               type="button"
-              className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold"
+              className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold"
               onClick={() => {
                 indexRef.current = Math.max(0, indexRef.current - 1);
                 leftRef.current = steps[indexRef.current]?.durationSeconds ?? 0;
@@ -99,7 +99,7 @@ export function BreakPlayerPage() {
             </button>
             <button
               type="button"
-              className="rounded-xl bg-surface px-3 py-2 text-sm font-semibold"
+              className="rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold"
               onClick={() => {
                 if (indexRef.current >= steps.length - 1) setDone(true);
                 else {
@@ -115,7 +115,7 @@ export function BreakPlayerPage() {
           </div>
         </>
       )}
-      <Link className="mt-6 text-sm font-semibold text-brand" to="/stretches">
+      <Link className="mt-6 text-sm font-semibold text-outline" to="/stretches">
         Browse the library
       </Link>
     </section>

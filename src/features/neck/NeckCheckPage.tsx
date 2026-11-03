@@ -89,8 +89,8 @@ export function NeckCheckPage() {
       {header?.image ? (
         <img src={header.image} alt={header.name} loading="lazy" className="mb-4 aspect-[4/3] w-full rounded-2xl object-cover" />
       ) : null}
-      <h1 className="text-3xl font-semibold text-ink">Neck check-in</h1>
-      <p className="mt-2 text-sm text-ink-muted">
+      <h1 className="text-3xl font-semibold text-white">Neck check-in</h1>
+      <p className="mt-2 text-sm text-white/70">
         A 30-second check-in. This compares today&apos;s head position with your saved posture. It is not a diagnosis.
       </p>
       {status !== 'live' ? (
@@ -105,18 +105,18 @@ export function NeckCheckPage() {
       ) : null}
       {running && step ? (
         <div className="mt-6" aria-live="polite">
-          <p className="text-sm text-ink-muted">Step {index + 1} of {steps.length}</p>
-          <p className="mt-2 text-4xl font-semibold text-ink">{step.cue}</p>
-          <p className="mt-2 text-5xl font-semibold tabular-nums text-brand">{Math.max(left, 0)}</p>
+          <p className="text-sm text-white/70">Step {index + 1} of {steps.length}</p>
+          <p className="mt-2 text-4xl font-semibold text-white">{step.cue}</p>
+          <p className="mt-2 text-5xl font-semibold tabular-nums text-outline">{Math.max(left, 0)}</p>
         </div>
       ) : null}
       {saved ? (
-        <p className="mt-6 text-sm text-ink" role="status">
+        <p className="mt-6 text-sm text-white" role="status">
           Check-in saved.
           {levelGap === null ? ' Level look is stored as a number next to your baseline.' : ` Your level look is about ${levelGap.toFixed(1)}° from the eye line you saved.`}
         </p>
       ) : null}
-      <p className="mt-6 text-xs text-ink-muted">DeskZen is a wellness tool, not a medical device.</p>
+      <p className="mt-6 text-xs text-white/70">DeskZen is a wellness tool, not a medical device.</p>
     </section>
   );
 }
