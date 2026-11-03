@@ -814,7 +814,7 @@ export function softenShape(grid: Uint8Array, width: number, height: number, ope
   const pad = Math.ceil(Math.max(openR, closeR)) + 2;
   const pw = width + 2 * pad;
   const ph = height + 2 * pad;
-  let work = new Uint8Array(pw * ph);
+  let work: Uint8Array = new Uint8Array(pw * ph);
   for (let y = 0; y < ph; y += 1) {
     const sy = Math.min(height - 1, Math.max(0, y - pad));
     for (let x = 0; x < pw; x += 1) {
