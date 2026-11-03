@@ -1,0 +1,414 @@
+@import 'tailwindcss';
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/inter/latin-700.css';
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --color-brand: #047857;
+  --color-print: #059669;
+  --color-eye: #7c3aed;
+  --color-brand-light: #10b981;
+  --color-brand-tint: #ecfdf5;
+  --color-glow: #f59e0b;
+  --color-glow-tint: #fffbeb;
+  --color-sky-brand: #38bdf8;
+  --color-sky-tint: #f0f9ff;
+  --color-ink: #0f172a;
+  --color-desk: #111827;
+  --color-ink-muted: #475569;
+  --color-surface: #f8faf9;
+  --color-alert: #f97316;
+  --color-stage: #0b1f17;
+  --color-outline: #34d399;
+  --color-mint-panel: #eef6f1;
+  --color-callout: #065f46;
+  --color-dock: rgb(15 23 42 / 0.72);
+}
+
+.stage-glow {
+  box-shadow: 0 0 40px rgb(5 150 105 / 0.35);
+}
+
+html {
+  font-family: var(--font-sans);
+  background: #ffffff;
+  color: var(--color-ink);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    box-shadow: 0 0 32px 4px var(--color-brand-light);
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(64px);
+    opacity: 0;
+  }
+}
+
+.confetti-bit {
+  animation: confetti-fall 1.6s ease-out forwards;
+}
+
+@keyframes glow-burst {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.glow-burst {
+  animation: glow-burst 0.9s ease-out forwards;
+}
+
+@keyframes reset-move-hips {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+}
+
+@keyframes reset-move-shoulders {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-5px);
+  }
+  70% {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes reset-move-chin {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
+}
+
+@keyframes reset-move-neck {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  35% {
+    transform: rotate(-14deg);
+  }
+  70% {
+    transform: rotate(14deg);
+  }
+}
+
+@keyframes reset-move-breath {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+.reset-move-hips,
+.reset-move-shoulders,
+.reset-move-neck,
+.reset-move-chin,
+.reset-move-breath {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.reset-move-hips {
+  animation-name: reset-move-hips;
+}
+
+.reset-move-shoulders {
+  animation-name: reset-move-shoulders;
+}
+
+.reset-move-neck {
+  animation-name: reset-move-neck;
+  transform-origin: 32px 20px;
+}
+
+.reset-move-chin {
+  animation-name: reset-move-chin;
+}
+
+.reset-move-breath {
+  animation-name: reset-move-breath;
+  transform-origin: center;
+}
+
+@keyframes nice-pop {
+  0% {
+    transform: scale(0.92);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.nice-pop {
+  animation: nice-pop 0.45s ease-out;
+}
+
+@keyframes catch-pop {
+  0% {
+    transform: scale(0.8);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.catch-pop {
+  animation: catch-pop 0.4s ease-out;
+}
+
+@keyframes glow-rise {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.glow-rise {
+  animation: glow-rise 1.2s ease-out;
+}
+
+@keyframes reminder-card {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.reminder-card {
+  animation: reminder-card 0.45s ease-out;
+}
+
+@keyframes shoulder-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.shoulder-glow-hot {
+  animation: shoulder-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes reset-arrow {
+  0%,
+  100% {
+    transform: translate(-50%, 10px);
+  }
+  50% {
+    transform: translate(-50%, -16px);
+  }
+}
+
+.reset-arrow {
+  animation: reset-arrow 2s ease-in-out infinite;
+}
+
+@keyframes coach-nudge {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(var(--nudge-x), var(--nudge-y));
+  }
+}
+
+.coach-arrow {
+  animation: coach-nudge 1.1s ease-in-out infinite;
+}
+
+.chip-burst {
+  animation: chip-burst 0.45s ease-out;
+}
+
+@keyframes coach-pop {
+  from {
+    transform: scale(0.96);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.coach-pop {
+  animation: coach-pop 300ms ease-out;
+}
+
+@keyframes outline-pulse {
+  0%,
+  100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.55;
+  }
+}
+
+.outline-pulse {
+  animation: outline-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes live-chevron-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.live-chevron {
+  animation: live-chevron-bounce 1.15s ease-in-out infinite;
+}
+
+@keyframes chip-burst {
+  from {
+    box-shadow: 0 0 0 0 var(--color-brand-tint);
+  }
+  to {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+@keyframes meter-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+}
+
+.meter-pulse {
+  animation: meter-pulse 1s ease-in-out infinite;
+}
+
+@keyframes dock-pulse-once {
+  0% {
+    box-shadow: 0 0 0 0 rgb(52 211 153 / 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgb(52 211 153 / 0);
+  }
+}
+
+.dock-pulse-once {
+  animation: dock-pulse-once 700ms ease-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock-pulse-once,
+  .meter-pulse,
+  .outline-pulse {
+    animation: none;
+  }
+}
+
+@keyframes spark-once {
+  0% {
+    transform: scale(0.6) rotate(-12deg);
+    opacity: 0;
+  }
+  45% {
+    transform: scale(1.15) rotate(8deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+.spark-once {
+  display: inline-block;
+  animation: spark-once 0.7s ease-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

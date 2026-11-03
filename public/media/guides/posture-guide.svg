@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice">
+  <!-- DeskZen head-and-shoulders target. Coordinates match a 1280x720 (16:9) camera frame.
+       Ideal: head center (640,236), eye line y=236, shoulder line y~470, shoulder points x=372 and x=908 (span 0.42 of width). -->
+  <path d="M0 0 H1280 V720 H0 Z M640 118 C700 118 742 166 742 236 C742 296 714 344 678 364 L678 404 C684 414 700 420 730 428 C800 446 870 468 908 500 C936 524 948 560 952 600 L958 720 L322 720 L328 600 C332 560 344 524 372 500 C410 468 480 446 550 428 C580 420 596 414 602 404 L602 364 C566 344 538 296 538 236 C538 166 580 118 640 118 Z" fill="#0B1F17" fill-opacity="0.35" fill-rule="evenodd"/>
+  <path id="outline" d="M322 720 L328 600 C332 560 344 524 372 500 C410 468 480 446 550 428 C580 420 596 414 602 404 L602 364 C566 344 538 296 538 236 C538 166 580 118 640 118 C700 118 742 166 742 236 C742 296 714 344 678 364 L678 404 C684 414 700 420 730 428 C800 446 870 468 908 500 C936 524 948 560 952 600 L958 720" fill="none" stroke="#059669" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 16"/>
+  <line x1="560" y1="236" x2="720" y2="236" stroke="#059669" stroke-width="3" stroke-opacity="0.5" stroke-dasharray="6 10"/>
+</svg>

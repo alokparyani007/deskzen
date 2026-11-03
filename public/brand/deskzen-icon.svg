@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DeskZen">
+  <rect width="512" height="512" rx="116" fill="#ECFDF5"/>
+  <circle cx="256" cy="132" r="44" fill="#F59E0B"/>
+  <path d="M164 222 H340 L172 380 H348" fill="none" stroke="#059669" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

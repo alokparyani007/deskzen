@@ -1,0 +1,57 @@
+---
+description: SitGlow project rules - brand, tone, privacy, stack, and code style. Always apply.
+globs: '**/*'
+alwaysApply: true
+---
+
+# SitGlow project rules
+
+You are building **SitGlow**, a browser-based, on-device webcam posture and desk-health PWA for US consumers and teams. Tagline: **"Sit better. Feel brighter."**
+
+## Source of truth
+- Specs live in `docs/`: `product-spec.md` (screens + acceptance criteria), `posture-engine.md` (scoring algorithm), `brand.md` (colors, type, voice), `landing-page.md` (marketing copy).
+- Visual targets live in `design/` (see `design/README.md`). Match layout, hierarchy and mood of the mockups. If a mockup shows the old name "Desk Habits" or UK wording, ignore that; SitGlow branding and these rules win.
+- If a spec and a mockup disagree, follow the spec and mention the difference.
+
+## Brand
+- Background: crisp white `#FFFFFF`; surfaces `#F8FAF9`; text `#0F172A` / muted `#475569`.
+- Primary emerald: `#047857` (buttons, headings accents), lighter emerald `#10B981` (progress, success).
+- Warm amber glow accent: `#F59E0B` (the "glow": score rings, logo sun, highlights). Use sparingly.
+- Sky-blue accent: `#38BDF8` (info, water/break reminders, charts secondary).
+- Font: Inter (fallback system-ui sans-serif). Rounded corners (`rounded-2xl` cards), soft shadows, generous whitespace.
+- Imagery: real photos of people in sunlit offices and nature. Professional and bright, never cartoonish.
+- Logo: a seated figure whose head is a glowing amber sun.
+- Define brand colors as Tailwind theme tokens (`emerald-brand`, `glow`, `sky-brand`, etc.); never hard-code hex values in components.
+
+## Tone and wording
+- Warm, encouraging, short. Coach, not nag. Never shame the user.
+- **US English and US context only.** Never mention UK, EU, GDPR, or DSE, and avoid UK spellings (use "color", "personalize"). Call it a "desk setup check" and "workplace ergonomics programs". Measure in inches.
+- Units: inches, imperial. Dates: US format.
+- **No medical claims.** Say "fewer aches", "feel better at your desk", "build healthier habits". Never "cure", "treat", "fix back pain", "diagnose", "prevent injury". Show "SitGlow is a wellness tool, not a medical device" where posture data is explained.
+
+## Privacy (non-negotiable)
+- Camera frames are processed **only in the browser**. Never upload, stream, store, or log video frames, images, or raw landmarks to any server.
+- **No network calls may include camera-derived data.** The only data persisted is derived numbers (scores, baseline numbers, settings, streaks), stored locally in IndexedDB/localStorage.
+- No analytics SDKs, trackers, or third-party scripts that could access the camera. MediaPipe model/WASM files should be self-hosted in `public/` (or loaded from a pinned CDN for dev only, with a TODO to self-host).
+- Always show a visible camera-on indicator and a one-click Pause camera. Provide "Delete all my data".
+- Stop all camera tracks when the user pauses, leaves, or the app is hidden for long periods.
+
+## Tech stack
+- Vite + React 18+ + TypeScript (`strict: true`) + Tailwind CSS.
+- PWA via `vite-plugin-pwa`.
+- `@mediapipe/tasks-vision`: PoseLandmarker + FaceLandmarker (iris), `runningMode: 'VIDEO'`, GPU delegate with CPU fallback.
+- Routing: `react-router-dom`. State: React hooks/context (or Zustand if it grows). Storage: `idb-keyval` or a tiny IndexedDB wrapper.
+- Tests: Vitest + React Testing Library for logic (posture engine must have unit tests).
+
+## Code style
+- TypeScript strict; no `any` (use `unknown` + narrowing). Explicit types on public functions.
+- Small, focused components (< ~150 lines). Pure logic (posture engine, scoring, streaks) lives in `src/lib/` with no React imports, so it is unit-testable.
+- Folder layout: `src/app` (shell, routes), `src/features/<feature>`, `src/components` (shared UI), `src/lib` (pure logic), `src/hooks`, `src/styles`.
+- Accessible by default: semantic HTML, labels on all controls, visible focus rings, keyboard navigable, `aria-live="polite"` for score/nudge updates, color is never the only signal, respects `prefers-reduced-motion`, WCAG AA contrast.
+- Performance: run inference with `requestAnimationFrame` / `requestVideoFrameCallback`, throttle to ~15 fps when visible and ~2-5 fps in background/PiP; never block the UI thread with heavy work.
+- Keep tunable numbers (thresholds, weights) in one config file (`src/lib/posture/config.ts`).
+- Leave clear `// TODO:` comments for anything stubbed (e.g., waitlist backend).
+
+## Workflow
+- Work in the step order of `prompts/`. Don't build future phases early unless asked.
+- After each step, make sure `npm run dev`, `npm run build`, and `npm test` (once tests exist) pass, and tell the user how to verify in plain language.
