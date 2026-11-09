@@ -19,14 +19,8 @@ function LegalPage({ title, path, children }: { title: string; path: PublicPath;
   return (
     <SitePage>
       <article className="mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-8 sm:pt-12">
-        <p className="inline-flex rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-200">
-          Draft
-        </p>
-        <h1 className="mt-4 text-4xl font-bold tracking-tight">{title}</h1>
-        <p className="mt-3 text-white/60">
-          This is a draft written in plain language while DeskZen is in early access. It is not final and is not legal
-          advice. The final version will replace it before accounts open.
-        </p>
+        <h1 className="text-4xl font-bold tracking-tight">{title}</h1>
+        <p className="mt-3 text-sm text-white/55">Last updated November 9, 2026</p>
         <div className="mt-8 space-y-6 text-white/80 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-white [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
           {children}
         </div>
@@ -42,23 +36,33 @@ export function PrivacyPolicyPage() {
       <section>
         <h2>Your camera stays on your device</h2>
         <ul>
-          <li>DeskZen checks your posture inside your browser. The camera picture is never sent to us.</li>
-          <li>Photos and video are never saved or uploaded.</li>
-          <li>What DeskZen keeps, like your Posture Print outline, settings and daily scores, is stored in this browser.</li>
+          <li>DeskZen checks your posture inside your browser with an on-device model. The camera picture is never sent to us.</li>
+          <li>Photos and video are never saved or uploaded. The snapshot stays in memory only.</li>
+          <li>Your Posture Print outline, settings, daily scores and similar app data stay in this browser on your device.</li>
         </ul>
       </section>
       <section>
         <h2>Your account</h2>
         <p>
-          When sign-in opens, we will keep only what an account needs, like your email address. This section will list
-          exactly what is stored and who provides sign-in before accounts go live.
+          Sign-in uses an email magic link through Supabase Auth. We store the email address and account data needed to
+          keep you signed in. App data like your Posture Print and progress stays in your browser; it is not synced to
+          our servers today.
         </p>
+      </section>
+      <section>
+        <h2>Where DeskZen runs</h2>
+        <ul>
+          <li>The website and app are hosted on Vercel.</li>
+          <li>Accounts and authentication are provided by Supabase.</li>
+          <li>We do not use third-party analytics or advertising cookies on these pages.</li>
+        </ul>
       </section>
       <section>
         <h2>Your choices</h2>
         <ul>
           <li>You can pause the camera any time.</li>
-          <li>You can export or delete everything DeskZen saved from Settings in the app.</li>
+          <li>You can clear what DeskZen saved in this browser from Settings in the app, or by clearing site data in your browser.</li>
+          <li>To delete your account or ask a privacy question, email us at <ContactLink />.</li>
         </ul>
       </section>
       <section>
@@ -82,6 +86,13 @@ export function TermsPage() {
         </p>
       </section>
       <section>
+        <h2>Your account</h2>
+        <p>
+          You sign in with an email magic link. Keep your inbox secure, and only use DeskZen on devices you control.
+          You are responsible for activity on your account.
+        </p>
+      </section>
+      <section>
         <h2>A wellness tool</h2>
         <p>
           DeskZen offers general wellness tips like posture nudges and break reminders. It does not diagnose, treat or
@@ -91,10 +102,6 @@ export function TermsPage() {
       <section>
         <h2>Be kind to your setup</h2>
         <p>Use DeskZen on your own devices, and only point the camera at people who are fine with it.</p>
-      </section>
-      <section>
-        <h2>Coming soon</h2>
-        <p>Full terms, including accounts, will be posted here before sign-up opens.</p>
       </section>
       <section>
         <h2>Contact</h2>

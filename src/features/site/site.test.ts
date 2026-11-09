@@ -29,22 +29,33 @@ describe('public site', () => {
     expect(html).toContain('href="/login"');
   });
 
-  it('renders sign-in with Google and email, and no Apple button yet', () => {
+  it('renders email sign-in, hides Google for now, and has no Apple button', () => {
     const html = render(createElement(LoginPage));
     expect(html).toContain('Welcome to DeskZen');
-    expect(html).toContain('Continue with Google');
+    expect(html).not.toContain('Continue with Google');
     expect(html).toContain('Email me a sign-in link');
     expect(html).not.toContain('Apple');
     expect(html).toContain('Your camera stays on your device.');
     expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
   });
 
-  it('marks the legal pages as drafts with the contact email', () => {
+  it('renders final Privacy and Terms with contact email and no draft wording', () => {
     for (const page of [PrivacyPolicyPage, TermsPage]) {
       const html = render(createElement(page));
-      expect(html).toContain('Draft');
+      expect(html).not.toMatch(/\bDraft\b/i);
+      expect(html).not.toMatch(/coming soon|before accounts open|when sign-in opens/i);
+      expect(html).toContain('Last updated November 9, 2026');
       expect(html).toContain(CONTACT_EMAIL);
+      expect(html).toContain('wellness tool, not a medical device');
     }
+    const privacy = render(createElement(PrivacyPolicyPage));
+    expect(privacy).toContain('Privacy Policy');
+    expect(privacy).toContain('Your camera stays on your device');
+    expect(privacy).toContain('Supabase');
+    expect(privacy).toContain('Vercel');
+    const terms = render(createElement(TermsPage));
+    expect(terms).toContain('Terms of Use');
+    expect(terms).toContain('email magic link');
   });
 
 });

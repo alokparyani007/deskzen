@@ -7,6 +7,9 @@ import type { AuthResult } from '../../lib/auth';
 import { CONTACT_EMAIL, siteFocus } from './SiteChrome';
 import { PAGE_META } from './seo';
 
+/** Flip to true when Google OAuth is ready in Supabase. */
+const GOOGLE_SIGNIN_ENABLED = false;
+
 type Busy = 'google' | 'email' | null;
 
 export function LoginPage() {
@@ -77,23 +80,27 @@ export function LoginPage() {
             </p>
           ) : null}
 
-          <button
-            type="button"
-            onClick={() => void google()}
-            disabled={busy !== null}
-            className={`mt-7 flex w-full items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 font-semibold text-desk transition hover:bg-white/90 disabled:opacity-60 ${siteFocus}`}
-          >
-            <GoogleMark />
-            {busy === 'google' ? 'Opening Google…' : 'Continue with Google'}
-          </button>
+          {GOOGLE_SIGNIN_ENABLED ? (
+            <>
+              <button
+                type="button"
+                onClick={() => void google()}
+                disabled={busy !== null}
+                className={`mt-7 flex w-full items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 font-semibold text-desk transition hover:bg-white/90 disabled:opacity-60 ${siteFocus}`}
+              >
+                <GoogleMark />
+                {busy === 'google' ? 'Opening Google…' : 'Continue with Google'}
+              </button>
 
-          <div className="my-6 flex items-center gap-4 text-sm text-white/50" role="separator" aria-label="or">
-            <span className="h-px flex-1 bg-white/12" />
-            or
-            <span className="h-px flex-1 bg-white/12" />
-          </div>
+              <div className="my-6 flex items-center gap-4 text-sm text-white/50" role="separator" aria-label="or">
+                <span className="h-px flex-1 bg-white/12" />
+                or
+                <span className="h-px flex-1 bg-white/12" />
+              </div>
+            </>
+          ) : null}
 
-          <form onSubmit={(e) => void sendLink(e)} noValidate>
+          <form onSubmit={(e) => void sendLink(e)} noValidate className={GOOGLE_SIGNIN_ENABLED ? undefined : 'mt-7'}>
             <label htmlFor={emailId} className="block text-sm font-medium text-white/85">
               Email
             </label>
@@ -112,7 +119,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={busy !== null}
-              className={`mt-4 w-full rounded-xl bg-print px-4 py-3 font-semibold text-white shadow-[0_0_24px_rgb(5_150_105/0.35)] transition hover:bg-brand-light disabled:opacity-60 ${siteFocus}`}
+              className={`mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-brand px-4 py-3 font-semibold text-white shadow-[0_0_24px_rgb(5_150_105/0.35)] transition hover:bg-callout disabled:opacity-60 ${siteFocus}`}
             >
               {busy === 'email' ? 'Sending…' : 'Email me a sign-in link'}
             </button>
@@ -128,9 +135,9 @@ export function LoginPage() {
             <span>Your camera stays on your device. Photos and video are never saved or uploaded.</span>
           </p>
           <p className="mt-4 flex justify-center gap-6 text-sm text-white/70">
-            <Link to="/privacy" className={`rounded hover:text-white ${siteFocus}`}>Privacy</Link>
-            <Link to="/terms" className={`rounded hover:text-white ${siteFocus}`}>Terms</Link>
-            <a href={`mailto:${CONTACT_EMAIL}`} className={`rounded hover:text-white ${siteFocus}`}>Contact</a>
+            <Link to="/privacy" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Privacy</Link>
+            <Link to="/terms" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Terms</Link>
+            <a href={`mailto:${CONTACT_EMAIL}`} className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Contact</a>
           </p>
           {auth.isStub && stubAllowed ? (
             <p className="mt-5 text-center text-xs text-white/40">Preview: accounts aren&rsquo;t connected yet, so this opens the app on this device.</p>

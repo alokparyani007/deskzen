@@ -33,9 +33,9 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
   },
   '/login': {
     title: 'Log in or Sign Up | DeskZen',
-    description: 'Sign in to DeskZen with Google or an email link and start getting gentle posture and break reminders at your desk. Free during early access.',
+    description: 'Sign in to DeskZen with an email link and start getting gentle posture and break reminders at your desk. Free during early access.',
     ogTitle: 'Log in to DeskZen',
-    ogDescription: 'Sign in with Google or email. Free during early access.',
+    ogDescription: 'Sign in with an email link. Free during early access.',
   },
 };
 

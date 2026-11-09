@@ -33,7 +33,7 @@ function ToZen() {
 }
 
 export const router = createBrowserRouter([
-  // Public website: marketing home, sign-in, and draft legal pages.
+  // Public website: marketing home, sign-in, Privacy and Terms.
   { path: '/', element: <SiteHome /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/privacy', element: <PrivacyPolicyPage /> },
