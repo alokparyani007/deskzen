@@ -1,10 +1,11 @@
 import { useEffect, useId, useState } from 'react';
 import type { FormEvent } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AFTER_SIGN_IN, auth, isValidEmail, stubAllowed, useAuthSession } from '../../lib/auth';
 import type { AuthResult } from '../../lib/auth';
 import { CONTACT_EMAIL, siteFocus } from './SiteChrome';
+import { enterApp } from './enterApp';
 import { PAGE_META } from './seo';
 
 /** Flip to true when Google OAuth is ready in Supabase. */
@@ -13,7 +14,6 @@ const GOOGLE_SIGNIN_ENABLED = false;
 type Busy = 'google' | 'email' | null;
 
 export function LoginPage() {
-  const navigate = useNavigate();
   const session = useAuthSession();
   const emailId = useId();
   const statusId = useId();
@@ -34,7 +34,7 @@ export function LoginPage() {
       return;
     }
     if (result.session) {
-      navigate(AFTER_SIGN_IN);
+      enterApp(AFTER_SIGN_IN);
       return;
     }
     // Real magic link: the session arrives when they tap the link in their email.
@@ -74,9 +74,9 @@ export function LoginPage() {
           {session ? (
             <p className="mt-5 rounded-xl border border-outline/30 bg-print/10 px-4 py-3 text-center text-sm text-brand-tint">
               You&rsquo;re signed in.{' '}
-              <Link to={AFTER_SIGN_IN} className={`rounded font-semibold text-outline underline-offset-2 hover:underline ${siteFocus}`}>
+              <a href={AFTER_SIGN_IN} className={`rounded font-semibold text-outline underline-offset-2 hover:underline ${siteFocus}`}>
                 Open the app
-              </Link>
+              </a>
             </p>
           ) : null}
 

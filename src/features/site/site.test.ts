@@ -6,6 +6,7 @@ import { LoginPage } from './LoginPage';
 import { PrivacyPolicyPage, TermsPage } from './LegalPage';
 import { SiteHome } from './SiteHome';
 import { CONTACT_EMAIL } from './SiteChrome';
+import { isPublicPath } from './enterApp';
 import { FAQS, PAGE_META, jsonLd } from './seo';
 import { PRERENDER_PATHS, render as renderPage } from '../../entry-server';
 
@@ -37,6 +38,18 @@ describe('public site', () => {
     expect(html).not.toContain('Apple');
     expect(html).toContain('Your camera stays on your device.');
     expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
+  });
+
+  it('does not client-side route from public pages into the app', () => {
+    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage]) {
+      const html = render(createElement(page));
+      const hrefs = [...html.matchAll(/href="([^"]+)"[^>]*data-discover="true"|data-discover="true"[^>]*href="([^"]+)"/g)].map(
+        (match) => match[1] ?? match[2] ?? '',
+      );
+      for (const href of hrefs) {
+        expect(isPublicPath(href), href).toBe(true);
+      }
+    }
   });
 
   it('renders final Privacy and Terms with contact email and no draft wording', () => {
