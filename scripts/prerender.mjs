@@ -1,8 +1,8 @@
 // Writes ready-made HTML for the public pages after `vite build` + the SSR build.
 // dist/index.html (home), dist/privacy.html, dist/terms.html, dist/login.html.
 // App routes use dist/app.html, the plain SPA shell (see vercel.json and the PWA navigateFallback).
-import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const root = resolve(import.meta.dirname, '..');
@@ -25,7 +25,10 @@ function setMeta(html, attr, key, value) {
   return replaceOnce(html, re, `<meta ${attr}="${key}" content="${esc(value)}" />`, `${attr}=${key}`);
 }
 
-const outFile = { '/': 'index.html', '/privacy': 'privacy.html', '/terms': 'terms.html', '/login': 'login.html' };
+function outFileFor(path) {
+  if (path === '/') return 'index.html';
+  return `${path.replace(/^\//, '')}.html`;
+}
 
 for (const path of ssr.PRERENDER_PATHS) {
   const meta = ssr.PAGE_META[path];
@@ -52,8 +55,10 @@ for (const path of ssr.PRERENDER_PATHS) {
     '</head>',
   );
   html = replaceOnce(html, /<div id="root"><\/div>/, `<div id="root">${body}</div>`, '<div id="root"></div>');
-  writeFileSync(resolve(dist, outFile[path]), html);
-  console.log(`prerender: ${path} -> dist/${outFile[path]} (${(html.length / 1024).toFixed(1)} KB)`);
+  const file = outFileFor(path);
+  mkdirSync(dirname(resolve(dist, file)), { recursive: true });
+  writeFileSync(resolve(dist, file), html);
+  console.log(`prerender: ${path} -> dist/${file} (${(html.length / 1024).toFixed(1)} KB)`);
 }
 
 rmSync(ssrDir, { recursive: true, force: true });

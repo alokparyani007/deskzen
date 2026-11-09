@@ -13,6 +13,18 @@
       "destination": "/login.html"
     },
     {
+      "source": "/learn",
+      "destination": "/learn.html"
+    },
+    {
+      "source": "/learn/stop-slouching-at-your-desk",
+      "destination": "/learn/stop-slouching-at-your-desk.html"
+    },
+    {
+      "source": "/learn/afternoon-slump",
+      "destination": "/learn/afternoon-slump.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/app.html"
     }

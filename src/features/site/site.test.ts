@@ -2,7 +2,9 @@ import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { LoginPage } from './LoginPage';
+import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './LearnPages';
 import { PrivacyPolicyPage, TermsPage } from './LegalPage';
 import { SiteHome } from './SiteHome';
 import { CONTACT_EMAIL } from './SiteChrome';
@@ -41,7 +43,7 @@ describe('public site', () => {
   });
 
   it('does not client-side route from public pages into the app', () => {
-    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage]) {
+    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage, LearnIndexPage, StopSlouchingPage, AfternoonSlumpPage]) {
       const html = render(createElement(page));
       const hrefs = [...html.matchAll(/href="([^"]+)"[^>]*data-discover="true"|data-discover="true"[^>]*href="([^"]+)"/g)].map(
         (match) => match[1] ?? match[2] ?? '',
@@ -102,6 +104,47 @@ describe('search and AI crawler readiness', () => {
     expect(ld).toContain('sales@deskzenapp.com');
     expect(ld).toContain('"FAQPage"');
     expect(JSON.stringify(jsonLd('/privacy'))).not.toContain('FAQPage');
+    expect(JSON.stringify(jsonLd('/learn/stop-slouching-at-your-desk'))).toContain('"Article"');
+    expect(JSON.stringify(jsonLd('/learn/afternoon-slump'))).toContain('"Article"');
+    expect(JSON.stringify(jsonLd('/learn'))).not.toContain('"Article"');
+  });
+
+  it('renders both Learn articles with sources, a soft CTA, and no medical claims', () => {
+    const slouch = render(createElement(StopSlouchingPage));
+    const slump = render(createElement(AfternoonSlumpPage));
+    expect(slouch).toContain('How to stop slouching at your desk');
+    expect(slump).toContain('Why you crash at 3 PM (and how your posture plays a part)');
+    const words = (html: string) => {
+      const article = html.match(/<article[\s\S]*<\/article>/)?.[0] ?? html;
+      return article.replace(/<[^>]+>/g, ' ').replace(/&#x27;|&rsquo;|&apos;|'/g, "'").replace(/\s+/g, ' ').trim().split(' ').length;
+    };
+    for (const html of [slouch, slump]) {
+      expect(words(html)).toBeGreaterThanOrEqual(900);
+      expect(words(html)).toBeLessThanOrEqual(1500);
+      expect(html).toContain('may help');
+      expect(html).toContain('health professional');
+      expect(html).toContain('wellness tool, not a medical device');
+      expect(html).toContain('href="/login"');
+      expect(html).toContain('Try DeskZen free');
+      expect(html.toLowerCase()).not.toMatch(/\b(cure|cures|heal|heals|treats back pain|prevents injury)\b/);
+    }
+    expect(slouch).toContain('https://www.osha.gov/etools/computer-workstations');
+    expect(slouch).toContain('https://www.osha.gov/etools/computer-workstations/positions');
+    expect(slouch).toContain('https://www.health.harvard.edu/staying-healthy/why-good-posture-matters');
+    expect(slouch).toContain('https://www.health.harvard.edu/pain/3-surprising-risks-of-poor-posture');
+    expect(slump).toContain('https://www.nigms.nih.gov/education/fact-sheets/Pages/circadian-rhythms.aspx');
+    expect(slump).toContain('https://www.nhlbi.nih.gov/health/sleep-deprivation');
+    expect(slump).toContain('https://www.health.harvard.edu/staying-healthy/the-dangers-of-sitting');
+    expect(slump).toContain('https://www.osha.gov/etools/computer-workstations/work-process');
+  });
+
+  it('lists Learn in the footer and both articles in the sitemap', () => {
+    const home = render(createElement(SiteHome));
+    expect(home).toContain('href="/learn"');
+    expect(home).toContain('Learn');
+    const sitemap = readFileSync('public/sitemap.xml', 'utf8');
+    expect(sitemap).toContain('https://www.deskzenapp.com/learn/stop-slouching-at-your-desk');
+    expect(sitemap).toContain('https://www.deskzenapp.com/learn/afternoon-slump');
   });
 
   it('server-renders every public page for the build prerender', () => {

@@ -10,6 +10,7 @@ import { HomePage } from '../features/home/HomePage';
 import { NeckCheckPage } from '../features/neck/NeckCheckPage';
 import { PrivacyPage } from '../features/privacy/PrivacyPage';
 import { LoginPage } from '../features/site/LoginPage';
+import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from '../features/site/LearnPages';
 import { PrivacyPolicyPage, TermsPage } from '../features/site/LegalPage';
 import { SiteHome } from '../features/site/SiteHome';
 import { ProgressPage } from '../features/progress/ProgressPage';
@@ -38,6 +39,9 @@ export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
   { path: '/privacy', element: <PrivacyPolicyPage /> },
   { path: '/terms', element: <TermsPage /> },
+  { path: '/learn', element: <LearnIndexPage /> },
+  { path: '/learn/stop-slouching-at-your-desk', element: <StopSlouchingPage /> },
+  { path: '/learn/afternoon-slump', element: <AfternoonSlumpPage /> },
   // Everything below needs a signed-in account; signed-out visitors go to /login.
   {
     element: <AuthGate />,

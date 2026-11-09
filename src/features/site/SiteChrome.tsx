@@ -52,6 +52,11 @@ export function SiteFooter() {
         <div className="flex flex-col items-center gap-2 sm:items-end">
           <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/75">
             <li>
+              <Link to="/learn" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
+                Learn
+              </Link>
+            </li>
+            <li>
               <Link to="/privacy" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
                 Privacy
               </Link>

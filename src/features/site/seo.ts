@@ -4,7 +4,14 @@ export const SITE_URL = 'https://www.deskzenapp.com';
 export const OG_IMAGE = `${SITE_URL}/site/og.jpg`;
 export const CONTACT = 'sales@deskzenapp.com';
 
-export type PublicPath = '/' | '/privacy' | '/terms' | '/login';
+export type PublicPath =
+  | '/'
+  | '/privacy'
+  | '/terms'
+  | '/login'
+  | '/learn'
+  | '/learn/stop-slouching-at-your-desk'
+  | '/learn/afternoon-slump';
 
 export type PageMeta = { title: string; description: string; ogTitle: string; ogDescription: string };
 
@@ -36,6 +43,27 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
     description: 'Sign in to DeskZen with an email link and start getting gentle posture and break reminders at your desk. Free during early access.',
     ogTitle: 'Log in to DeskZen',
     ogDescription: 'Sign in with an email link. Free during early access.',
+  },
+  '/learn': {
+    title: 'Learn | DeskZen Posture Guides',
+    description:
+      'Friendly guides on slouching, the 3 PM slump, and desk habits that may help. From DeskZen, a free posture reminder app.',
+    ogTitle: 'Learn with DeskZen',
+    ogDescription: 'Friendly guides on slouching, the 3 PM slump, and desk habits that may help.',
+  },
+  '/learn/stop-slouching-at-your-desk': {
+    title: 'How to Stop Slouching at Your Desk | DeskZen',
+    description:
+      'Practical desk setup and habits that may help you sit taller and slouch less. From DeskZen, a free posture reminder app for your browser.',
+    ogTitle: 'How to stop slouching at your desk',
+    ogDescription: 'Desk setup and daily habits that may help you sit taller, without turning it into a chore.',
+  },
+  '/learn/afternoon-slump': {
+    title: 'Why You Crash at 3 PM | DeskZen',
+    description:
+      'Why many people fade around 3 PM, how sitting and slouching may play a part, and simple habits that may help. A DeskZen guide.',
+    ogTitle: 'Why you crash at 3 PM',
+    ogDescription: 'Why afternoons feel heavy, how sitting may play a part, and simple resets that may help.',
   },
 };
 
@@ -115,6 +143,26 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
       '@type': 'FAQPage',
       '@id': `${SITE_URL}/#faq`,
       mainEntity: FAQS.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+    });
+  }
+  const articleHeadline: Partial<Record<PublicPath, string>> = {
+    '/learn/stop-slouching-at-your-desk': 'How to stop slouching at your desk',
+    '/learn/afternoon-slump': 'Why you crash at 3 PM (and how your posture plays a part)',
+  };
+  const headline = articleHeadline[path];
+  if (headline) {
+    graph.push({
+      '@type': 'Article',
+      '@id': `${pageUrl(path)}#article`,
+      headline,
+      description: meta.description,
+      datePublished: '2026-11-09',
+      dateModified: '2026-11-09',
+      author: { '@id': org['@id'] },
+      publisher: { '@id': org['@id'] },
+      image: OG_IMAGE,
+      mainEntityOfPage: { '@id': page['@id'] },
+      inLanguage: 'en-US',
     });
   }
   return { '@context': 'https://schema.org', '@graph': graph };

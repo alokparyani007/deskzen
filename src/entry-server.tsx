@@ -3,6 +3,7 @@ import type { ComponentType } from 'react';
 import { renderToString } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { LoginPage } from './features/site/LoginPage';
+import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './features/site/LearnPages';
 import { PrivacyPolicyPage, TermsPage } from './features/site/LegalPage';
 import { SiteHome } from './features/site/SiteHome';
 import type { PublicPath } from './features/site/seo';
@@ -14,6 +15,9 @@ const pages: Record<PublicPath, ComponentType> = {
   '/privacy': PrivacyPolicyPage,
   '/terms': TermsPage,
   '/login': LoginPage,
+  '/learn': LearnIndexPage,
+  '/learn/stop-slouching-at-your-desk': StopSlouchingPage,
+  '/learn/afternoon-slump': AfternoonSlumpPage,
 };
 
 export const PRERENDER_PATHS = Object.keys(pages) as PublicPath[];

@@ -62,7 +62,7 @@ export default defineConfig(({ isSsrBuild }) => ({
           // App routes open the plain shell, never the prerendered homepage.
           navigateFallback: 'app.html',
           // Let the server answer these directly (prerendered pages and crawler files).
-          navigateFallbackDenylist: [/^\/(privacy|terms|login)\/?$/, /^\/(robots\.txt|sitemap\.xml)$/],
+          navigateFallbackDenylist: [/^\/(privacy|terms|login)\/?$/, /^\/learn(\/[^/]+)?\/?$/, /^\/(robots\.txt|sitemap\.xml)$/],
           // New deploys take over right away so nobody stays on an old cached build.
           skipWaiting: true,
           clientsClaim: true,
