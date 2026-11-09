@@ -96,7 +96,8 @@ describe('search and AI crawler readiness', () => {
 
   it('keeps the FAQ free of medical claims', () => {
     const text = FAQS.map((f) => `${f.q} ${f.a}`).join(' ').toLowerCase();
-    expect(text).toContain('wellness tool, not a medical device');
+    expect(text).toContain('wellness tool');
+    expect(text).toContain('doesn\u2019t diagnose');
     expect(text).not.toMatch(/\b(cure|cures|heal|heals|treats back pain|prevents injury)\b/);
   });
 });

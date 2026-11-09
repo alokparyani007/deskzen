@@ -42,27 +42,27 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
 export const FAQS: readonly { q: string; a: string }[] = [
   {
     q: 'How does DeskZen check my posture?',
-    a: 'First you sit your best once to set your Zen, a personal outline of your good posture. While DeskZen runs, it uses your webcam and an on-device model inside your browser to compare how you sit with that outline. When you slouch or drift, you get a gentle nudge to sit up straight.',
+    a: 'Sit your best once to set your Zen, your personal posture outline. Then DeskZen watches through your webcam, right in your browser, and gives you a gentle nudge when you slouch or drift.',
   },
   {
     q: 'Is my camera video saved or uploaded?',
-    a: 'No. The camera picture is checked inside your browser and never leaves your device. Photos and video are never saved or uploaded.',
+    a: 'Never. Your camera is checked on your device, inside your browser. No photos or video are saved or sent anywhere, and there\u2019s no tracking.',
   },
   {
     q: 'Does DeskZen remind me to take breaks?',
-    a: 'Yes. Break reminders nudge you to move, stretch, rest your eyes and drink water. Mark a break done or snooze it in one tap, and quiet hours keep reminders silent when you need focus.',
+    a: 'Yes. It nudges you to move, stretch, rest your eyes and drink water. Tap Done or Snooze, and quiet hours keep it silent when you need to focus.',
   },
   {
     q: 'Is DeskZen free?',
-    a: 'Yes. DeskZen is free during early access, and you don\u2019t need a credit card to sign up.',
+    a: 'Yes, it\u2019s free during early access, with no credit card. You sign in with a link sent to your email, so there\u2019s no password to remember.',
   },
   {
     q: 'Does it work on Mac and Windows?',
-    a: 'Yes. DeskZen runs in a modern desktop browser on Mac or Windows with a built-in or USB webcam. There is nothing to install.',
+    a: 'Yes. All you need is a modern desktop browser and a webcam. There\u2019s nothing to install.',
   },
   {
     q: 'Is DeskZen a medical device?',
-    a: 'No. DeskZen is a wellness tool, not a medical device. It offers general posture and break tips and does not diagnose or treat any condition. If something hurts, please talk to a health professional.',
+    a: 'No. DeskZen is a wellness tool with general posture and break tips. It doesn\u2019t diagnose or treat anything. If something hurts, talk to a health professional.',
   },
 ];
 
