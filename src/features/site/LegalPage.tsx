@@ -54,7 +54,12 @@ export function PrivacyPolicyPage() {
         <ul>
           <li>The website and app are hosted on Vercel.</li>
           <li>Accounts and authentication are provided by Supabase.</li>
-          <li>We do not use third-party analytics or advertising cookies on these pages.</li>
+          <li>
+            The public website pages use Google Analytics to count visits and see how people find the site. The DeskZen
+            app itself (the camera and posture checks) uses no analytics. The camera feed stays on your device and is
+            never uploaded or saved.
+          </li>
+          <li>We do not use advertising cookies.</li>
         </ul>
       </section>
       <section>

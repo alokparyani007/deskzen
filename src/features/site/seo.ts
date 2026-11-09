@@ -46,7 +46,7 @@ export const FAQS: readonly { q: string; a: string }[] = [
   },
   {
     q: 'Is my camera video saved or uploaded?',
-    a: 'Never. Your camera is checked on your device, inside your browser. No photos or video are saved or sent anywhere, and there\u2019s no tracking.',
+    a: 'Never. Your camera is checked on your device, inside your browser. No photos or video are saved or sent anywhere. The DeskZen app itself uses no analytics.',
   },
   {
     q: 'Does DeskZen remind me to take breaks?',

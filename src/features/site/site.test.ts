@@ -53,6 +53,9 @@ describe('public site', () => {
     expect(privacy).toContain('Your camera stays on your device');
     expect(privacy).toContain('Supabase');
     expect(privacy).toContain('Vercel');
+    expect(privacy).toContain('Google Analytics');
+    expect(privacy).toContain('The DeskZen app itself (the camera and posture checks) uses no analytics');
+    expect(privacy).not.toContain('We do not use third-party analytics');
     const terms = render(createElement(TermsPage));
     expect(terms).toContain('Terms of Use');
     expect(terms).toContain('email magic link');
