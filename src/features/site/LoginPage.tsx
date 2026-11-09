@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AFTER_SIGN_IN, auth, isValidEmail, stubAllowed, useAuthSession } from '../../lib/auth';
 import type { AuthResult } from '../../lib/auth';
 import { CONTACT_EMAIL, siteFocus } from './SiteChrome';
+import { PAGE_META } from './seo';
 
 type Busy = 'google' | 'email' | null;
 
@@ -20,7 +21,7 @@ export function LoginPage() {
   const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
-    document.title = 'Log in · DeskZen';
+    document.title = PAGE_META['/login'].title;
   }, []);
 
   function finish(result: AuthResult): void {

@@ -1,0 +1,46 @@
+# DeskZen: public pages are open to search engines and AI assistants.
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /live
+Disallow: /set-my-zen
+Disallow: /progress
+Disallow: /reminders
+Disallow: /settings
+Disallow: /debug
+Disallow: /eye
+Disallow: /spot-fix
+Disallow: /calibrate
+Disallow: /welcome
+Disallow: /break
+Disallow: /stretches
+Disallow: /neck
+
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Googlebot
+User-agent: Bingbot
+Allow: /
+Disallow: /app
+Disallow: /live
+Disallow: /set-my-zen
+Disallow: /progress
+Disallow: /reminders
+Disallow: /settings
+Disallow: /debug
+Disallow: /eye
+Disallow: /spot-fix
+Disallow: /calibrate
+Disallow: /welcome
+Disallow: /break
+Disallow: /stretches
+Disallow: /neck
+
+Sitemap: https://www.deskzenapp.com/sitemap.xml

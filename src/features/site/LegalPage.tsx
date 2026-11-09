@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { CONTACT_EMAIL, SitePage, siteFocus } from './SiteChrome';
+import { PAGE_META } from './seo';
+import type { PublicPath } from './seo';
 
 function ContactLink() {
   return (
@@ -10,10 +12,10 @@ function ContactLink() {
   );
 }
 
-function LegalPage({ title, children }: { title: string; children: ReactNode }) {
+function LegalPage({ title, path, children }: { title: string; path: PublicPath; children: ReactNode }) {
   useEffect(() => {
-    document.title = `${title} · DeskZen`;
-  }, [title]);
+    document.title = PAGE_META[path].title;
+  }, [path]);
   return (
     <SitePage>
       <article className="mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-8 sm:pt-12">
@@ -36,7 +38,7 @@ function LegalPage({ title, children }: { title: string; children: ReactNode }) 
 
 export function PrivacyPolicyPage() {
   return (
-    <LegalPage title="Privacy">
+    <LegalPage title="Privacy Policy" path="/privacy">
       <section>
         <h2>Your camera stays on your device</h2>
         <ul>
@@ -71,7 +73,7 @@ export function PrivacyPolicyPage() {
 
 export function TermsPage() {
   return (
-    <LegalPage title="Terms">
+    <LegalPage title="Terms of Use" path="/terms">
       <section>
         <h2>Using DeskZen</h2>
         <p>

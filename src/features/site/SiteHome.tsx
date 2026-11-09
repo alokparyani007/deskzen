@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { Check, Clock, Gift, Globe, MousePointerClick, PersonStanding, ShieldCheck, Zap } from 'lucide-react';
+import { Check, ChevronDown, Clock, Gift, Globe, MousePointerClick, PersonStanding, ShieldCheck, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BrowserFrame } from './BrowserFrame';
-import { SitePage, ctaClass } from './SiteChrome';
+import { SitePage, ctaClass, siteFocus } from './SiteChrome';
+import { FAQS, PAGE_META } from './seo';
 
-export const SITE_TITLE = 'DeskZen: Feel better by 3 PM';
+export const SITE_TITLE = PAGE_META['/'].title;
 
 type Benefit = { icon: LucideIcon; title: string; body: string };
 
@@ -40,6 +41,7 @@ export function SiteHome() {
       <Cta className="pt-4 pb-20 sm:pb-24" />
       <HowItWorks />
       <Privacy />
+      <Faq />
       <BottomBand />
     </SitePage>
   );
@@ -61,7 +63,8 @@ function Hero() {
     <section aria-labelledby="hero-title" className="relative overflow-hidden px-5 pt-6 pb-14 sm:px-8 sm:pt-10">
       <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-40 h-[28rem] w-[56rem] max-w-[140vw] -translate-x-1/2 rounded-full bg-print/15 blur-3xl" />
       <div className="relative mx-auto max-w-4xl text-center">
-        <h1 id="hero-title" className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+        <p className="text-sm font-semibold uppercase tracking-[0.14em] text-outline">Posture and break reminders for your desk</p>
+        <h1 id="hero-title" className="mt-4 text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
           Feel better by 3 PM.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-outline sm:text-xl">
@@ -85,7 +88,7 @@ function HeroShot() {
           sizes="(min-width: 1024px) 896px, 100vw"
           width={1280}
           height={720}
-          alt="A woman smiling at her laptop, with a soft green outline showing she is sitting tall"
+          alt="A woman smiling at her laptop desk, with a soft green DeskZen posture outline showing she is sitting up straight"
           fetchPriority="high"
           className="block aspect-video h-auto w-full object-cover"
         />
@@ -117,13 +120,14 @@ function ScoreBadge({ score }: { score: number }) {
 
 function Benefits() {
   return (
-    <section aria-label="Benefits" className="px-5 pb-10 sm:px-8">
+    <section aria-labelledby="benefits-title" className="px-5 pb-10 sm:px-8">
+      <h2 id="benefits-title" className="sr-only">Benefits of posture and break reminders at your desk</h2>
       <ul className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-3 sm:gap-5">
         {benefits.map(({ icon: Icon, title, body }) => (
           <li key={title} className="flex items-center gap-4 rounded-3xl border border-white/15 bg-white/[0.03] px-5 py-5 sm:block sm:px-6 sm:py-7 sm:text-center">
             <Icon className="size-8 shrink-0 text-outline sm:mx-auto sm:size-9" strokeWidth={1.75} aria-hidden="true" />
             <div>
-              <h2 className="text-lg font-semibold text-white sm:mt-4 sm:text-xl">{title}</h2>
+              <h3 className="text-lg font-semibold text-white sm:mt-4 sm:text-xl">{title}</h3>
               <p className="mt-0.5 text-outline/90 sm:mt-1.5">{body}</p>
             </div>
           </li>
@@ -199,7 +203,7 @@ function HowItWorks() {
   return (
     <section aria-labelledby="how-title" className="px-5 pb-16 sm:px-8">
       <h2 id="how-title" className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
-        How it works
+        How DeskZen helps you sit up straight
       </h2>
       <ol className="mx-auto mt-10 grid max-w-4xl gap-10 sm:grid-cols-3 sm:gap-6">
         {steps.map((step, i) => (
@@ -223,7 +227,7 @@ function Privacy() {
   return (
     <section aria-labelledby="privacy-title" className="px-5 pb-20 sm:px-8">
       <h2 id="privacy-title" className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
-        Privacy
+        Private posture checks
       </h2>
       <div className="mx-auto mt-8 flex max-w-2xl flex-col items-center gap-5 rounded-3xl border border-outline/40 bg-print/[0.06] px-6 py-7 text-center shadow-[0_0_40px_rgb(5_150_105/0.25)] sm:flex-row sm:px-8 sm:text-left">
         <ShieldCheck className="size-12 shrink-0 text-outline" strokeWidth={1.5} aria-hidden="true" />
@@ -240,6 +244,27 @@ function Privacy() {
           </li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+function Faq() {
+  return (
+    <section aria-labelledby="faq-title" className="px-5 pb-20 sm:px-8">
+      <h2 id="faq-title" className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        Questions about DeskZen
+      </h2>
+      <div className="mx-auto mt-8 max-w-3xl space-y-3">
+        {FAQS.map(({ q, a }) => (
+          <details key={q} className="group rounded-2xl border border-white/15 bg-white/[0.03] px-5 py-4 open:border-outline/40 open:bg-print/[0.06] sm:px-6">
+            <summary className={`flex cursor-pointer list-none items-center justify-between gap-4 rounded-lg [&::-webkit-details-marker]:hidden ${siteFocus}`}>
+              <h3 className="text-lg font-semibold text-white">{q}</h3>
+              <ChevronDown className="size-5 shrink-0 text-outline transition group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <p className="mt-3 text-outline/90">{a}</p>
+          </details>
+        ))}
+      </div>
     </section>
   );
 }
