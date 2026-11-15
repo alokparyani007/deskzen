@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom';
+import { AppDocumentGate } from './AppDocumentGate';
 import { AppShell } from './AppShell';
-import { AuthGate } from './AuthGate';
 import { OnboardingGate } from './OnboardingGate';
 import { ZenFlowV2 } from '../features/zen2/ZenFlowV2';
 import { LiveViewV2 } from '../features/live/LiveViewV2';
@@ -35,6 +35,8 @@ function ToZen() {
 
 export const router = createBrowserRouter([
   // Public website: marketing home, sign-in, Privacy and Terms.
+  // The marketing entry (index.html) serves these without the app bundle.
+  // They stay here too so in-app links, like Settings → Sign in, still resolve.
   { path: '/', element: <SiteHome /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/privacy', element: <PrivacyPolicyPage /> },
@@ -42,9 +44,9 @@ export const router = createBrowserRouter([
   { path: '/learn', element: <LearnIndexPage /> },
   { path: '/learn/stop-slouching-at-your-desk', element: <StopSlouchingPage /> },
   { path: '/learn/afternoon-slump', element: <AfternoonSlumpPage /> },
-  // Everything below needs a signed-in account; signed-out visitors go to /login.
+  // Guests and signed-in people share these routes. Sign-in is optional.
   {
-    element: <AuthGate />,
+    element: <AppDocumentGate />,
     children: [
       {
         element: <AppShell />,

@@ -9,8 +9,10 @@ import { PrivacyCard } from '../print/PrivacyCard';
 import { OutlineSvg, useStageBox } from '../zen2/OutlineSvg';
 import { StepPill, ZenStage } from '../zen2/ZenStage';
 import { zenConfig } from '../zen2/zenConfig';
+import { SaveSetupPrompt } from '../auth/SaveSetupPrompt';
 import { CoachLine, CornerMatchRing, TrackStatusPill } from './LiveChrome';
 import { useLiveV2 } from './useLiveV2';
+import { SETUP_TIME } from '../../lib/copy/setupTime';
 
 const MUTE_KEY = 'sitglow.glowMuted';
 
@@ -44,8 +46,18 @@ export function LiveViewV2() {
   if (!model.live && camera.status !== 'paused') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-stage p-6">
-        <div className="rounded-3xl border border-white/10 bg-[#0f261d] text-white shadow-2xl">
-          <PrivacyCard status={camera.status} errorName={camera.errorName} onStart={() => void camera.start()} onLeave={() => navigate('/app')} />
+        <div className="w-full max-w-xl">
+          <SaveSetupPrompt />
+          <div className="rounded-3xl border border-white/10 bg-[#0f261d] text-white shadow-2xl">
+            <PrivacyCard
+              status={camera.status}
+              errorName={camera.errorName}
+              title="Live view"
+              intro="Turn the camera on for a live posture check. It stays on this device. Photos and video are never saved or uploaded."
+              onStart={() => void camera.start()}
+              onLeave={() => navigate('/app')}
+            />
+          </div>
         </div>
       </div>
     );
@@ -66,6 +78,7 @@ export function LiveViewV2() {
       showVoice
       debug={model.debug}
     >
+      <SaveSetupPrompt />
       <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)] px-[2%] pb-2">
         <div ref={stage.ref} className="relative h-full min-h-0 overflow-hidden rounded-2xl bg-black">
           <CameraStage landmarks={model.landmarks} alignment={null} showGuides={false} showLandmarks={false} frame="fill" chrome="bare" />
@@ -94,7 +107,7 @@ export function LiveViewV2() {
             <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center px-6">
               <div className="w-full max-w-md rounded-2xl bg-dock p-5 text-white backdrop-blur-md">
                 <h2 className="text-2xl font-semibold">{oldPrint ? 'Set your Zen again' : 'Set your Zen first'}</h2>
-                <p className="mt-1 text-base text-white/80">{oldPrint ? 'DeskZen has a new, more accurate outline.' : 'It takes about 30 seconds so I know your best posture.'}</p>
+                <p className="mt-1 text-base text-white/80">{oldPrint ? 'DeskZen has a new, more accurate outline.' : `It takes ${SETUP_TIME} so I know your best posture.`}</p>
                 <button type="button" className="mt-4 inline-flex h-12 items-center rounded-full bg-print px-5 text-lg font-semibold" onClick={() => navigate(`/set-my-zen?pose=${model.mode}&from=live`)}>
                   Set my Zen
                 </button>

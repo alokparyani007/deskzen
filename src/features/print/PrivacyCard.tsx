@@ -1,3 +1,4 @@
+import { ZEN_SETUP_INTRO } from '../../lib/copy/setupTime';
 import { printButton } from './printButton';
 
 export function PrivacyCard({
@@ -6,6 +7,8 @@ export function PrivacyCard({
   onStart,
   onLeave,
   tone = 'dark',
+  title = 'Set my Zen',
+  intro = ZEN_SETUP_INTRO,
 }: {
   status: string;
   errorName: string | null;
@@ -13,17 +16,17 @@ export function PrivacyCard({
   onLeave: () => void;
   /** Dark for Set my Zen v2 and Live view. The older light flow passes light. */
   tone?: 'dark' | 'light';
+  /** Visible page title. Live view passes its own so this card is not mistaken for Set my Zen. */
+  title?: string;
+  intro?: string;
 }) {
-  const title = tone === 'dark' ? 'text-white' : 'text-ink';
+  const titleClass = tone === 'dark' ? 'text-white' : 'text-ink';
   const muted = tone === 'dark' ? 'text-white/70' : 'text-ink-muted';
   const denied = status === 'denied' || status === 'unavailable';
   return (
     <section className="mx-auto max-w-xl px-4 py-10">
-      <h1 className={`text-2xl font-semibold ${title}`}>Set my Zen</h1>
-      <p className={`mt-2 max-w-xl text-sm ${muted}`}>About 20 seconds. We'll learn your best posture and save your Posture Print.</p>
-      <p className={`mt-3 text-base ${muted}`}>
-        DeskZen learns your good posture in about a minute. Your camera stays on this device. No video is saved or sent.
-      </p>
+      <h1 className={`text-2xl font-semibold ${titleClass}`}>{title}</h1>
+      <p className={`mt-3 max-w-xl text-base ${muted}`}>{intro}</p>
       {denied ? (
         <p className={`mt-4 text-sm ${muted}`} role="status">
           {cameraMessage(errorName)}

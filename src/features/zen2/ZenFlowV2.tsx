@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Shield } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { markGuestSetupPrompt } from '../auth/guestPrompt';
+import { useAuthSession } from '../../lib/auth';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { useLandmarks } from '../../hooks/useLandmarks';
 import type { Baseline, Landmarks, NormPoint } from '../../lib/posture/types';
@@ -51,6 +53,7 @@ import { usePersonOutline } from './usePersonOutline';
 import { useSnapLoop } from './useSnapLoop';
 import { DockButton, ZenDock } from './ZenDock';
 import { buildZenV2, pointsFromFrame, saveZenPrint, type ZenV2 } from './zenPrint';
+import { destinationAfterZen } from './afterZen';
 import { StepPill, ZenStage } from './ZenStage';
 import { zenConfig, type PoseMode } from './zenConfig';
 
@@ -84,6 +87,8 @@ export function ZenFlowV2() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const mode: PoseMode = params.get('pose') === 'stand' ? 'stand' : 'sit';
+  const from = params.get('from');
+  const session = useAuthSession();
   const debugOn = params.get('debug') === '1';
   const backTo = printReturnPath(params.get('from'));
   const camera = useCamera();
@@ -290,10 +295,15 @@ export function ZenFlowV2() {
           // The Zen print is saved. Spot checks pick up the numbers on the next Set my Zen.
         }
       }
-      setSaved(zen);
-      setStep('done');
       playLockIn();
       say('Locked.');
+      if (!session) markGuestSetupPrompt();
+      if (destinationAfterZen({ signedIn: Boolean(session), from }) === '/live') {
+        navigate('/live', { replace: true });
+        return;
+      }
+      setSaved(zen);
+      setStep('done');
     } catch {
       locking.current = false;
     }

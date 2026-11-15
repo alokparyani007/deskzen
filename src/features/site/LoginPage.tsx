@@ -1,10 +1,12 @@
 import { useEffect, useId, useState } from 'react';
 import type { FormEvent } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { AFTER_SIGN_IN, auth, isValidEmail, stubAllowed, useAuthSession } from '../../lib/auth';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { auth, isValidEmail, stubAllowed, useAuthSession } from '../../lib/auth';
 import type { AuthResult } from '../../lib/auth';
-import { CONTACT_EMAIL, siteFocus } from './SiteChrome';
+import { clearReturnPath, rememberReturnPath, returnPathFrom } from '../../lib/auth/returnPath';
+import { SETUP_TIME } from '../../lib/copy/setupTime';
+import { CONTACT_EMAIL, OpenAppLink, TryLink, ctaClass, siteFocus } from './SiteChrome';
 import { enterApp } from './enterApp';
 import { PAGE_META } from './seo';
 
@@ -15,6 +17,9 @@ type Busy = 'google' | 'email' | null;
 
 export function LoginPage() {
   const session = useAuthSession();
+  const location = useLocation();
+  const [params] = useSearchParams();
+  const returnTo = returnPathFrom(params.get('from'), (location.state as { from?: unknown } | null)?.from);
   const emailId = useId();
   const statusId = useId();
   const [email, setEmail] = useState('');
@@ -30,11 +35,13 @@ export function LoginPage() {
   function finish(result: AuthResult): void {
     setBusy(null);
     if (!result.ok) {
+      clearReturnPath();
       setError(result.error);
       return;
     }
     if (result.session) {
-      enterApp(AFTER_SIGN_IN);
+      clearReturnPath();
+      enterApp(returnTo);
       return;
     }
     // Real magic link: the session arrives when they tap the link in their email.
@@ -45,6 +52,7 @@ export function LoginPage() {
     setError(null);
     setNotice(null);
     setBusy('google');
+    rememberReturnPath(returnTo);
     finish(await auth.signInWithGoogle());
   }
 
@@ -57,6 +65,7 @@ export function LoginPage() {
       return;
     }
     setBusy('email');
+    rememberReturnPath(returnTo);
     finish(await auth.sendMagicLink(email));
   }
 
@@ -69,16 +78,19 @@ export function LoginPage() {
             <img src="/brand/deskzen-icon.svg" alt="" width={64} height={64} className="size-16" />
           </Link>
           <h1 className="mt-5 text-center text-[1.7rem] font-semibold tracking-tight sm:text-3xl">Welcome to DeskZen</h1>
-          <p className="mt-2 text-center text-white/70">Sign in or create your free account.</p>
+          <p className="mt-2 text-center text-white/70">Try it right away. Sign in is optional.</p>
 
           {session ? (
-            <p className="mt-5 rounded-xl border border-outline/30 bg-print/10 px-4 py-3 text-center text-sm text-brand-tint">
-              You&rsquo;re signed in.{' '}
-              <a href={AFTER_SIGN_IN} className={`rounded font-semibold text-outline underline-offset-2 hover:underline ${siteFocus}`}>
-                Open the app
-              </a>
-            </p>
-          ) : null}
+            <div className="mt-7">
+              <OpenAppLink href={returnTo} className={`${ctaClass} w-full`} />
+              <p className="mt-3 text-center text-sm text-white/70">You&rsquo;re signed in.</p>
+            </div>
+          ) : (
+            <div className="mt-7">
+              <TryLink className={`${ctaClass} w-full`} />
+              <p className="mt-3 text-center text-sm text-white/60">No account needed. Takes {SETUP_TIME}.</p>
+            </div>
+          )}
 
           {GOOGLE_SIGNIN_ENABLED ? (
             <>
@@ -100,7 +112,14 @@ export function LoginPage() {
             </>
           ) : null}
 
-          <form onSubmit={(e) => void sendLink(e)} noValidate className={GOOGLE_SIGNIN_ENABLED ? undefined : 'mt-7'}>
+          {session ? null : (
+          <>
+          <div className="my-6 flex items-center gap-4 text-sm text-white/50" role="separator" aria-label="or sign in">
+            <span className="h-px flex-1 bg-white/12" />
+            or sign in
+            <span className="h-px flex-1 bg-white/12" />
+          </div>
+          <form onSubmit={(e) => void sendLink(e)} noValidate>
             <label htmlFor={emailId} className="block text-sm font-medium text-white/85">
               Email
             </label>
@@ -119,11 +138,13 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={busy !== null}
-              className={`mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-brand px-4 py-3 font-semibold text-white shadow-[0_0_24px_rgb(5_150_105/0.35)] transition hover:bg-callout disabled:opacity-60 ${siteFocus}`}
+              className={`mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-white/20 px-4 py-3 font-semibold text-white transition hover:bg-white/10 disabled:opacity-60 ${siteFocus}`}
             >
               {busy === 'email' ? 'Sending…' : 'Email me a sign-in link'}
             </button>
           </form>
+          </>
+          )}
 
           <div id={statusId} aria-live="polite" className="min-h-0">
             {error ? <p className="mt-4 text-center text-sm text-amber-300">{error}</p> : null}

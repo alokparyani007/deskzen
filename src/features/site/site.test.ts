@@ -20,8 +20,13 @@ describe('public site', () => {
   it('renders the homepage copy, CTAs and real screenshots', () => {
     const html = render(createElement(SiteHome));
     expect(html).toContain('Feel better by 3 PM.');
-    expect(html.match(/>Get started free</g)?.length).toBeGreaterThanOrEqual(4);
-    expect(html.match(/No credit card\. 30-second setup\./g)?.length).toBe(3);
+    expect(html.match(/>Try it now, no sign-up</g)?.length).toBeGreaterThanOrEqual(3);
+    expect(html).toContain('>Try it now<');
+    expect(html.match(/No sign-up\. No credit card\. About 30 seconds\./g)?.length).toBe(3);
+    expect(html).toContain('href="/set-my-zen"');
+    expect(html).not.toContain('Get started free');
+    expect(html).not.toContain('Open DeskZen');
+    expect(html).not.toMatch(/href="\/set-my-zen"[^>]*data-discover="true"|data-discover="true"[^>]*href="\/set-my-zen"/);
     expect(html).toContain('Breaks and progress, built in');
     expect(html).toContain('/site/reminders.webp');
     expect(html).toContain('/site/progress.webp');
@@ -30,13 +35,22 @@ describe('public site', () => {
     expect(html).toContain('DeskZen is a wellness tool, not a medical device.');
     expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
     expect(html).toContain('href="/login"');
+    const signedIn = render(createElement(SiteHome, { signedIn: true }));
+    expect(signedIn).toContain('Open DeskZen');
+    expect(signedIn).toContain('href="/app"');
+    expect(signedIn).not.toContain('Try it now, no sign-up');
+    expect(signedIn).not.toMatch(/href="\/app"[^>]*data-discover="true"|data-discover="true"[^>]*href="\/app"/);
   });
 
   it('renders email sign-in, hides Google for now, and has no Apple button', () => {
     const html = render(createElement(LoginPage));
     expect(html).toContain('Welcome to DeskZen');
+    expect(html).toContain('Try it right away. Sign in is optional.');
+    expect(html).toContain('Try it now, no sign-up');
+    expect(html).toContain('href="/set-my-zen"');
     expect(html).not.toContain('Continue with Google');
     expect(html).toContain('Email me a sign-in link');
+    expect(html).toContain('or sign in');
     expect(html).not.toContain('Apple');
     expect(html).toContain('Your camera stays on your device.');
     expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
@@ -157,6 +171,8 @@ describe('search and AI crawler readiness', () => {
     const text = FAQS.map((f) => `${f.q} ${f.a}`).join(' ').toLowerCase();
     expect(text).toContain('wellness tool');
     expect(text).toContain('doesn\u2019t diagnose');
+    expect(text).toContain('no sign-up');
+    expect(text).not.toMatch(/sign in with a link sent to your email/i);
     expect(text).not.toMatch(/\b(cure|cures|heal|heals|treats back pain|prevents injury)\b/);
   });
 });

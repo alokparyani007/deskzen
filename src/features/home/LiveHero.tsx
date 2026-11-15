@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SETUP_TIME_LEAD } from '../../lib/copy/setupTime';
 import { Link } from 'react-router-dom';
 import type { PosturePrint } from '../../calibration/print';
 import { printIsStale } from '../../lib/home/liveHome';
@@ -45,7 +46,7 @@ export function LiveHero({ nowMs }: { nowMs: number }) {
           </svg>
           <div>
             <h2 className="text-xl font-semibold text-white">Set my Zen to save your Posture Print</h2>
-            <p className="mx-auto mt-2 max-w-sm text-sm text-white/70">About 20 seconds. Sit the way you want DeskZen to remember. Your video never leaves this computer.</p>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-white/70">{SETUP_TIME_LEAD}. Sit the way you want DeskZen to remember. Your video never leaves this computer.</p>
           </div>
           <Link to={`/set-my-zen?pose=${mode}&from=home`} className="rounded-full bg-print px-5 py-2.5 text-sm font-semibold text-white">
             Set my Zen

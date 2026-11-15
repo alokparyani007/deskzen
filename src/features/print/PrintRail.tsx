@@ -1,3 +1,5 @@
+import { SETUP_TIME_LEAD } from '../../lib/copy/setupTime';
+
 const RAIL = [
   { id: 'setup', label: 'Frame check' },
   { id: 'reset', label: 'Loosen up' },
@@ -16,7 +18,7 @@ export function PrintRail({ step }: { step: (typeof RAIL)[number]['id'] }) {
   const index = RAIL.findIndex((item) => item.id === step);
   return (
     <aside className="px-4">
-      <p className="text-sm font-semibold text-ink">About 20 seconds total</p>
+      <p className="text-sm font-semibold text-ink">{SETUP_TIME_LEAD} total</p>
       <ol className="mt-3 hidden gap-2 lg:grid">
         {RAIL.map((item, itemIndex) => (
           <li key={item.id} className={`rounded-xl px-3 py-2 text-sm font-semibold ${itemIndex === index ? 'bg-brand-tint text-brand' : itemIndex < index ? 'text-print' : 'text-ink-muted'}`}>
