@@ -40,9 +40,9 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
   },
   '/login': {
     title: 'Log in or Sign Up | DeskZen',
-    description: 'Sign in to DeskZen with an email link and start getting gentle posture and break reminders at your desk. Free during early access.',
+    description: 'Try DeskZen with no sign-up, or sign in with an email link. Free during early access. Your camera stays on your device.',
     ogTitle: 'Log in to DeskZen',
-    ogDescription: 'Sign in with an email link. Free during early access.',
+    ogDescription: 'Try it with no sign-up, or sign in with an email link.',
   },
   '/learn': {
     title: 'Learn | DeskZen Posture Guides',
@@ -81,8 +81,12 @@ export const FAQS: readonly { q: string; a: string }[] = [
     a: 'Yes. It nudges you to move, stretch, rest your eyes and drink water. Tap Done or Snooze, and quiet hours keep it silent when you need to focus.',
   },
   {
+    q: 'Do I need an account to start?',
+    a: 'No. Try it now with no sign-up. Set your Zen and open Live view right in your browser. Sign-in is optional, and your camera stays on your device.',
+  },
+  {
     q: 'Is DeskZen free?',
-    a: 'Yes, it\u2019s free during early access, with no credit card. You sign in with a link sent to your email, so there\u2019s no password to remember.',
+    a: 'Yes, it\u2019s free during early access, with no credit card and no sign-up required. An account is optional.',
   },
   {
     q: 'Does it work on Mac and Windows?',

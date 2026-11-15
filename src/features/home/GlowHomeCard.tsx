@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SETUP_TIME } from '../../lib/copy/setupTime';
 import { Link } from 'react-router-dom';
 import { DeviceLock } from '../../components/DeviceLock';
 import { glowCheckDue } from '../../lib/posture/glow';
@@ -48,7 +49,7 @@ export function GlowHomeCard() {
       ) : (
         <>
           <h2 className="text-lg font-semibold text-ink">Set my Zen to save your Posture Print</h2>
-          <p className="mt-1 text-sm text-ink-muted">Set the posture DeskZen compares with, in about 20 seconds.</p>
+          <p className="mt-1 text-sm text-ink-muted">Set the posture DeskZen compares with, in {SETUP_TIME}.</p>
           <Link to={`/set-my-zen?pose=${pose}`} className="mt-3 inline-flex rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white">
             Set my Zen
           </Link>

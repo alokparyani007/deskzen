@@ -32,10 +32,15 @@ function render(props: Partial<SettingsViewProps> = {}): string {
 
 describe('settings page', () => {
   it('shows the account and Sign out only while signed in', () => {
-    expect(render()).not.toContain('Sign out');
+    const guest = render();
+    expect(guest).not.toContain('Sign out');
+    expect(guest).toContain('Save your setup');
+    expect(guest).toContain('Sign in is optional');
+    expect(guest).toContain('href="/login?from=/settings"');
     const html = render({ accountEmail: 'maya@example.com', onSignOut: () => {} });
     expect(html).toContain('Sign out');
     expect(html).toContain('Signed in as maya@example.com.');
+    expect(html).not.toContain('Save your setup');
   });
 
   it('renders every group', () => {

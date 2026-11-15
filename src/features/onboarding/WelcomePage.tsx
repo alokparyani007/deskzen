@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SETUP_TIME } from '../../lib/copy/setupTime';
 import { useNavigate } from 'react-router-dom';
 import { Logo } from '../../components/Logo';
 import { usePageTitle } from '../../hooks/usePageTitle';
@@ -12,7 +13,7 @@ import { WorkStylePicker } from '../settings/WorkStylePicker';
 const STEPS = [
   {
     title: 'Set my Zen',
-    body: 'This is your posture baseline. Sit back, feet flat, screen at eye level. It takes about 20 seconds and stays on this device.',
+    body: `This is your posture baseline. Sit back, feet flat, screen at eye level. It takes ${SETUP_TIME} and stays on this device.`,
   },
   {
     title: 'How do you work?',

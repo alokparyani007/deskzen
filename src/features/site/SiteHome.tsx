@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Check, ChevronDown, Clock, Gift, Globe, MousePointerClick, PersonStanding, ShieldCheck, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuthSession } from '../../lib/auth';
+import { SETUP_BLURB } from '../../lib/copy/setupTime';
 import { BrowserFrame } from './BrowserFrame';
-import { SitePage, ctaClass, siteFocus } from './SiteChrome';
+import { OpenAppLink, SitePage, TryLink, siteFocus } from './SiteChrome';
 import { FAQS, PAGE_META } from './seo';
 
 export const SITE_TITLE = PAGE_META['/'].title;
@@ -28,37 +30,42 @@ const badges: readonly { icon: LucideIcon; label: string }[] = [
   { icon: Gift, label: 'Free during early access' },
 ];
 
-export function SiteHome() {
+export function SiteHome({ signedIn }: { signedIn?: boolean } = {}) {
+  const detected = useAuthSession() !== null;
+  const open = signedIn ?? detected;
   useEffect(() => {
     document.title = SITE_TITLE;
   }, []);
 
   return (
-    <SitePage>
-      <Hero />
+    <SitePage signedIn={open}>
+      <Hero signedIn={open} />
       <Benefits />
       <SeeItInAction />
-      <Cta className="pt-4 pb-20 sm:pb-24" />
+      <Cta signedIn={open} className="pt-4 pb-20 sm:pb-24" />
       <HowItWorks />
       <Privacy />
       <Faq />
-      <BottomBand />
+      <BottomBand signedIn={open} />
     </SitePage>
   );
 }
 
-function Cta({ className = '' }: { className?: string }) {
+function Cta({ className = '', signedIn = false }: { className?: string; signedIn?: boolean }) {
   return (
     <div className={`flex flex-col items-center gap-3 px-5 ${className}`}>
-      <Link to="/login" className={ctaClass}>
-        Get started free
-      </Link>
-      <p className="text-sm text-white/60">No credit card. 30-second setup.</p>
+      {signedIn ? <OpenAppLink /> : <TryLink />}
+      <p className="text-sm text-white/60">{signedIn ? 'Your setup stays on this device.' : SETUP_BLURB}</p>
+      {signedIn ? null : (
+        <Link to="/login" className={`inline-flex min-h-11 items-center rounded text-sm font-semibold text-white/80 underline underline-offset-2 hover:text-white ${siteFocus}`}>
+          Sign in
+        </Link>
+      )}
     </div>
   );
 }
 
-function Hero() {
+function Hero({ signedIn }: { signedIn: boolean }) {
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden px-5 pt-6 pb-14 sm:px-8 sm:pt-10">
       <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-40 h-[28rem] w-[56rem] max-w-[140vw] -translate-x-1/2 rounded-full bg-print/15 blur-3xl" />
@@ -70,7 +77,7 @@ function Hero() {
         <p className="mx-auto mt-5 max-w-2xl text-lg text-outline sm:text-xl">
           Gentle posture nudges that help you sit tall, take breaks, and keep your energy all workday.
         </p>
-        <Cta className="mt-8" />
+        <Cta className="mt-8" signedIn={signedIn} />
       </div>
       <HeroShot />
     </section>
@@ -269,13 +276,13 @@ function Faq() {
   );
 }
 
-function BottomBand() {
+function BottomBand({ signedIn }: { signedIn: boolean }) {
   return (
     <section aria-labelledby="ready-title" className="border-t border-outline/20 bg-gradient-to-b from-[#0b2a1f] to-[#07140f] px-5 py-14 text-center sm:px-8">
       <h2 id="ready-title" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
         Ready to feel better at your desk?
       </h2>
-      <Cta className="mt-7" />
+      <Cta className="mt-7" signedIn={signedIn} />
     </section>
   );
 }

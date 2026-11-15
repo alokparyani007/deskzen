@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthSession } from '../../lib/auth';
 
 /** Contact address used across the public site. */
 export const CONTACT_EMAIL = 'sales@deskzenapp.com';
@@ -8,6 +9,29 @@ export const siteFocus = 'focus-visible:outline-2 focus-visible:outline-offset-2
 
 /** Big emerald call to action with a soft glow. White text on #047857 for WCAG AA contrast. */
 export const ctaClass = `inline-flex min-h-11 items-center justify-center rounded-2xl bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_rgb(5_150_105/0.45)] ring-1 ring-outline/40 transition hover:bg-callout hover:shadow-[0_0_44px_rgb(5_150_105/0.55)] ${siteFocus}`;
+
+/** First-time flow. A plain link so the browser loads app.html, which has no analytics. */
+export const TRY_PATH = '/set-my-zen';
+export const TRY_LABEL = 'Try it now, no sign-up';
+export const OPEN_LABEL = 'Open DeskZen';
+
+const headerCtaClass = `inline-flex min-h-11 items-center whitespace-nowrap rounded-xl bg-brand px-3.5 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgb(5_150_105/0.45)] ring-1 ring-outline/40 hover:bg-callout sm:px-4 ${siteFocus}`;
+
+export function TryLink({ className = ctaClass, children = TRY_LABEL }: { className?: string; children?: ReactNode }) {
+  return (
+    <a href={TRY_PATH} className={className}>
+      {children}
+    </a>
+  );
+}
+
+export function OpenAppLink({ className = ctaClass, href = '/app', children = OPEN_LABEL }: { className?: string; href?: string; children?: ReactNode }) {
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  );
+}
 
 export function SiteLogo({ className = '' }: { className?: string }) {
   return (
@@ -20,24 +44,25 @@ export function SiteLogo({ className = '' }: { className?: string }) {
   );
 }
 
-export function SiteNav() {
+export function SiteNav({ signedIn = false }: { signedIn?: boolean }) {
   return (
     <header className="relative z-20">
       <nav aria-label="Main" className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:px-8 sm:py-5">
         <SiteLogo />
         <div className="flex items-center gap-2 sm:gap-4">
-          <Link
-            to="/login"
-            className={`inline-flex min-h-11 items-center whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium text-white/80 hover:text-white sm:px-3 ${siteFocus}`}
-          >
-            Log in
-          </Link>
-          <Link
-            to="/login"
-            className={`inline-flex min-h-11 items-center whitespace-nowrap rounded-xl bg-brand px-3.5 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgb(5_150_105/0.45)] ring-1 ring-outline/40 hover:bg-callout sm:px-4 ${siteFocus}`}
-          >
-            Get started free
-          </Link>
+          {signedIn ? (
+            <OpenAppLink className={headerCtaClass} />
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className={`inline-flex min-h-11 items-center whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium text-white/80 hover:text-white sm:px-3 ${siteFocus}`}
+              >
+                Log in
+              </Link>
+              <TryLink className={headerCtaClass}>Try it now</TryLink>
+            </>
+          )}
         </div>
       </nav>
     </header>
@@ -81,13 +106,15 @@ export function SiteFooter() {
 }
 
 /** Near-black page with the site nav and footer. */
-export function SitePage({ children }: { children: ReactNode }) {
+export function SitePage({ children, signedIn }: { children: ReactNode; signedIn?: boolean }) {
+  const detected = useAuthSession() !== null;
+  const open = signedIn ?? detected;
   return (
     <div className="min-h-dvh bg-[#060807] text-white antialiased">
       <a href="#content" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-desk">
         Skip to content
       </a>
-      <SiteNav />
+      <SiteNav signedIn={open} />
       <main id="content">{children}</main>
       <SiteFooter />
     </div>

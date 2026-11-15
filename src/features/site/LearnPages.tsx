@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { SitePage, ctaClass, siteFocus } from './SiteChrome';
+import { SETUP_BLURB } from '../../lib/copy/setupTime';
+import { SitePage, TryLink, ctaClass, siteFocus } from './SiteChrome';
 import { PAGE_META } from './seo';
 import type { PublicPath } from './seo';
 
@@ -63,10 +64,14 @@ function ArticleCta({ children }: { children: ReactNode }) {
     <div className="mt-10 rounded-3xl border border-outline/40 bg-print/[0.06] px-6 py-8 text-center shadow-[0_0_40px_rgb(5_150_105/0.25)] sm:px-8">
       <h2 className="text-2xl font-semibold tracking-tight text-white">Try DeskZen free</h2>
       <p className="mx-auto mt-3 max-w-xl text-outline/90">{children}</p>
-      <Link to="/login" className={`${ctaClass} mt-6`}>
-        Get started free
-      </Link>
-      <p className="mt-3 text-sm text-white/60">No credit card. 30-second setup.</p>
+      <TryLink className={`${ctaClass} mt-6`} />
+      <p className="mt-3 text-sm text-white/60">{SETUP_BLURB}</p>
+      <p className="mt-1 text-sm text-white/70">
+        <Link to="/login" className={`rounded font-semibold text-outline underline underline-offset-2 hover:text-white ${siteFocus}`}>
+          Sign in
+        </Link>{' '}
+        if you already have an account.
+      </p>
     </div>
   );
 }

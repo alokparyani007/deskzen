@@ -238,7 +238,17 @@ export function SettingsView(props: SettingsViewProps) {
                   Sign out
                 </button>
               </section>
-            ) : null}
+            ) : (
+              <section className={`${card} p-5`} aria-labelledby="save-setup-title">
+                <h2 id="save-setup-title" className="font-semibold">
+                  Save your setup
+                </h2>
+                <p className="mt-1 text-sm text-white/60">Sign in is optional. Your posture data stays on this device either way.</p>
+                <Link to="/login?from=/settings" className={`mt-4 inline-flex min-h-11 items-center rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-callout ${focus}`}>
+                  Sign in
+                </Link>
+              </section>
+            )}
 
             <section className={`${card} p-5`} aria-labelledby="reset-title">
               <div className="flex items-start gap-3">

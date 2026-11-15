@@ -4,8 +4,33 @@ import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { shouldServeAppDocument } from './scripts/app-document.ts';
 
 const appVersion = (JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string }).version;
+
+type ConnectLike = {
+  stack: Array<{ route: string; handle: (req: { url?: string; headers: { accept?: string | string[] } }, res: unknown, next: () => void) => void }>;
+};
+
+/** Dev and preview: app routes get app.html (no analytics). Production uses vercel.json. */
+function appDocumentPlugin() {
+  const handle = (req: { url?: string; headers: { accept?: string | string[] } }, _res: unknown, next: () => void) => {
+    if (req.url && shouldServeAppDocument(req.url, req.headers.accept)) req.url = '/app.html';
+    next();
+  };
+  const prepend = (server: { middlewares: ConnectLike }) => {
+    server.middlewares.stack.unshift({ route: '', handle });
+  };
+  return {
+    name: 'deskzen-app-document',
+    configureServer(server: { middlewares: ConnectLike }) {
+      return () => prepend(server);
+    },
+    configurePreviewServer(server: { middlewares: ConnectLike }) {
+      return () => prepend(server);
+    },
+  };
+}
 
 export default defineConfig(({ isSsrBuild }) => ({
   define: {
@@ -23,6 +48,7 @@ export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     react(),
     tailwindcss(),
+    appDocumentPlugin(),
     // The SSR build (used only to prerender public pages) needs no service worker.
     !isSsrBuild &&
       VitePWA({
