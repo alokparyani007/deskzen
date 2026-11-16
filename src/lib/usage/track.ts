@@ -62,6 +62,23 @@ export function notifyGoogleAnalytics(
   }
 }
 
+/** The same per-tab id the usage counter stores. Creates one if this tab does not have one yet. */
+export function ensureAnonSessionId(
+  storage: StorageLike | null,
+  newSessionId: () => string = createAnonSessionId,
+): string | null {
+  try {
+    const existing = storage?.getItem(SESSION_KEY) ?? null;
+    if (existing && isAnonSessionId(existing)) return existing;
+    const created = newSessionId();
+    if (!isAnonSessionId(created)) return null;
+    storage?.setItem(SESSION_KEY, created);
+    return created;
+  } catch {
+    return null;
+  }
+}
+
 export function readGtag(host: unknown): ((command: 'event', name: UsageEventName) => void) | undefined {
   if (!host || typeof host !== 'object' || !('gtag' in host)) return undefined;
   const gtag = (host as { gtag?: unknown }).gtag;
