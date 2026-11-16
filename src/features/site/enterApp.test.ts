@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
 import { PUBLIC_PATHS, shouldServeAppDocument } from '../../../scripts/app-document.ts';
 import {
@@ -45,6 +46,14 @@ describe('public page to app navigation', () => {
     const assign = vi.fn();
     enterApp('/app', assign);
     expect(assign).toHaveBeenCalledWith('/app');
+  });
+
+  it('loads Google Analytics on the public document only', () => {
+    const index = readFileSync('index.html', 'utf8');
+    const app = readFileSync('app.html', 'utf8');
+    expect(index).toContain('G-M8LX7XCZEX');
+    expect(app).not.toContain('googletagmanager');
+    expect(app).not.toContain('G-M8LX7XCZEX');
   });
 
   it('serves app.html for guest app routes and index.html for public pages', () => {

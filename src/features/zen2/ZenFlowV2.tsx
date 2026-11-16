@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Shield } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { markGuestSetupPrompt } from '../auth/guestPrompt';
+import { trackUsage } from '../../lib/usage/track';
 import { useAuthSession } from '../../lib/auth';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { useLandmarks } from '../../hooks/useLandmarks';
@@ -135,6 +136,9 @@ export function ZenFlowV2() {
     speakCaption(text, false);
   };
 
+  useEffect(() => {
+    trackUsage('zen_started');
+  }, []);
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const apply = () => setReduced(media.matches);
@@ -287,6 +291,7 @@ export function ZenFlowV2() {
     if (!pictureIsGone(shotRef.current?.capture ?? null)) wipe();
     try {
       await saveZenPrint({ zen, frame: current.frame, deskProfileId: activeProfileId, deviceLabel: cameraLabel(camera.devices, camera.deviceId) });
+      trackUsage('zen_saved');
       const numbers = legacyBaseline(goodFramesRef.current, current.frame);
       if (numbers) {
         try {

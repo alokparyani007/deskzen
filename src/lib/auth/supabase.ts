@@ -1,4 +1,6 @@
 import { createClient, type Session, type SupabaseClient } from '@supabase/supabase-js';
+import { trackUsage } from '../usage/track';
+import { isSignInCallback } from './signInCallback';
 import { isValidEmail } from './stub';
 import type { AuthAdapter, AuthProvider, AuthResult, AuthSession } from './types';
 
@@ -28,6 +30,8 @@ export function createSupabaseAuth(options: Options): AuthAdapter {
   const fetcher = options.fetcher ?? (typeof fetch === 'function' ? fetch.bind(globalThis) : undefined);
   // Read before the client strips the hash, so an expired link can be explained.
   let redirectError = readRedirectError();
+  // Same moment: a successful magic link is still in the URL. A restored session is not.
+  let countThisSignIn = thisLoadCompletedSignIn();
 
   const client =
     options.client ??
@@ -46,7 +50,13 @@ export function createSupabaseAuth(options: Options): AuthAdapter {
   }
 
   // INITIAL_SESSION fires once the saved session and any magic-link hash are read.
-  client.auth.onAuthStateChange((_event, session) => set(session));
+  client.auth.onAuthStateChange((event, session) => {
+    set(session);
+    if (!countThisSignIn || !session) return;
+    if (event !== 'SIGNED_IN' && event !== 'INITIAL_SESSION') return;
+    countThisSignIn = false;
+    trackUsage('sign_in_completed');
+  });
   void client.auth
     .getSession()
     .then(({ data, error }) => {
@@ -112,6 +122,28 @@ export function createSupabaseAuth(options: Options): AuthAdapter {
       return message;
     },
   };
+}
+
+function thisLoadCompletedSignIn(): boolean {
+  try {
+    if (typeof window === 'undefined') return false;
+    return isSignInCallback(window.location.href, pkceVerifierStored());
+  } catch {
+    return false;
+  }
+}
+
+/** True when this browser still has the PKCE verifier Supabase saved before the redirect. The value is not read. */
+function pkceVerifierStored(): boolean {
+  try {
+    const raw = import.meta.env.VITE_SUPABASE_URL?.trim();
+    if (!raw || typeof localStorage === 'undefined') return false;
+    const ref = new URL(raw).hostname.split('.')[0];
+    if (!ref) return false;
+    return localStorage.getItem(`sb-${ref}-auth-token-code-verifier`) !== null;
+  } catch {
+    return false;
+  }
 }
 
 function toAuthSession(session: Session | null): AuthSession | null {

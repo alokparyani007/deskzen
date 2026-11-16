@@ -1,6 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { trackUsage } from '../usage/track';
 import { CHECK_EMAIL, GOOGLE_COMING_SOON, createSupabaseAuth, friendlyError, readRedirectError } from './supabase';
+
+vi.mock('../usage/track', () => ({ trackUsage: vi.fn() }));
 
 type Call = { name: string; args: unknown };
 
@@ -34,8 +37,14 @@ function fakeClient(overrides: { otpError?: { message: string; status?: number }
 }
 
 const base = { url: 'https://ref.supabase.co', anonKey: 'anon', redirectPath: '/app', origin: () => 'https://deskzenapp.com' };
+const session = { user: { id: 'u1', email: 'maya@example.com', app_metadata: { provider: 'email' }, created_at: '2026-11-03T00:00:00Z' } };
 
 describe('supabase auth adapter', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.unstubAllGlobals();
+  });
+
   it('sends a magic link back to /app and asks them to check email', async () => {
     const { client, calls } = fakeClient();
     const a = createSupabaseAuth({ ...base, client });
@@ -81,13 +90,41 @@ describe('supabase auth adapter', () => {
     const a = createSupabaseAuth({ ...base, client });
     let changes = 0;
     a.subscribe(() => (changes += 1));
-    emit('SIGNED_IN', { user: { id: 'u1', email: 'maya@example.com', app_metadata: { provider: 'email' }, created_at: '2026-11-03T00:00:00Z' } });
+    emit('SIGNED_IN', session);
     expect(a.isReady()).toBe(true);
     expect(a.getSession()?.user).toEqual({ id: 'u1', email: 'maya@example.com', provider: 'email' });
+    expect(trackUsage).not.toHaveBeenCalled();
     await a.signOut();
     expect(a.getSession()).toBeNull();
     expect(calls.some((c) => c.name === 'signOut')).toBe(true);
     expect(changes).toBeGreaterThanOrEqual(2);
+  });
+
+  it('counts a completed sign-in once when this page opened from a magic link', () => {
+    vi.stubGlobal('window', { location: { href: 'https://deskzenapp.com/app#access_token=a&refresh_token=b&type=magiclink' } });
+    const { client, emit } = fakeClient();
+    const a = createSupabaseAuth({ ...base, client });
+    emit('INITIAL_SESSION', session);
+    emit('SIGNED_IN', session);
+    expect(trackUsage).toHaveBeenCalledTimes(1);
+    expect(trackUsage).toHaveBeenCalledWith('sign_in_completed');
+    expect(a.getSession()?.user.email).toBe('maya@example.com');
+  });
+
+  it('does not count a restored session or an expired link', () => {
+    vi.stubGlobal('window', { location: { href: 'https://deskzenapp.com/app' } });
+    const restored = fakeClient();
+    createSupabaseAuth({ ...base, client: restored.client });
+    restored.emit('SIGNED_IN', session);
+    expect(trackUsage).not.toHaveBeenCalled();
+
+    vi.stubGlobal('window', {
+      location: { href: 'https://deskzenapp.com/app#error=access_denied&error_code=otp_expired&error_description=expired' },
+    });
+    const expired = fakeClient();
+    createSupabaseAuth({ ...base, client: expired.client });
+    expired.emit('SIGNED_IN', session);
+    expect(trackUsage).not.toHaveBeenCalled();
   });
 
   it('explains expired magic links from the redirect', () => {
