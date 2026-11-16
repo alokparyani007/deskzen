@@ -14,6 +14,8 @@ import { CoachLine, CornerMatchRing, TrackStatusPill } from './LiveChrome';
 import { useLiveV2 } from './useLiveV2';
 import { useLiveUsage } from '../../hooks/useLiveUsage';
 import { SETUP_TIME } from '../../lib/copy/setupTime';
+import { FeedbackPrompt } from '../feedback/FeedbackPrompt';
+import { feedbackPreviewFromSearch } from '../../lib/feedback/preview';
 
 const MUTE_KEY = 'sitglow.glowMuted';
 
@@ -22,6 +24,7 @@ export function LiveViewV2() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const debugOn = params.get('debug') === '1';
+  const feedbackPreview = feedbackPreviewFromSearch(params.toString());
   const camera = useCamera();
   const model = useLiveV2(debugOn);
   useLiveUsage(camera.status === 'live');
@@ -117,6 +120,7 @@ export function LiveViewV2() {
             </div>
           ) : null}
           {!needsZen && model.caption ? <CoachLine text={model.caption} loud={model.captionLoud} /> : null}
+          <FeedbackPrompt active={camera.status === 'live'} preview={feedbackPreview} place={needsZen ? 'top' : 'bottom'} />
         </div>
       </div>
       <CameraPausedBar live={model.live} video={camera.videoElement} lastLandmarkMs={model.wallMs} />

@@ -374,10 +374,26 @@ h3 {
   animation: dock-pulse-once 700ms ease-out 1;
 }
 
+@keyframes feedback-step {
+  from {
+    transform: translateX(12px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.feedback-step {
+  animation: feedback-step 220ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dock-pulse-once,
   .meter-pulse,
-  .outline-pulse {
+  .outline-pulse,
+  .feedback-step {
     animation: none;
   }
 }
