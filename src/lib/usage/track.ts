@@ -25,6 +25,16 @@ export type UsageTracker = {
 
 type StorageLike = Pick<Storage, 'getItem' | 'setItem'>;
 
+/** The random id this browser tab already uses for usage counts, when it is a UUID v4. */
+export function storedAnonSessionId(storage: Pick<Storage, 'getItem'> | null): string | null {
+  try {
+    const raw = storage?.getItem(SESSION_KEY) ?? null;
+    return raw && isAnonSessionId(raw) ? raw : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Separate from the sign-in client on purpose.
  * persistSession is off, so a signed-in person's access token is never attached.

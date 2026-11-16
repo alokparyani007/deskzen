@@ -11,7 +11,7 @@ import {
   safeUsagePath,
   usageInsert,
 } from './events';
-import { createUsageTracker, notifyGoogleAnalytics, usageClientOptions, type UsageInsert } from './track';
+import { createUsageTracker, notifyGoogleAnalytics, storedAnonSessionId, usageClientOptions, type UsageInsert } from './track';
 
 const SESSION = '123e4567-e89b-42d3-a456-426614174000';
 
@@ -146,6 +146,16 @@ describe('usage event helper', () => {
 
   it('accepts a platform random uuid', () => {
     expect(isAnonSessionId(createAnonSessionId())).toBe(true);
+  });
+
+  it('reads only a valid anonymous session id from the usage counter', () => {
+    const storage = memory();
+    expect(storedAnonSessionId(storage)).toBeNull();
+    expect(storedAnonSessionId(null)).toBeNull();
+    storage.setItem('deskzen.usage.session', 'maya@example.com');
+    expect(storedAnonSessionId(storage)).toBeNull();
+    storage.setItem('deskzen.usage.session', SESSION);
+    expect(storedAnonSessionId(storage)).toBe(SESSION);
   });
 
   it('matches the event names stored in the migration', () => {

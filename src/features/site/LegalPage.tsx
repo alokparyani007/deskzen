@@ -63,6 +63,7 @@ export function PrivacyPolicyPage() {
             A count stores a short event name, a random id for this browser tab, and sometimes the page path. It includes
             no personal info and no camera data. We do not store your email, account id, or IP address with these counts.
           </li>
+          <li>Optional feedback text and a thumbs rating are stored without your name or email.</li>
           <li>We do not use advertising cookies.</li>
         </ul>
       </section>
