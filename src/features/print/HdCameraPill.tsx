@@ -32,13 +32,15 @@ export function HdCameraPill() {
     <div ref={rootRef} className="relative">
       <button
         type="button"
-        className="inline-flex h-10 items-center gap-2 rounded-full border border-white/15 bg-slate-900/70 px-3 text-sm font-medium text-white backdrop-blur-md"
+        className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full border border-white/15 bg-slate-900/70 px-2.5 text-sm font-medium text-white backdrop-blur-md sm:px-3"
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-label="HD camera"
         onClick={() => setOpen((value) => !value)}
       >
         <span className={`size-2 rounded-full ${live && hd ? 'bg-outline' : 'bg-white/40'}`} aria-hidden="true" />
-        HD camera
+        <span className="sm:hidden">HD</span>
+        <span className="hidden sm:inline">HD camera</span>
       </button>
       {open ? (
         <ul className="absolute right-0 z-20 mt-2 w-56 rounded-2xl bg-white/15 p-1 text-sm text-white shadow-lg backdrop-blur-xl" role="menu">

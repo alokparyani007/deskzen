@@ -26,10 +26,10 @@ export function FeedbackStep({
     <div className="feedback-step" aria-live="polite">
       {spec ? (
         <>
-          <h2 id="deskzen-feedback-title" className="text-base font-semibold">
+          <h2 id="deskzen-feedback-title" className="text-sm font-semibold sm:text-base">
             {spec.prompt}
           </h2>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
             {spec.options.map((option) => {
               const selected = pending === option.value;
               return (
@@ -56,7 +56,7 @@ export function FeedbackStep({
           <label
             id="deskzen-feedback-title"
             htmlFor="deskzen-feedback-note"
-            className="text-base font-semibold"
+            className="text-sm font-semibold sm:text-base"
           >
             Anything else?
           </label>
@@ -66,7 +66,7 @@ export function FeedbackStep({
             maxLength={COMMENT_MAX}
             rows={2}
             placeholder="A sentence or two is plenty."
-            className="mt-3 w-full resize-none rounded-xl border border-white/15 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/40"
+            className="mt-2 w-full resize-none rounded-xl border border-white/15 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/40 sm:mt-3"
             onChange={(event) => onNote(event.target.value)}
           />
           <div className="mt-2 flex items-center justify-end gap-3">

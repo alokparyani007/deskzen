@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { Logo } from '../../components/Logo';
 import { HdCameraPill } from '../print/HdCameraPill';
 import { useCamera } from '../camera/camera-context';
+import { stepPillClass, zenHeaderCenterClass, zenHeaderClass } from './stageLayout';
 
 export function ZenStage({
   center,
@@ -12,6 +13,7 @@ export function ZenStage({
   onVoice,
   showVoice,
   debug,
+  screen,
   children,
 }: {
   center: ReactNode;
@@ -21,30 +23,34 @@ export function ZenStage({
   onVoice?: (value: boolean) => void;
   showVoice?: boolean;
   debug?: string | null;
+  screen?: string;
   children: ReactNode;
 }) {
   const camera = useCamera();
+  const voiceLabel = `Voice ${voice ? 'on' : 'off'}`;
   return (
-    <div className="fixed inset-0 z-50 flex h-dvh flex-col overflow-hidden bg-stage text-white">
-      <header className="flex h-16 shrink-0 items-center gap-3 px-4">
-        <Logo tone="onBrand" />
-        <div className="flex min-w-0 flex-1 items-center justify-center">{center}</div>
-        <div className="flex shrink-0 items-center gap-2">
+    <div data-screen={screen} className="fixed inset-0 z-50 flex h-dvh flex-col overflow-hidden bg-stage text-white">
+      <header className={zenHeaderClass}>
+        <Logo tone="onBrand" className="shrink-0" />
+        <div className={zenHeaderCenterClass}>{center}</div>
+        <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
           {showVoice && onVoice ? (
             <button
               type="button"
               role="switch"
               aria-checked={voice}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-white/15 bg-slate-900/70 px-3 text-sm font-medium backdrop-blur-md"
+              aria-label={voiceLabel}
+              className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full border border-white/15 bg-slate-900/70 px-2.5 text-sm font-medium backdrop-blur-md sm:px-3"
               onClick={() => onVoice(!voice)}
             >
               <span className={`size-2 rounded-full ${voice ? 'bg-outline' : 'bg-white/40'}`} aria-hidden="true" />
-              Voice {voice ? 'on' : 'off'}
+              <span className="max-sm:sr-only">Voice </span>
+              {voice ? 'on' : 'off'}
             </button>
           ) : null}
           <HdCameraPill />
           {camera.status === 'live' ? (
-            <button type="button" className="h-10 rounded-full border border-white/15 bg-slate-900/70 px-3 text-sm font-semibold backdrop-blur-md" onClick={camera.pause}>
+            <button type="button" className="h-10 whitespace-nowrap rounded-full border border-white/15 bg-slate-900/70 px-2.5 text-sm font-semibold backdrop-blur-md sm:px-3" onClick={camera.pause}>
               Pause
             </button>
           ) : null}
@@ -65,6 +71,17 @@ export function ZenStage({
   );
 }
 
-export function StepPill({ label }: { label: string }) {
-  return <p className="rounded-full border border-white/15 bg-slate-900/70 px-4 py-2 text-sm font-medium backdrop-blur-md">{label}</p>;
+export function StepPill({ label, short }: { label: string; short?: string }) {
+  return (
+    <p className={stepPillClass}>
+      {short ? (
+        <>
+          <span className="sm:hidden">{short}</span>
+          <span className="hidden sm:inline">{label}</span>
+        </>
+      ) : (
+        label
+      )}
+    </p>
+  );
 }
