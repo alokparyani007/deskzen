@@ -48,9 +48,9 @@ export function PostureSidePanel({
   const crop = mode === 'stand' ? zenConfig.crop.stand : zenConfig.crop.sit;
   const standing = mode === 'stand';
   return (
-    <aside className="flex min-h-0 flex-col rounded-2xl border border-print/20 bg-stage p-3" aria-label="Correct posture">
-      <h2 className="px-1 text-xl font-semibold text-white">Correct posture</h2>
-      <div className="relative mt-2 min-h-0 flex-1 overflow-hidden rounded-xl bg-mint-panel">
+    <aside className="flex max-h-[6.75rem] min-h-0 shrink-0 items-center gap-2 overflow-hidden rounded-2xl border border-print/20 bg-stage p-2 md:max-h-none md:flex-col md:items-stretch md:gap-0 md:p-3" aria-label="Correct posture">
+      <h2 className="hidden px-1 text-xl font-semibold text-white md:block">Correct posture</h2>
+      <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg bg-mint-panel md:mt-2 md:h-auto md:w-full md:min-h-0 md:flex-1 md:rounded-xl">
         <div className="relative h-full w-full" style={{ aspectRatio: `${crop.w} / ${crop.h}` }}>
           <img
             src={src}
@@ -69,7 +69,7 @@ export function PostureSidePanel({
           {COVERS[mode].map((cover) => (
             <span key={`${cover.x}-${cover.y}`} className="absolute bg-mint-panel" style={{ left: `${cover.x}%`, top: `${cover.y}%`, width: `${cover.w}%`, height: `${cover.h}%` }} aria-hidden="true" />
           ))}
-          <svg className="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <svg className="absolute inset-0 hidden h-full w-full overflow-visible md:block" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             {CALLOUTS[mode].map((item) => {
               const on = item.id === active;
               return (
@@ -91,12 +91,12 @@ export function PostureSidePanel({
             return (
               <span key={item.id}>
                 <span
-                  className={`absolute size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${on ? 'bg-glow' : 'bg-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
+                  className={`absolute hidden size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full md:block ${on ? 'bg-glow' : 'bg-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
                   style={{ left: `${item.dot.x}%`, top: `${item.dot.y}%` }}
                   aria-hidden="true"
                 />
                 <p
-                  className={`absolute w-[40%] text-[13px] font-semibold leading-tight ${on ? 'text-glow' : 'text-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
+                  className={`absolute hidden w-[40%] text-[13px] font-semibold leading-tight md:block ${on ? 'text-glow' : 'text-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
                   style={{ left: `${item.label.x}%`, top: `${item.label.y}%` }}
                 >
                   {item.text}
@@ -106,7 +106,9 @@ export function PostureSidePanel({
           })}
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-center gap-3 text-sm font-semibold">
+      <div className="flex min-w-0 flex-1 flex-col justify-center md:mt-3 md:flex-none">
+        <p className="text-sm font-semibold text-white md:hidden">Correct posture</p>
+        <div className="mt-1 flex items-center gap-2 text-xs font-semibold md:mt-0 md:justify-center md:gap-3 md:text-sm">
         <span className={standing ? 'text-white/60' : 'text-white'}>Sitting</span>
         <button
           type="button"
@@ -119,6 +121,7 @@ export function PostureSidePanel({
           <span className={`absolute top-0.5 size-6 rounded-full bg-white transition-transform ${standing ? 'left-5' : 'left-0.5'}`} />
         </button>
         <span className={standing ? 'text-white' : 'text-white/60'}>Standing</span>
+        </div>
       </div>
     </aside>
   );

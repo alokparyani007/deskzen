@@ -55,6 +55,7 @@ import { useSnapLoop } from './useSnapLoop';
 import { DockButton, ZenDock } from './ZenDock';
 import { buildZenV2, pointsFromFrame, saveZenPrint, type ZenV2 } from './zenPrint';
 import { destinationAfterZen } from './afterZen';
+import { fitSaveAnywayReady, openLiveView, zenSingleGridClass, zenSnapGridClass } from './stageLayout';
 import { StepPill, ZenStage } from './ZenStage';
 import { zenConfig, type PoseMode } from './zenConfig';
 
@@ -107,6 +108,7 @@ export function ZenFlowV2() {
   const [holdFraction, setHoldFraction] = useState(0);
   const [reduced, setReduced] = useState(false);
   const [clock, setClock] = useState(0);
+  const [fitStartedAt, setFitStartedAt] = useState<number | null>(null);
   const opened = useRef(performance.now());
   const forcedRef = useRef(false);
   const shotRef = useRef<Shot | null>(null);
@@ -304,7 +306,7 @@ export function ZenFlowV2() {
       say('Locked.');
       if (!session) markGuestSetupPrompt();
       if (destinationAfterZen({ signedIn: Boolean(session), from }) === '/live') {
-        navigate('/live', { replace: true });
+        openLiveView();
         return;
       }
       setSaved(zen);
@@ -319,7 +321,7 @@ export function ZenFlowV2() {
   useEffect(() => {
     if (step === 'snap') {
       const tip = activeTip(snap.rules, snap.board.activeChip, true, mode);
-      say(snap.away ? STEP_IN_COPY.title : snap.board.allGreen ? 'Perfect. Hold still.' : tip?.title ?? "Let's set your Zen. Match the picture on the right.");
+      say(snap.away ? STEP_IN_COPY.title : snap.board.allGreen ? 'Perfect. Hold still.' : tip?.title ?? "Let's set your Zen. Match the posture picture.");
     }
   }, [mode, snap.away, snap.board.activeChip, snap.board.allGreen, snap.rules, step, voice]);
 
@@ -409,6 +411,7 @@ export function ZenFlowV2() {
     emaRef.current = null;
     locking.current = false;
     wipe();
+    setFitStartedAt(performance.now());
     setStep('fit');
   };
   flow.current.back = () => {
@@ -424,12 +427,17 @@ export function ZenFlowV2() {
     } else if (step === 'outline' && shot && !shot.tracing) {
       if (problem) { wipe(); setStep('snap'); } else keep();
     } else if (step === 'fit') void finishRef.current(fitShown);
-    else if (step === 'done') navigate('/live');
+    else if (step === 'done') openLiveView();
   };
+
+  const stepIndex = STEPS.indexOf(stepName(step)) + 1;
+  const stepLabel = stepName(step);
+  const saveAnyway = step === 'fit' && fitStartedAt !== null && fitSaveAnywayReady(clock - fitStartedAt);
 
   return (
     <ZenStage
-      center={<StepPill label={`Step ${STEPS.indexOf(stepName(step)) + 1} of 4 · ${stepName(step)}`} />}
+      screen="set-my-zen"
+      center={<StepPill label={`Step ${stepIndex} of 4 · ${stepLabel}`} short={`${stepIndex} of 4 · ${stepLabel}`} />}
       onClose={close}
       voice={voice}
       onVoice={setVoice}
@@ -439,8 +447,9 @@ export function ZenFlowV2() {
       {step === 'done' && saved ? (
         <DoneStep outline={saved.outline} mode={saved.mode} video={saved.video} />
       ) : (
-        <div className={`grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-[2%] px-[2%] ${step === 'snap' ? 'grid-cols-[minmax(0,68fr)_minmax(280px,30fr)]' : 'grid-cols-1'}`}>
-          <div ref={stage.ref} className="relative h-full min-h-0 overflow-hidden rounded-2xl bg-black">
+        <div className={step === 'snap' ? zenSnapGridClass : zenSingleGridClass}>
+          <div className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl bg-black">
+          <div ref={stage.ref} className="relative min-h-0 min-w-0 flex-1">
             {step === 'outline' && shot ? (
               <OutlineStep capture={shot.capture} outline={shot.outline} marks={shot.tracing ? null : outlineMarks(shot.frame, shot.outline)} badges={shot.tracing ? [] : snapBadges(shot, mode)} />
             ) : (
@@ -459,14 +468,15 @@ export function ZenFlowV2() {
                   />
                 ) : null}
                 {step === 'fit' ? <FitStep fraction={holdFraction} fit={fitShown} /> : null}
-                {step === 'snap' ? (
-                  <div className="absolute inset-x-3 top-3">
-                    <CheckChips chips={snap.board.chips} mode={mode} />
-                  </div>
-                ) : null}
                 {step === 'snap' && snap.rules.some((rule) => rule.id === 'R13' && rule.pass === false) ? <FramingPill text={JUST_YOU} /> : null}
               </>
             )}
+          </div>
+          {step === 'snap' ? (
+            <div className="shrink-0 px-2 py-2 md:absolute md:inset-x-3 md:top-3 md:p-0">
+              <CheckChips chips={snap.board.chips} mode={mode} />
+            </div>
+          ) : null}
           </div>
           {step === 'snap' ? (
             <PostureSidePanel mode={mode} active={snap.board.allGreen ? null : calloutForChip(snap.board.activeChip)} reduced={reduced} onMode={setMode} />
@@ -494,6 +504,20 @@ export function ZenFlowV2() {
           ) : null}
         </ZenDock>
       ) : null}
+      {step === 'fit' ? (
+        <ZenDock
+          tone={saveAnyway ? 'ready' : 'good'}
+          title="Great, hold right there"
+          helper={saveAnyway ? 'Taking a while. Save this outline, or retake the picture.' : 'Hold still while the ring fills.'}
+        >
+          <DockButton onClick={() => setStep('snap')}>Retake</DockButton>
+          {saveAnyway ? (
+            <DockButton primary onClick={() => void finish(fitShown)}>
+              Save anyway
+            </DockButton>
+          ) : null}
+        </ZenDock>
+      ) : null}
       {step === 'done' ? (
         <ZenDock
           tone="good"
@@ -507,7 +531,7 @@ export function ZenFlowV2() {
           }
         >
           <DockButton onClick={() => { setSaved(null); setStep('snap'); }}>Retake</DockButton>
-          <DockButton primary onClick={() => navigate('/live')}>Start Live view</DockButton>
+          <DockButton primary onClick={() => openLiveView()}>Start Live view</DockButton>
         </ZenDock>
       ) : null}
       <CameraPausedBar live={live} video={camera.videoElement} lastLandmarkMs={wallMs} />

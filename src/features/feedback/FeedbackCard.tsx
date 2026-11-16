@@ -94,7 +94,7 @@ export function FeedbackCard({
       role="dialog"
       aria-labelledby="deskzen-feedback-title"
       aria-describedby="deskzen-feedback-step"
-      className={`absolute right-3 z-20 max-h-[min(18rem,46%)] w-[min(17.5rem,calc(100%-1.5rem))] overflow-y-auto rounded-2xl border border-print/50 bg-stage p-3 text-white shadow-2xl ${place === 'top' ? 'top-3' : 'bottom-3'}`}
+      className={`absolute z-20 overflow-y-auto rounded-2xl border border-print/50 bg-stage text-white shadow-2xl max-sm:inset-x-2 max-sm:max-h-[min(8.75rem,28%)] max-sm:w-auto max-sm:p-2 sm:right-3 sm:max-h-[min(18rem,46%)] sm:w-[min(17.5rem,calc(100%-1.5rem))] sm:p-3 ${place === 'top' ? 'max-sm:top-1 sm:top-3' : 'max-sm:bottom-1 sm:bottom-3'}`}
     >
       <div className="mb-2 flex items-center justify-between gap-2">
         <p id="deskzen-feedback-step" className="text-xs font-medium text-print">

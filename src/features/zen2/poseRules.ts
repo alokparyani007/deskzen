@@ -81,7 +81,7 @@ export interface CoachCopy {
 
 const OPENING: CoachCopy = {
   title: "Let's set your Zen",
-  helper: "Match the picture on the right. When all four are green, I'll take your picture.",
+  helper: "Match the posture picture. When all four are green, I'll take your picture.",
 };
 
 export const STEP_IN_COPY: CoachCopy = {

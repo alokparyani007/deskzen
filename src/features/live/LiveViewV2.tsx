@@ -76,7 +76,8 @@ export function LiveViewV2() {
 
   return (
     <ZenStage
-      center={<StepPill label={`Live view · ${pose}`} />}
+      screen="live"
+      center={<StepPill label={`Live view · ${pose}`} short={`Live · ${pose}`} />}
       onClose={() => leave('/app')}
       voice={voice}
       onVoice={setVoice}
