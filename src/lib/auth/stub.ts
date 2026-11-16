@@ -1,3 +1,4 @@
+import { trackUsage } from '../usage/track';
 import type { AuthAdapter, AuthProvider, AuthResult, AuthSession } from './types';
 
 const KEY = 'deskzen.auth.stub';
@@ -54,6 +55,7 @@ export function createStubAuth(options: { allowed: boolean; storage?: StorageLik
     }
     const session: AuthSession = { user: { id: `local-${provider}`, email, provider }, createdAt: now() };
     write(session);
+    trackUsage('sign_in_completed');
     return { ok: true, session };
   }
 

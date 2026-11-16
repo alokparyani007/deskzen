@@ -12,7 +12,7 @@ function ContactLink() {
   );
 }
 
-function LegalPage({ title, path, children }: { title: string; path: PublicPath; children: ReactNode }) {
+function LegalPage({ title, path, updated, children }: { title: string; path: PublicPath; updated: string; children: ReactNode }) {
   useEffect(() => {
     document.title = PAGE_META[path].title;
   }, [path]);
@@ -20,7 +20,7 @@ function LegalPage({ title, path, children }: { title: string; path: PublicPath;
     <SitePage>
       <article className="mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-8 sm:pt-12">
         <h1 className="text-4xl font-bold tracking-tight">{title}</h1>
-        <p className="mt-3 text-sm text-white/55">Last updated November 9, 2026</p>
+        <p className="mt-3 text-sm text-white/55">Last updated {updated}</p>
         <div className="mt-8 space-y-6 text-white/80 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-white [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
           {children}
         </div>
@@ -32,7 +32,7 @@ function LegalPage({ title, path, children }: { title: string; path: PublicPath;
 
 export function PrivacyPolicyPage() {
   return (
-    <LegalPage title="Privacy Policy" path="/privacy">
+    <LegalPage title="Privacy Policy" path="/privacy" updated="November 16, 2026">
       <section>
         <h2>Your camera stays on your device</h2>
         <ul>
@@ -56,8 +56,12 @@ export function PrivacyPolicyPage() {
           <li>Accounts and authentication are provided by Supabase.</li>
           <li>
             The public website pages use Google Analytics to count visits and see how people find the site. The DeskZen
-            app itself (the camera and posture checks) uses no analytics. The camera feed stays on your device and is
-            never uploaded or saved.
+            app does not load Google Analytics. The camera feed stays on your device and is never uploaded or saved.
+          </li>
+          <li>
+            DeskZen counts anonymous usage events, like &quot;started Live view&quot;, to see if the product is working.
+            A count stores a short event name, a random id for this browser tab, and sometimes the page path. It includes
+            no personal info and no camera data. We do not store your email, account id, or IP address with these counts.
           </li>
           <li>We do not use advertising cookies.</li>
         </ul>
@@ -82,7 +86,7 @@ export function PrivacyPolicyPage() {
 
 export function TermsPage() {
   return (
-    <LegalPage title="Terms of Use" path="/terms">
+    <LegalPage title="Terms of Use" path="/terms" updated="November 9, 2026">
       <section>
         <h2>Using DeskZen</h2>
         <p>

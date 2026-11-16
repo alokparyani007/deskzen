@@ -12,6 +12,7 @@ import { zenConfig } from '../zen2/zenConfig';
 import { SaveSetupPrompt } from '../auth/SaveSetupPrompt';
 import { CoachLine, CornerMatchRing, TrackStatusPill } from './LiveChrome';
 import { useLiveV2 } from './useLiveV2';
+import { useLiveUsage } from '../../hooks/useLiveUsage';
 import { SETUP_TIME } from '../../lib/copy/setupTime';
 
 const MUTE_KEY = 'sitglow.glowMuted';
@@ -23,6 +24,7 @@ export function LiveViewV2() {
   const debugOn = params.get('debug') === '1';
   const camera = useCamera();
   const model = useLiveV2(debugOn);
+  useLiveUsage(camera.status === 'live');
   const stage = useStageBox();
   const [voice, setVoiceState] = useState(() => window.localStorage.getItem(MUTE_KEY) !== '1');
 

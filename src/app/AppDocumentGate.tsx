@@ -7,7 +7,7 @@ import { useAuthReady, useAuthSession } from '../lib/auth';
 /**
  * App routes work for guests and signed-in people. This gate does not ask for an account.
  * If an app route is still inside a public page (which has Google Analytics), reload so
- * the server sends app.html without analytics.
+ * the server sends app.html without Google Analytics.
  */
 export function AppDocumentGate() {
   const location = useLocation();

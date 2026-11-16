@@ -12,7 +12,7 @@ type ConnectLike = {
   stack: Array<{ route: string; handle: (req: { url?: string; headers: { accept?: string | string[] } }, res: unknown, next: () => void) => void }>;
 };
 
-/** Dev and preview: app routes get app.html (no analytics). Production uses vercel.json. */
+/** Dev and preview: app routes get app.html (no Google Analytics). Production uses vercel.json. */
 function appDocumentPlugin() {
   const handle = (req: { url?: string; headers: { accept?: string | string[] } }, _res: unknown, next: () => void) => {
     if (req.url && shouldServeAppDocument(req.url, req.headers.accept)) req.url = '/app.html';

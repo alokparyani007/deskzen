@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthSession } from '../../lib/auth';
+import { trackUsage } from '../../lib/usage/track';
 
 /** Contact address used across the public site. */
 export const CONTACT_EMAIL = 'sales@deskzenapp.com';
@@ -10,7 +11,7 @@ export const siteFocus = 'focus-visible:outline-2 focus-visible:outline-offset-2
 /** Big emerald call to action with a soft glow. White text on #047857 for WCAG AA contrast. */
 export const ctaClass = `inline-flex min-h-11 items-center justify-center rounded-2xl bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_rgb(5_150_105/0.45)] ring-1 ring-outline/40 transition hover:bg-callout hover:shadow-[0_0_44px_rgb(5_150_105/0.55)] ${siteFocus}`;
 
-/** First-time flow. A plain link so the browser loads app.html, which has no analytics. */
+/** First-time flow. A plain link so the browser loads app.html, which has no Google Analytics. */
 export const TRY_PATH = '/set-my-zen';
 export const TRY_LABEL = 'Try it now, no sign-up';
 export const OPEN_LABEL = 'Open DeskZen';
@@ -19,7 +20,13 @@ const headerCtaClass = `inline-flex min-h-11 items-center whitespace-nowrap roun
 
 export function TryLink({ className = ctaClass, children = TRY_LABEL }: { className?: string; children?: ReactNode }) {
   return (
-    <a href={TRY_PATH} className={className}>
+    <a
+      href={TRY_PATH}
+      className={className}
+      onClick={() => {
+        trackUsage('try_now_click');
+      }}
+    >
       {children}
     </a>
   );

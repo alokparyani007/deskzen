@@ -1,6 +1,6 @@
 // Which HTML document a navigation should get.
 // Public pages are prerendered from index.html (with analytics).
-// Everything else is the app shell, app.html (no analytics).
+// Everything else is the app shell, app.html (no Google Analytics).
 // Keep this list in sync with PAGE_META in src/features/site/seo.ts.
 
 export const PUBLIC_PATHS = [

@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { trackUsage } from '../lib/usage/track';
 import { isImmersivePath } from './nav';
 import { Sidebar } from '../components/Sidebar';
 import { TabBar } from '../components/TabBar';
@@ -11,6 +13,9 @@ import { ModeBar } from '../features/wellness/ModeBar';
 import { WellnessProvider } from '../features/wellness/wellness-context';
 
 export function AppShell() {
+  useEffect(() => {
+    trackUsage('app_open');
+  }, []);
   return (
     <CameraProvider>
       <BaselineProvider>

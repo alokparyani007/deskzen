@@ -73,19 +73,26 @@ describe('public site', () => {
       const html = render(createElement(page));
       expect(html).not.toMatch(/\bDraft\b/i);
       expect(html).not.toMatch(/coming soon|before accounts open|when sign-in opens/i);
-      expect(html).toContain('Last updated November 9, 2026');
       expect(html).toContain(CONTACT_EMAIL);
       expect(html).toContain('wellness tool, not a medical device');
     }
     const privacy = render(createElement(PrivacyPolicyPage));
+    expect(privacy).toContain('Last updated November 16, 2026');
     expect(privacy).toContain('Privacy Policy');
     expect(privacy).toContain('Your camera stays on your device');
     expect(privacy).toContain('Supabase');
     expect(privacy).toContain('Vercel');
     expect(privacy).toContain('Google Analytics');
-    expect(privacy).toContain('The DeskZen app itself (the camera and posture checks) uses no analytics');
+    expect(privacy).toContain('The DeskZen app does not load Google Analytics');
+    expect(privacy).toContain('anonymous usage events, like');
+    expect(privacy).toContain('started Live view');
+    expect(privacy).toContain('no personal info and no camera data');
+    expect(privacy).toContain('We do not store your email, account id, or IP address');
+    expect(privacy).not.toContain('The DeskZen app itself (the camera and posture checks) uses no analytics');
     expect(privacy).not.toContain('We do not use third-party analytics');
+    expect(privacy).not.toContain('\u2014');
     const terms = render(createElement(TermsPage));
+    expect(terms).toContain('Last updated November 9, 2026');
     expect(terms).toContain('Terms of Use');
     expect(terms).toContain('email magic link');
   });
@@ -172,6 +179,8 @@ describe('search and AI crawler readiness', () => {
     expect(text).toContain('wellness tool');
     expect(text).toContain('doesn\u2019t diagnose');
     expect(text).toContain('no sign-up');
+    expect(text).toContain('anonymous usage events');
+    expect(text).not.toContain('uses no analytics');
     expect(text).not.toMatch(/sign in with a link sent to your email/i);
     expect(text).not.toMatch(/\b(cure|cures|heal|heals|treats back pain|prevents injury)\b/);
   });
