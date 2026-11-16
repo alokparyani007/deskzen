@@ -35,6 +35,8 @@ export interface SettingsViewProps {
   accountEmail?: string | null;
   /** Shown as a Sign out button when set (only while signed in). */
   onSignOut?: () => void;
+  /** Opens the same feedback card used after a long Live session. */
+  onSendFeedback: () => void;
   /** Opens a confirm dialog on first render (for tests). */
   initialConfirm?: ConfirmKind | null;
 }
@@ -249,6 +251,16 @@ export function SettingsView(props: SettingsViewProps) {
                 </Link>
               </section>
             )}
+
+            <section className={`${card} p-5`} aria-labelledby="feedback-settings-title">
+              <h2 id="feedback-settings-title" className="font-semibold">
+                Feedback
+              </h2>
+              <p className="mt-1 text-sm text-white/60">How was DeskZen? A thumbs rating and an optional note. No name or email.</p>
+              <button type="button" className={`mt-4 min-h-11 rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-callout ${focus}`} onClick={props.onSendFeedback}>
+                Send feedback
+              </button>
+            </section>
 
             <section className={`${card} p-5`} aria-labelledby="reset-title">
               <div className="flex items-start gap-3">

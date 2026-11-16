@@ -24,6 +24,7 @@ function render(props: Partial<SettingsViewProps> = {}): string {
     onExport: () => {},
     onDeleteAll: () => {},
     onReset: () => {},
+    onSendFeedback: () => {},
     version: '0.1.0',
     ...props,
   };
@@ -56,6 +57,8 @@ describe('settings page', () => {
     expect(html).toContain('Photos and video are never saved or uploaded.');
     expect(html).toContain('DeskZen 0.1.0');
     expect(html).toContain('DeskZen is a wellness tool, not a medical device.');
+    expect(html).toContain('Send feedback');
+    expect(html).toContain('No name or email.');
     expect(html).not.toContain('Floating mini widget');
     expect(html).not.toContain('>Sound<');
   });

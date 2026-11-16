@@ -9,6 +9,7 @@ import { speakCaption } from '../calibrate/glowVoice';
 import { useCamera } from '../camera/camera-context';
 import { useBaseline } from '../posture/baseline-context';
 import { useSession } from '../session/session-context';
+import { useFeedback } from '../feedback/feedback-context';
 import { SettingsView, type NotificationStatus } from './SettingsView';
 
 function permission(): NotificationStatus {
@@ -25,6 +26,7 @@ export function SettingsPage() {
   const [notification, setNotification] = useState<NotificationStatus>(permission);
   const refreshDevices = camera.refreshDevices;
   const account = useAuthSession();
+  const feedback = useFeedback();
 
   useEffect(() => {
     void refreshDevices();
@@ -72,6 +74,7 @@ export function SettingsPage() {
         resetStrictness();
         if (name) updateSettings({ name });
       }}
+      onSendFeedback={feedback.open}
       version={__APP_VERSION__}
       accountEmail={account?.user.email ?? null}
       onSignOut={account ? () => void auth.signOut().then(() => navigate('/login', { replace: true })) : undefined}

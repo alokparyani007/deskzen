@@ -180,6 +180,23 @@ function browserStorage(): StorageLike | null {
   }
 }
 
+/**
+ * The random id this browser tab already uses for usage counts.
+ * Creates one with the same helper when the tab does not have one yet.
+ */
+export function anonSessionId(storage: StorageLike | null = browserStorage(), create: () => string = createAnonSessionId): string {
+  try {
+    const existing = storage?.getItem(SESSION_KEY) ?? null;
+    if (existing && isAnonSessionId(existing)) return existing;
+    const next = create();
+    if (!isAnonSessionId(next)) return '';
+    storage?.setItem(SESSION_KEY, next);
+    return next;
+  } catch {
+    return '';
+  }
+}
+
 function browserPath(): string | null {
   try {
     if (typeof location === 'undefined') return null;

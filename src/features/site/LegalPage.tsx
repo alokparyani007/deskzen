@@ -65,6 +65,7 @@ export function PrivacyPolicyPage() {
           </li>
           <li>We do not use advertising cookies.</li>
         </ul>
+        <p>Optional feedback text and a thumbs rating are stored without your name or email.</p>
       </section>
       <section>
         <h2>Your choices</h2>
