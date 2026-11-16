@@ -7,6 +7,7 @@ import { TabBar } from '../components/TabBar';
 import { CameraPill } from '../features/camera/CameraPill';
 import { CameraProvider } from '../features/camera/camera-context';
 import { BaselineProvider } from '../features/posture/baseline-context';
+import { FeedbackPrompt } from '../features/feedback/FeedbackPrompt';
 import { SessionChrome } from '../features/session/SessionChrome';
 import { SessionProvider } from '../features/session/session-context';
 import { ModeBar } from '../features/wellness/ModeBar';
@@ -51,6 +52,7 @@ function Shell() {
       {immersive ? null : <TabBar />}
       {immersive ? null : <CameraPill />}
       <SessionChrome />
+      <FeedbackPrompt />
     </div>
   );
 }

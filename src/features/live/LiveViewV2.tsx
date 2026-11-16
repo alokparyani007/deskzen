@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { playLockIn, speakCaption, stopSpeech } from '../calibrate/glowVoice';
 import { CameraStage } from '../camera/CameraStage';
@@ -13,6 +13,7 @@ import { SaveSetupPrompt } from '../auth/SaveSetupPrompt';
 import { CoachLine, CornerMatchRing, TrackStatusPill } from './LiveChrome';
 import { useLiveV2 } from './useLiveV2';
 import { useLiveUsage } from '../../hooks/useLiveUsage';
+import { useLiveFeedback } from '../feedback/useLiveFeedback';
 import { SETUP_TIME } from '../../lib/copy/setupTime';
 
 const MUTE_KEY = 'sitglow.glowMuted';
@@ -24,7 +25,9 @@ export function LiveViewV2() {
   const debugOn = params.get('debug') === '1';
   const camera = useCamera();
   const model = useLiveV2(debugOn);
+  const path = useLocation().pathname;
   useLiveUsage(camera.status === 'live');
+  useLiveFeedback(camera.status === 'live', path);
   const stage = useStageBox();
   const [voice, setVoiceState] = useState(() => window.localStorage.getItem(MUTE_KEY) !== '1');
 
