@@ -6,6 +6,7 @@ import { Sidebar } from '../components/Sidebar';
 import { TabBar } from '../components/TabBar';
 import { CameraPill } from '../features/camera/CameraPill';
 import { CameraProvider } from '../features/camera/camera-context';
+import { FeedbackProvider } from '../features/feedback/FeedbackProvider';
 import { BaselineProvider } from '../features/posture/baseline-context';
 import { SessionChrome } from '../features/session/SessionChrome';
 import { SessionProvider } from '../features/session/session-context';
@@ -18,13 +19,15 @@ export function AppShell() {
   }, []);
   return (
     <CameraProvider>
-      <BaselineProvider>
-        <SessionProvider>
-          <WellnessProvider>
-            <Shell />
-          </WellnessProvider>
-        </SessionProvider>
-      </BaselineProvider>
+      <FeedbackProvider>
+        <BaselineProvider>
+          <SessionProvider>
+            <WellnessProvider>
+              <Shell />
+            </WellnessProvider>
+          </SessionProvider>
+        </BaselineProvider>
+      </FeedbackProvider>
     </CameraProvider>
   );
 }

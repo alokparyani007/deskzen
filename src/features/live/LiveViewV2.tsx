@@ -14,6 +14,8 @@ import { CoachLine, CornerMatchRing, TrackStatusPill } from './LiveChrome';
 import { useLiveV2 } from './useLiveV2';
 import { useLiveUsage } from '../../hooks/useLiveUsage';
 import { SETUP_TIME } from '../../lib/copy/setupTime';
+import { useFeedback } from '../feedback/feedback-context';
+import { useLiveSessionEnd } from '../feedback/useLiveSessionEnd';
 
 const MUTE_KEY = 'sitglow.glowMuted';
 
@@ -24,6 +26,8 @@ export function LiveViewV2() {
   const debugOn = params.get('debug') === '1';
   const camera = useCamera();
   const model = useLiveV2(debugOn);
+  const feedback = useFeedback();
+  const endLive = useLiveSessionEnd(camera.status === 'live', feedback.onLiveEnded);
   useLiveUsage(camera.status === 'live');
   const stage = useStageBox();
   const [voice, setVoiceState] = useState(() => window.localStorage.getItem(MUTE_KEY) !== '1');
@@ -41,6 +45,7 @@ export function LiveViewV2() {
   }, [model.spoken, voice]);
 
   const leave = (path: string) => {
+    endLive();
     camera.pause();
     navigate(path);
   };

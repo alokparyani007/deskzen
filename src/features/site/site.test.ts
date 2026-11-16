@@ -88,6 +88,7 @@ describe('public site', () => {
     expect(privacy).toContain('started Live view');
     expect(privacy).toContain('no personal info and no camera data');
     expect(privacy).toContain('We do not store your email, account id, or IP address');
+    expect(privacy).toContain('Optional feedback text and a thumbs rating are stored without your name or email.');
     expect(privacy).not.toContain('The DeskZen app itself (the camera and posture checks) uses no analytics');
     expect(privacy).not.toContain('We do not use third-party analytics');
     expect(privacy).not.toContain('\u2014');
