@@ -54,7 +54,8 @@ import { usePersonOutline } from './usePersonOutline';
 import { useSnapLoop } from './useSnapLoop';
 import { DockButton, ZenDock } from './ZenDock';
 import { buildZenV2, pointsFromFrame, saveZenPrint, type ZenV2 } from './zenPrint';
-import { destinationAfterZen } from './afterZen';
+import { destinationAfterZen, openLiveView } from './afterZen';
+import { rememberZenMode } from './liveMode';
 import { StepPill, ZenStage } from './ZenStage';
 import { zenConfig, type PoseMode } from './zenConfig';
 
@@ -243,7 +244,7 @@ export function ZenFlowV2() {
   }, [mode, shot?.tracing, step]);
 
   useEffect(() => {
-    if (step !== 'fit' || !draftRef.current || !landmarks) return;
+    if (step !== 'fit' || !draftRef.current || !landmarks || locking.current) return;
     const current = draftRef.current;
     const measures = measurePose(landmarks);
     const rules = liveRules(measures, current.baseline, mode);
@@ -303,8 +304,9 @@ export function ZenFlowV2() {
       playLockIn();
       say('Locked.');
       if (!session) markGuestSetupPrompt();
+      rememberZenMode(mode);
       if (destinationAfterZen({ signedIn: Boolean(session), from }) === '/live') {
-        navigate('/live', { replace: true });
+        openLiveView(navigate, true);
         return;
       }
       setSaved(zen);
@@ -424,7 +426,7 @@ export function ZenFlowV2() {
     } else if (step === 'outline' && shot && !shot.tracing) {
       if (problem) { wipe(); setStep('snap'); } else keep();
     } else if (step === 'fit') void finishRef.current(fitShown);
-    else if (step === 'done') navigate('/live');
+    else if (step === 'done') openLiveView(navigate);
   };
 
   return (
@@ -507,7 +509,7 @@ export function ZenFlowV2() {
           }
         >
           <DockButton onClick={() => { setSaved(null); setStep('snap'); }}>Retake</DockButton>
-          <DockButton primary onClick={() => navigate('/live')}>Start Live view</DockButton>
+          <DockButton primary onClick={() => openLiveView(navigate)}>Start Live view</DockButton>
         </ZenDock>
       ) : null}
       <CameraPausedBar live={live} video={camera.videoElement} lastLandmarkMs={wallMs} />

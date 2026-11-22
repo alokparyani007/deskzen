@@ -39,6 +39,12 @@ export function shoulderCaption(side: 'left' | 'right'): string {
   return side === 'right' ? 'Relax your right shoulder down' : 'Relax your left shoulder down';
 }
 
+export function stepIntoViewHelper(mode: PoseMode): string {
+  return mode === 'stand'
+    ? 'Stand where the camera can see your head and shoulders.'
+    : 'Sit where the camera can see your head and shoulders.';
+}
+
 /** One short line for the live pill. Shoulder side wins only when it is the tip. */
 export function liveCaption(result: RuleResult | null, mode: PoseMode, shoulder: 'left' | 'right' | null): string {
   if (shoulder && (!result || result.id === 'L-tilt')) return shoulderCaption(shoulder);
