@@ -56,6 +56,8 @@ import { DockButton, ZenDock } from './ZenDock';
 import { buildZenV2, pointsFromFrame, saveZenPrint, type ZenV2 } from './zenPrint';
 import { destinationAfterZen, openLiveView } from './afterZen';
 import { rememberZenMode } from './liveMode';
+import { phoneFrameStyle } from './phoneFrame';
+import { useNarrowPhone } from './useNarrowPhone';
 import { StepPill, ZenStage } from './ZenStage';
 import { zenConfig, type PoseMode } from './zenConfig';
 
@@ -120,6 +122,7 @@ export function ZenFlowV2() {
   const goodFramesRef = useRef<Landmarks[]>([]);
   const locking = useRef(false);
   const stage = useStageBox();
+  const narrow = useNarrowPhone();
   voiceRef.current = voice;
   const outlineLive = usePersonOutline(camera.videoElement, landmarks, live && step === 'fit', zenConfig.live.fitSegHz, mode);
 
@@ -441,8 +444,12 @@ export function ZenFlowV2() {
       {step === 'done' && saved ? (
         <DoneStep outline={saved.outline} mode={saved.mode} video={saved.video} />
       ) : (
-        <div className={`grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-[2%] px-[2%] ${step === 'snap' ? 'grid-cols-[minmax(0,68fr)_minmax(280px,30fr)]' : 'grid-cols-1'}`}>
-          <div ref={stage.ref} className="relative h-full min-h-0 overflow-hidden rounded-2xl bg-black">
+        <div className={`grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] gap-[2%] px-[2%] max-[599px]:flex-none max-[599px]:gap-3 max-[599px]:px-3 ${step === 'snap' ? 'grid-cols-[minmax(0,68fr)_minmax(280px,30fr)] max-[599px]:grid-cols-1 max-[599px]:grid-rows-[auto_auto]' : 'grid-cols-1 max-[599px]:grid-rows-[auto]'}`}>
+          <div
+            ref={stage.ref}
+            className="relative h-full min-h-0 overflow-hidden rounded-2xl bg-black max-[599px]:h-auto max-[599px]:w-full"
+            style={phoneFrameStyle(narrow, landmarks?.videoWidth || camera.resolution?.width || draft?.video.width || shot?.capture.width || 0, landmarks?.videoHeight || camera.resolution?.height || draft?.video.height || shot?.capture.height || 0)}
+          >
             {step === 'outline' && shot ? (
               <OutlineStep capture={shot.capture} outline={shot.outline} marks={shot.tracing ? null : outlineMarks(shot.frame, shot.outline)} badges={shot.tracing ? [] : snapBadges(shot, mode)} />
             ) : (
@@ -462,7 +469,7 @@ export function ZenFlowV2() {
                 ) : null}
                 {step === 'fit' ? <FitStep fraction={holdFraction} fit={fitShown} /> : null}
                 {step === 'snap' ? (
-                  <div className="absolute inset-x-3 top-3">
+                  <div className="absolute inset-x-3 top-3 max-[599px]:hidden">
                     <CheckChips chips={snap.board.chips} mode={mode} />
                   </div>
                 ) : null}
@@ -470,6 +477,11 @@ export function ZenFlowV2() {
               </>
             )}
           </div>
+          {step === 'snap' ? (
+            <div className="hidden px-1 max-[599px]:block">
+              <CheckChips chips={snap.board.chips} mode={mode} />
+            </div>
+          ) : null}
           {step === 'snap' ? (
             <PostureSidePanel mode={mode} active={snap.board.allGreen ? null : calloutForChip(snap.board.activeChip)} reduced={reduced} onMode={setMode} />
           ) : null}
@@ -490,7 +502,7 @@ export function ZenFlowV2() {
             <DockButton primary disabled={!shot || shot.tracing || !shot.outline} onClick={keep}>Looks good</DockButton>
           )}
           {problem?.allowAnyway ? (
-            <button type="button" className="text-sm font-semibold text-white/80 underline" onClick={keep}>
+            <button type="button" className="text-sm font-semibold text-white/80 underline max-[599px]:flex max-[599px]:h-12 max-[599px]:w-full max-[599px]:items-center max-[599px]:justify-center max-[599px]:rounded-full max-[599px]:border max-[599px]:border-white/40 max-[599px]:no-underline" onClick={keep}>
               Use it anyway
             </button>
           ) : null}

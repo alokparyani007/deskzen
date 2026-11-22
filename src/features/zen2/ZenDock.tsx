@@ -21,18 +21,18 @@ export function ZenDock({
   const Icon = tone === 'good' ? Check : tone === 'ready' ? Camera : tone === 'wait' ? LoaderCircle : UserRound;
   const badge = tone === 'good' || tone === 'ready' ? 'bg-print' : 'bg-glow text-ink';
   return (
-    <div className="mx-[2%] mb-3 flex shrink-0 items-center gap-4 rounded-2xl border border-white/10 bg-dock px-4 py-3 text-white backdrop-blur-md">
-      <span className={`relative flex size-12 shrink-0 items-center justify-center rounded-full ${badge}`} aria-hidden="true">
+    <div className="mx-[2%] mb-3 flex shrink-0 items-center gap-4 rounded-2xl border border-white/10 bg-dock px-4 py-3 text-white backdrop-blur-md max-[599px]:mx-3 max-[599px]:mb-4 max-[599px]:flex-col max-[599px]:items-stretch max-[599px]:gap-3 max-[599px]:py-4">
+      <span className={`relative flex size-12 shrink-0 items-center justify-center rounded-full max-[599px]:hidden ${badge}`} aria-hidden="true">
         <Icon className={`size-6 ${tone === 'wait' ? 'animate-spin' : ''} ${tone === 'coach' ? 'text-ink' : 'text-white'}`} />
         {typeof hold === 'number' ? <HoldRing fraction={hold} /> : null}
       </span>
-      <div className={`min-w-0 ${aside ? '' : 'flex-1'}`} aria-live="polite">
+      <div className={`min-w-0 ${aside ? '' : 'flex-1'} max-[599px]:w-full`} aria-live="polite">
         <p className="text-2xl font-semibold leading-tight">{title}</p>
         <p className="mt-0.5 text-base text-white/80">{helper}</p>
         {note ? <p className="mt-1 text-sm text-white/70">{note}</p> : null}
       </div>
-      {aside ? <div className="flex min-w-0 flex-1 items-center justify-center px-3">{aside}</div> : null}
-      <div className="flex shrink-0 items-center gap-2">{children}</div>
+      {aside ? <div className="flex min-w-0 flex-1 items-center justify-center px-3 max-[599px]:w-full max-[599px]:flex-none max-[599px]:justify-start max-[599px]:px-0">{aside}</div> : null}
+      <div className="flex shrink-0 items-center gap-2 max-[599px]:w-full max-[599px]:flex-col max-[599px]:items-stretch max-[599px]:gap-2">{children}</div>
     </div>
   );
 }
@@ -63,7 +63,7 @@ export function DockButton({
     <button
       type="button"
       disabled={disabled}
-      className={`inline-flex h-12 items-center justify-center rounded-full px-5 text-lg font-semibold ${primary ? 'bg-print text-white disabled:opacity-40' : 'border border-white/40 text-white'}`}
+      className={`inline-flex h-12 items-center justify-center rounded-full px-5 text-lg font-semibold max-[599px]:h-14 max-[599px]:w-full ${primary ? 'bg-print text-white disabled:opacity-40' : 'border border-white/40 text-white'}`}
       onClick={onClick}
     >
       {children}

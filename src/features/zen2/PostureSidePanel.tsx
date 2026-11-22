@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { CalloutId } from './poseRules';
+import { useNarrowPhone } from './useNarrowPhone';
 import { zenConfig, type PoseMode } from './zenConfig';
 
 const CALLOUTS: Record<PoseMode, { id: CalloutId; text: string; dot: { x: number; y: number }; label: { x: number; y: number } }[]> = {
@@ -44,31 +45,38 @@ export function PostureSidePanel({
   reduced: boolean;
   onMode: (mode: PoseMode) => void;
 }) {
+  const narrow = useNarrowPhone();
   const [src, setSrc] = useState('/media/guides/good-desk-posture-clean.jpg');
   const crop = mode === 'stand' ? zenConfig.crop.stand : zenConfig.crop.sit;
+  // On a phone the printed words in the guide sit on top of each other, so the
+  // picture is cropped to the figure and the four lines are a list underneath.
+  const frame = narrow
+    ? { x: crop.x + crop.w * 0.02, y: crop.y + crop.h * 0.05, w: crop.w * 0.58, h: crop.h * 0.9 }
+    : crop;
   const standing = mode === 'stand';
   return (
-    <aside className="flex min-h-0 flex-col rounded-2xl border border-print/20 bg-stage p-3" aria-label="Correct posture">
+    <aside className={`flex min-h-0 flex-col rounded-2xl border border-print/20 bg-stage p-3 ${narrow ? 'flex-none' : ''}`} aria-label="Correct posture">
       <h2 className="px-1 text-xl font-semibold text-white">Correct posture</h2>
-      <div className="relative mt-2 min-h-0 flex-1 overflow-hidden rounded-xl bg-mint-panel">
-        <div className="relative h-full w-full" style={{ aspectRatio: `${crop.w} / ${crop.h}` }}>
+      <div className={narrow ? 'relative mt-2 overflow-hidden rounded-xl bg-mint-panel' : 'relative mt-2 min-h-0 flex-1 overflow-hidden rounded-xl bg-mint-panel'}>
+        <div className={narrow ? 'relative w-full' : 'relative h-full w-full'} style={{ aspectRatio: `${frame.w} / ${frame.h}` }}>
           <img
             src={src}
             alt={standing ? 'Illustration of good desk posture while standing' : 'Illustration of good desk posture while sitting'}
             className="absolute max-w-none"
             style={{
-              width: `${(zenConfig.crop.sourceW / crop.w) * 100}%`,
-              height: `${(zenConfig.crop.sourceH / crop.h) * 100}%`,
-              left: `${(-crop.x / crop.w) * 100}%`,
-              top: `${(-crop.y / crop.h) * 100}%`,
+              width: `${(zenConfig.crop.sourceW / frame.w) * 100}%`,
+              height: `${(zenConfig.crop.sourceH / frame.h) * 100}%`,
+              left: `${(-frame.x / frame.w) * 100}%`,
+              top: `${(-frame.y / frame.h) * 100}%`,
             }}
             onError={() => {
               if (src.includes('clean')) setSrc('/media/guides/good-desk-posture.jpg');
             }}
           />
-          {COVERS[mode].map((cover) => (
+          {narrow ? null : COVERS[mode].map((cover) => (
             <span key={`${cover.x}-${cover.y}`} className="absolute bg-mint-panel" style={{ left: `${cover.x}%`, top: `${cover.y}%`, width: `${cover.w}%`, height: `${cover.h}%` }} aria-hidden="true" />
           ))}
+          {narrow ? null : (
           <svg className="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             {CALLOUTS[mode].map((item) => {
               const on = item.id === active;
@@ -86,17 +94,18 @@ export function PostureSidePanel({
               );
             })}
           </svg>
-          {CALLOUTS[mode].map((item) => {
+          )}
+          {narrow ? null : CALLOUTS[mode].map((item) => {
             const on = item.id === active;
             return (
               <span key={item.id}>
                 <span
-                  className={`absolute size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${on ? 'bg-glow' : 'bg-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
+                  className={`absolute size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full max-[599px]:hidden ${on ? 'bg-glow' : 'bg-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
                   style={{ left: `${item.dot.x}%`, top: `${item.dot.y}%` }}
                   aria-hidden="true"
                 />
                 <p
-                  className={`absolute w-[40%] text-[13px] font-semibold leading-tight ${on ? 'text-glow' : 'text-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
+                  className={`absolute w-[40%] text-[13px] font-semibold leading-tight max-[599px]:hidden ${on ? 'text-glow' : 'text-callout'} ${on && !reduced ? 'motion-safe:animate-pulse' : ''}`}
                   style={{ left: `${item.label.x}%`, top: `${item.label.y}%` }}
                 >
                   {item.text}
@@ -106,6 +115,16 @@ export function PostureSidePanel({
           })}
         </div>
       </div>
+      <ul className="mt-3 hidden flex-col gap-1.5 max-[599px]:flex">
+        {CALLOUTS[mode].map((item) => {
+          const on = item.id === active;
+          return (
+            <li key={item.id} className={`text-sm font-semibold leading-snug ${on ? 'text-glow' : 'text-callout'}`}>
+              {item.text}
+            </li>
+          );
+        })}
+      </ul>
       <div className="mt-3 flex items-center justify-center gap-3 text-sm font-semibold">
         <span className={standing ? 'text-white/60' : 'text-white'}>Sitting</span>
         <button
