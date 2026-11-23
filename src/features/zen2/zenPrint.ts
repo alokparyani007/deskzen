@@ -3,6 +3,7 @@ import { lockedPoseFromFrames } from '../../calibration/lockedPose';
 import { findLivePrint, PRINTS_RECORD_KEY, type PosturePrint, type PrintLibrary } from '../../calibration/print';
 import { loadPrintLibrary } from '../../calibration/store';
 import { saveRecord } from '../../lib/storage/local-data';
+import { markZenSaved } from '../../lib/storage/zenFlag';
 import type { Landmarks, NormPoint } from '../../lib/posture/types';
 import type { PoseBaseline } from './poseRules';
 import type { PoseMode } from './zenConfig';
@@ -93,6 +94,7 @@ export async function saveZenPrint(input: {
   const library = await loadPrintLibrary();
   const print = zenPrintRecord(input);
   await saveRecord(PRINTS_RECORD_KEY, mergeZenPrint(library, print));
+  markZenSaved();
 }
 
 export async function loadZenPrint(mode: PoseMode, deskProfileId: string, auto: boolean): Promise<PosturePrint | null> {

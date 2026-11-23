@@ -17,29 +17,40 @@ function render(node: ReturnType<typeof createElement>): string {
 }
 
 describe('public site', () => {
-  it('renders the homepage copy, CTAs and real screenshots', () => {
+  it('renders the homepage copy and a direct start button', () => {
     const html = render(createElement(SiteHome));
-    expect(html).toContain('Feel better by 3 PM.');
-    expect(html.match(/>Try it now, no sign-up</g)?.length).toBeGreaterThanOrEqual(3);
-    expect(html).toContain('>Try it now<');
-    expect(html.match(/No sign-up\. No credit card\. About 30 seconds\./g)?.length).toBe(3);
+    expect(html).toContain('Gentle webcam nudges when you slouch.');
+    expect(html.match(/>Start free, no sign-up</g)?.length).toBeGreaterThanOrEqual(2);
+    expect(html).not.toContain('>Try it now<');
+    expect(html.match(/Runs on your device\. No video saved\./g)?.length).toBeGreaterThanOrEqual(2);
     expect(html).toContain('href="/set-my-zen"');
+    expect(html).not.toContain('href="/live"');
     expect(html).not.toContain('Get started free');
     expect(html).not.toContain('Open DeskZen');
     expect(html).not.toMatch(/href="\/set-my-zen"[^>]*data-discover="true"|data-discover="true"[^>]*href="\/set-my-zen"/);
-    expect(html).toContain('Breaks and progress, built in');
-    expect(html).toContain('/site/reminders.webp');
-    expect(html).toContain('/site/progress.webp');
+    expect(html).toContain('How it works');
+    expect(html).toContain('Set my Zen');
+    expect(html).toContain('Work as usual');
+    expect(html).toContain('Get a gentle nudge when you slouch');
+    expect(html).not.toContain('/site/hero-maya.webp');
     expect(html).toContain('Your camera never leaves your device.');
     expect(html).toContain('Free during early access');
     expect(html).toContain('DeskZen is a wellness tool, not a medical device.');
     expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
     expect(html).toContain('href="/login"');
+    expect(html).not.toContain('\u2014');
     const signedIn = render(createElement(SiteHome, { signedIn: true }));
     expect(signedIn).toContain('Open DeskZen');
     expect(signedIn).toContain('href="/app"');
     expect(signedIn).not.toContain('Try it now, no sign-up');
     expect(signedIn).not.toMatch(/href="\/app"[^>]*data-discover="true"|data-discover="true"[^>]*href="\/app"/);
+    const returning = render(createElement(SiteHome, { hasZen: true }));
+    expect(returning.match(/>Open Live view</g)?.length).toBeGreaterThanOrEqual(2);
+    expect(returning.match(/>Reset my Zen</g)?.length).toBeGreaterThanOrEqual(2);
+    expect(returning).toContain('href="/live"');
+    expect(returning).toContain('href="/set-my-zen"');
+    expect(returning).not.toContain('Start free, no sign-up');
+    expect(returning).not.toMatch(/href="\/live"[^>]*data-discover="true"|data-discover="true"[^>]*href="\/live"/);
   });
 
   it('renders email sign-in, hides Google for now, and has no Apple button', () => {
@@ -172,7 +183,7 @@ describe('search and AI crawler readiness', () => {
   it('server-renders every public page for the build prerender', () => {
     for (const path of PRERENDER_PATHS) expect(renderPage(path).length).toBeGreaterThan(1000);
     expect(renderPage('/privacy')).toContain('Your camera stays on your device');
-    expect(renderPage('/')).toContain('Breaks and progress, built in');
+    expect(renderPage('/')).toContain('Gentle webcam nudges when you slouch.');
   });
 
   it('keeps the FAQ free of medical claims', () => {

@@ -176,7 +176,9 @@ async function sendToSupabase(row: UsageInsert): Promise<void> {
   try {
     usageClient ??= createClient(url, key, usageClientOptions());
     const { data } = await usageClient.auth.getSession();
-    if (data.session) return;
+    // Guests have no session. A signed-in token on this client would send the
+    // row as authenticated, so skip it rather than fail the visit.
+    if (data?.session) return;
     const payload: Record<string, unknown> = {
       event: row.event,
       anon_session: row.anon_session,

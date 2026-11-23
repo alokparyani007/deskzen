@@ -51,10 +51,10 @@ export function SiteLogo({ className = '' }: { className?: string }) {
   );
 }
 
-export function SiteNav({ signedIn = false }: { signedIn?: boolean }) {
+export function SiteNav({ signedIn = false, headerAction = true }: { signedIn?: boolean; headerAction?: boolean }) {
   return (
     <header className="relative z-20">
-      <nav aria-label="Main" className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:px-8 sm:py-5">
+      <nav aria-label="Main" className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:px-8 sm:py-5">
         <SiteLogo />
         <div className="flex items-center gap-2 sm:gap-4">
           {signedIn ? (
@@ -63,11 +63,11 @@ export function SiteNav({ signedIn = false }: { signedIn?: boolean }) {
             <>
               <Link
                 to="/login"
-                className={`inline-flex min-h-11 items-center whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium text-white/80 hover:text-white sm:px-3 ${siteFocus}`}
+                className={`inline-flex min-h-11 items-center whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-white/80 hover:text-white sm:px-3 ${siteFocus}`}
               >
                 Log in
               </Link>
-              <TryLink className={headerCtaClass}>Try it now</TryLink>
+              {headerAction ? <TryLink className={headerCtaClass}>Try it now</TryLink> : null}
             </>
           )}
         </div>
@@ -113,7 +113,7 @@ export function SiteFooter() {
 }
 
 /** Near-black page with the site nav and footer. */
-export function SitePage({ children, signedIn }: { children: ReactNode; signedIn?: boolean }) {
+export function SitePage({ children, signedIn, headerAction = true }: { children: ReactNode; signedIn?: boolean; headerAction?: boolean }) {
   const detected = useAuthSession() !== null;
   const open = signedIn ?? detected;
   return (
@@ -121,7 +121,7 @@ export function SitePage({ children, signedIn }: { children: ReactNode; signedIn
       <a href="#content" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-desk">
         Skip to content
       </a>
-      <SiteNav signedIn={open} />
+      <SiteNav signedIn={open} headerAction={headerAction} />
       <main id="content">{children}</main>
       <SiteFooter />
     </div>
