@@ -12,7 +12,7 @@ import { PAGE_META } from './seo';
 
 describe('public page to app navigation', () => {
   it('treats the prerendered site pages as public, including query strings', () => {
-    for (const path of ['/', '/privacy', '/terms', '/login', '/privacy/', '/login?from=/app']) {
+    for (const path of ['/', '/privacy', '/terms', '/login', '/privacy/', '/login?from=/app', '/webcam-posture-checker', '/posture-reminder-mac-windows']) {
       expect(isPublicPath(path)).toBe(true);
       expect(isAppPath(path)).toBe(false);
     }
@@ -23,6 +23,9 @@ describe('public page to app navigation', () => {
       expect(isAppPath(path)).toBe(true);
       expect(isPublicPath(path)).toBe(false);
     }
+    expect(isAppPath('/blog')).toBe(false);
+    expect(isPublicPath('/blog')).toBe(false);
+    expect(isAppPath('/features')).toBe(false);
   });
 
   it('reloads only when an app route is still on a public HTML document', () => {
@@ -66,6 +69,9 @@ describe('public page to app navigation', () => {
     expect(shouldServeAppDocument('/', html)).toBe(false);
     expect(shouldServeAppDocument('/login', html)).toBe(false);
     expect(shouldServeAppDocument('/learn/afternoon-slump', html)).toBe(false);
+    expect(shouldServeAppDocument('/webcam-posture-checker', html)).toBe(false);
+    expect(shouldServeAppDocument('/blog', html)).toBe(false);
+    expect(shouldServeAppDocument('/features', html)).toBe(false);
     expect(shouldServeAppDocument('/privacy/', html)).toBe(false);
     expect(shouldServeAppDocument('/assets/index.js', html)).toBe(false);
     expect(shouldServeAppDocument('/src/main.tsx', '*/*')).toBe(false);

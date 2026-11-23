@@ -11,7 +11,9 @@ export type PublicPath =
   | '/login'
   | '/learn'
   | '/learn/stop-slouching-at-your-desk'
-  | '/learn/afternoon-slump';
+  | '/learn/afternoon-slump'
+  | '/webcam-posture-checker'
+  | '/posture-reminder-mac-windows';
 
 export type PageMeta = { title: string; description: string; ogTitle: string; ogDescription: string };
 
@@ -19,10 +21,10 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
   '/': {
     title: 'DeskZen: Posture Reminders and Break App for Your Desk',
     description:
-      'DeskZen is a free posture reminder and break app. Your webcam spots slouching and gently nudges you to sit up straight, right in your browser. Video never leaves your device.',
-    ogTitle: 'DeskZen: Feel better by 3 PM',
+      'DeskZen is a free posture reminder app. Your webcam spots slouching and gently nudges you to sit up straight, in your browser. Video never leaves your device.',
+    ogTitle: 'DeskZen: Posture Reminders and Break App for Your Desk',
     ogDescription:
-      'Gentle posture nudges and break reminders, right in your browser. Your camera never leaves your device. Free during early access.',
+      'DeskZen is a free posture reminder app. Your webcam spots slouching and gently nudges you to sit up straight, in your browser. Video never leaves your device.',
   },
   '/privacy': {
     title: 'Privacy Policy | DeskZen Posture App',
@@ -65,6 +67,22 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
     ogTitle: 'Why you crash at 3 PM',
     ogDescription: 'Why afternoons feel heavy, how sitting may play a part, and simple resets that may help.',
   },
+  '/webcam-posture-checker': {
+    title: 'Free Webcam Posture Checker | DeskZen',
+    description:
+      'Free webcam posture checker and slouch detector. No download and no sign-up. DeskZen runs in your browser and keeps the camera on your device.',
+    ogTitle: 'Free Webcam Posture Checker | DeskZen',
+    ogDescription:
+      'Free webcam posture checker and slouch detector. No download and no sign-up. DeskZen runs in your browser and keeps the camera on your device.',
+  },
+  '/posture-reminder-mac-windows': {
+    title: 'Posture Reminder App for Mac and Windows | DeskZen',
+    description:
+      'Free posture reminder for Mac, Windows, and laptops. No download. DeskZen runs in your browser and the camera stays on your device.',
+    ogTitle: 'Posture Reminder App for Mac and Windows | DeskZen',
+    ogDescription:
+      'Free posture reminder for Mac, Windows, and laptops. No download. DeskZen runs in your browser and the camera stays on your device.',
+  },
 };
 
 export const FAQS: readonly { q: string; a: string }[] = [
@@ -95,6 +113,56 @@ export const FAQS: readonly { q: string; a: string }[] = [
   {
     q: 'Is DeskZen a medical device?',
     a: 'No. DeskZen is a wellness tool with general posture and break tips. It doesn\u2019t diagnose or treat anything. If something hurts, talk to a health professional.',
+  },
+];
+
+export const CHECKER_FAQS: readonly { q: string; a: string }[] = [
+  {
+    q: 'Is this webcam posture checker free?',
+    a: 'Yes. DeskZen is free during early access. There is no credit card and no sign-up. You can set your Zen and open Live view right in the browser.',
+  },
+  {
+    q: 'Do I need to download an app?',
+    a: 'No. DeskZen is a browser posture checker. Keep this tab open on your laptop. There is nothing to install.',
+  },
+  {
+    q: 'Is it a free slouch detector?',
+    a: 'Yes. After you sit your best once, DeskZen watches for a slouch against your own outline and gives you a nudge. It is a reminder, not a medical device, and it does not diagnose or treat anything.',
+  },
+  {
+    q: 'Does my camera video get uploaded?',
+    a: 'No. The camera stays on your device. Photos and video are never saved or uploaded. The check runs inside your browser.',
+  },
+  {
+    q: 'Will it work on a Mac and on Windows?',
+    a: 'Yes. Any modern desktop browser with a webcam is enough. The same page works on a Mac and on a Windows PC.',
+  },
+  {
+    q: 'How is this different from a sit up straight timer?',
+    a: 'A timer rings on a clock, even if you are already sitting well. DeskZen looks at your posture and nudges you when you actually slouch.',
+  },
+];
+
+export const MAC_FAQS: readonly { q: string; a: string }[] = [
+  {
+    q: 'Is there a posture reminder app for Mac that I do not have to install?',
+    a: 'Yes. DeskZen runs in the browser on a Mac. There is no App Store download and no menu-bar install.',
+  },
+  {
+    q: 'Does the same reminder work on Windows?',
+    a: 'Yes. Open the same page on a Windows laptop. It is one posture reminder for both, with nothing to install.',
+  },
+  {
+    q: 'Does it use my laptop webcam?',
+    a: 'Yes. The laptop camera is enough. The picture is checked on your device and is never uploaded.',
+  },
+  {
+    q: 'Do I need an account?',
+    a: 'No. You can try it with no sign-up. An account is optional, and your camera stays on your device either way.',
+  },
+  {
+    q: 'Is DeskZen a medical device?',
+    a: 'No. It is a wellness tool that helps you notice slouching. It does not diagnose or treat anything. If something hurts, talk with a health professional.',
   },
 ];
 
@@ -138,7 +206,7 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
       operatingSystem: 'Web browser (Windows, macOS)',
       browserRequirements: 'Requires a modern browser and a webcam.',
       image: OG_IMAGE,
-      screenshot: [`${SITE_URL}/site/reminders.webp`, `${SITE_URL}/site/progress.webp`],
+      screenshot: [`${SITE_URL}/site/slouch-nudge.svg`, `${SITE_URL}/site/reminders.webp`, `${SITE_URL}/site/progress.webp`],
       featureList: ['Webcam posture reminders', 'Sit up straight nudges', 'Break reminders', 'Stretch and eye breaks', 'Weekly progress tracker', 'Runs on your device'],
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       publisher: { '@id': org['@id'] },
@@ -153,6 +221,46 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
     '/learn/stop-slouching-at-your-desk': 'How to stop slouching at your desk',
     '/learn/afternoon-slump': 'Why you crash at 3 PM (and how your posture plays a part)',
   };
+  const landingFaqs: Partial<Record<PublicPath, readonly { q: string; a: string }[]>> = {
+    '/webcam-posture-checker': CHECKER_FAQS,
+    '/posture-reminder-mac-windows': MAC_FAQS,
+  };
+  const landing = landingFaqs[path];
+  if (landing) {
+    const mac = path === '/posture-reminder-mac-windows';
+    graph.push({
+      '@type': 'SoftwareApplication',
+      '@id': `${pageUrl(path)}#software`,
+      name: 'DeskZen',
+      url: pageUrl(path),
+      description: meta.description,
+      applicationCategory: 'HealthApplication',
+      applicationSubCategory: 'Posture and break reminders',
+      operatingSystem: mac ? 'macOS, Windows' : 'Web browser (Windows, macOS)',
+      browserRequirements: 'Requires a modern browser and a webcam. No download.',
+      image: OG_IMAGE,
+      screenshot: [`${SITE_URL}/site/slouch-nudge.svg`, `${SITE_URL}/site/reminders.webp`, `${SITE_URL}/site/progress.webp`],
+      featureList: mac
+        ? ['Posture reminder for Mac', 'Posture reminder for Windows', 'Laptop webcam nudges', 'Break reminders', 'No install', 'Camera stays on your device']
+        : ['Webcam posture checker', 'Slouch detector', 'No download', 'No sign-up', 'Break reminders', 'Camera stays on your device'],
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      isAccessibleForFree: true,
+      publisher: { '@id': org['@id'] },
+    });
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${pageUrl(path)}#faq`,
+      mainEntity: landing.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+    });
+    graph.push({
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl(path)}#breadcrumb`,
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name: mac ? 'Posture reminder for Mac and Windows' : 'Webcam posture checker', item: pageUrl(path) },
+      ],
+    });
+  }
   const headline = articleHeadline[path];
   if (headline) {
     graph.push({

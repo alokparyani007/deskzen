@@ -1,3 +1,4 @@
+import { isKnownAppPath } from './publicRoutes';
 import { PAGE_META } from './seo';
 
 function pathnameOf(href: string): string {
@@ -18,10 +19,9 @@ export function isPublicPath(href: string): boolean {
   return Object.prototype.hasOwnProperty.call(PAGE_META, pathnameOf(href));
 }
 
-/** Signed-in app routes (Home, Live view, Set my Zen, and the rest). */
+/** Signed-in app routes (Home, Live view, Set my Zen, and the rest). Unknown URLs are not app routes. */
 export function isAppPath(href: string): boolean {
-  const path = pathnameOf(href);
-  return path.startsWith('/') && !isPublicPath(path);
+  return isKnownAppPath(pathnameOf(href));
 }
 
 /** The public HTML files include the Google Analytics snippet; app.html does not. */

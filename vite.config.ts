@@ -4,7 +4,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { shouldServeAppDocument } from './scripts/app-document.ts';
+import { htmlTarget, shouldServeAppDocument } from './scripts/app-document.ts';
+import { APP_NAVIGATION_RE } from './src/features/site/publicRoutes.ts';
 
 const appVersion = (JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string }).version;
 
@@ -12,22 +13,55 @@ type ConnectLike = {
   stack: Array<{ route: string; handle: (req: { url?: string; headers: { accept?: string | string[] } }, res: unknown, next: () => void) => void }>;
 };
 
-/** Dev and preview: app routes get app.html (no Google Analytics). Production uses vercel.json. */
+type NodeResponse = {
+  statusCode: number;
+  setHeader: (name: string, value: string) => void;
+  end: (body?: string | Uint8Array) => void;
+};
+
+function sendNotFound(res: NodeResponse): void {
+  const html = readFileSync(fileURLToPath(new URL('./dist/404.html', import.meta.url)));
+  res.statusCode = 404;
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('X-Robots-Tag', 'noindex');
+  res.end(html);
+}
+
+/** Dev: app routes get app.html. Preview: prerendered public HTML, app.html, or a real 404. Production uses vercel.json. */
 function appDocumentPlugin() {
-  const handle = (req: { url?: string; headers: { accept?: string | string[] } }, _res: unknown, next: () => void) => {
+  const rewriteApp = (req: { url?: string; headers: { accept?: string | string[] } }, _res: unknown, next: () => void) => {
     if (req.url && shouldServeAppDocument(req.url, req.headers.accept)) req.url = '/app.html';
     next();
-  };
-  const prepend = (server: { middlewares: ConnectLike }) => {
-    server.middlewares.stack.unshift({ route: '', handle });
   };
   return {
     name: 'deskzen-app-document',
     configureServer(server: { middlewares: ConnectLike }) {
-      return () => prepend(server);
+      return () => server.middlewares.stack.unshift({ route: '', handle: rewriteApp });
     },
     configurePreviewServer(server: { middlewares: ConnectLike }) {
-      return () => prepend(server);
+      return () => {
+        server.middlewares.stack.unshift({
+          route: '',
+          handle: (req, res, next) => {
+            const target = htmlTarget(req.url ?? '', req.headers.accept);
+            if (target.kind === 'app') {
+              req.url = '/app.html';
+              next();
+              return;
+            }
+            if (target.kind === 'public') {
+              req.url = target.file;
+              next();
+              return;
+            }
+            if (target.kind === 'not-found') {
+              sendNotFound(res as NodeResponse);
+              return;
+            }
+            next();
+          },
+        });
+      };
     },
   };
 }
@@ -53,7 +87,7 @@ export default defineConfig(({ isSsrBuild }) => ({
     !isSsrBuild &&
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.svg', 'pwa-192x192.png', 'pwa-512x512.png'],
+        includeAssets: ['favicon.svg', 'favicon.ico', 'pwa-192x192.png', 'pwa-512x512.png'],
         manifest: {
           name: 'DeskZen',
           short_name: 'DeskZen',
@@ -87,8 +121,13 @@ export default defineConfig(({ isSsrBuild }) => ({
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,webp}'],
           // App routes open the plain shell, never the prerendered homepage.
           navigateFallback: 'app.html',
-          // Let the server answer these directly (prerendered pages and crawler files).
-          navigateFallbackDenylist: [/^\/(privacy|terms|login)\/?$/, /^\/learn(\/[^/]+)?\/?$/, /^\/(robots\.txt|sitemap\.xml)$/],
+          // Only real app screens use the shell. Public pages and unknown URLs hit the network (404.html for misses).
+          navigateFallbackAllowlist: [APP_NAVIGATION_RE],
+          navigateFallbackDenylist: [
+            /^\/(?:privacy|terms|login|webcam-posture-checker|posture-reminder-mac-windows)\/?(?:\?.*)?$/,
+            /^\/learn(?:\/[^/]+)?\/?(?:\?.*)?$/,
+            /^\/(?:robots\.txt|sitemap\.xml|favicon\.ico)$/,
+          ],
           // New deploys take over right away so nobody stays on an old cached build.
           skipWaiting: true,
           clientsClaim: true,

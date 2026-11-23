@@ -11,6 +11,9 @@ export const siteFocus = 'focus-visible:outline-2 focus-visible:outline-offset-2
 /** Big emerald call to action with a soft glow. White text on #047857 for WCAG AA contrast. */
 export const ctaClass = `inline-flex min-h-11 items-center justify-center rounded-2xl bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_rgb(5_150_105/0.45)] ring-1 ring-outline/40 transition hover:bg-callout hover:shadow-[0_0_44px_rgb(5_150_105/0.55)] ${siteFocus}`;
 
+/** Primary guest action on the landing pages. Same destination as Try it now: Set my Zen. */
+export const setZenClass = `inline-flex min-h-14 w-full items-center justify-center rounded-2xl bg-brand px-8 py-4 text-lg font-semibold text-white shadow-[0_0_32px_rgb(5_150_105/0.45)] ring-1 ring-white/10 transition hover:bg-callout hover:shadow-[0_0_44px_rgb(5_150_105/0.55)] sm:w-auto ${siteFocus}`;
+
 /** First-time flow. A plain link so the browser loads app.html, which has no Google Analytics. */
 export const TRY_PATH = '/set-my-zen';
 export const TRY_LABEL = 'Try it now, no sign-up';
@@ -83,6 +86,16 @@ export function SiteFooter() {
         <SiteLogo />
         <div className="flex flex-col items-center gap-2 sm:items-end">
           <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/75">
+            <li>
+              <Link to="/webcam-posture-checker" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
+                Webcam checker
+              </Link>
+            </li>
+            <li>
+              <Link to="/posture-reminder-mac-windows" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
+                Mac and Windows
+              </Link>
+            </li>
             <li>
               <Link to="/learn" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
                 Learn

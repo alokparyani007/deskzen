@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { SETUP_BLURB } from '../../lib/copy/setupTime';
+import { GUIDE_LINKS } from './guideLinks';
 import { SitePage, TryLink, ctaClass, siteFocus } from './SiteChrome';
 import { PAGE_META } from './seo';
 import type { PublicPath } from './seo';
@@ -93,6 +94,17 @@ export function LearnIndexPage() {
           Friendly guides on desk posture, the 3 PM slump, and small habits that may help you feel better at your desk.
         </p>
         <ul className="mt-10 space-y-4">
+          {GUIDE_LINKS.slice(0, 2).map((item) => (
+            <li key={item.href}>
+              <Link
+                to={item.href}
+                className={`block rounded-3xl border border-white/15 bg-white/[0.03] px-6 py-6 hover:border-outline/40 hover:bg-print/[0.06] ${siteFocus}`}
+              >
+                <h2 className="text-xl font-semibold text-white">{item.title}</h2>
+                <p className="mt-2 text-white/70">{item.text}</p>
+              </Link>
+            </li>
+          ))}
           <li>
             <Link
               to={STOP_SLOUCHING_PATH}
@@ -269,6 +281,10 @@ export function StopSlouchingPage() {
         <Link to={AFTERNOON_SLUMP_PATH} className={linkClass}>
           why you crash at 3 PM, and how your posture plays a part
         </Link>
+        , or try the{' '}
+        <Link to="/webcam-posture-checker" className={linkClass}>
+          free webcam posture checker
+        </Link>
         .
       </p>
 
@@ -420,6 +436,10 @@ export function AfternoonSlumpPage() {
         You may also like{' '}
         <Link to={STOP_SLOUCHING_PATH} className={linkClass}>
           how to stop slouching at your desk
+        </Link>
+        , or a{' '}
+        <Link to="/posture-reminder-mac-windows" className={linkClass}>
+          posture reminder for Mac and Windows
         </Link>
         .
       </p>

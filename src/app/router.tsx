@@ -11,8 +11,11 @@ import { NeckCheckPage } from '../features/neck/NeckCheckPage';
 import { PrivacyPage } from '../features/privacy/PrivacyPage';
 import { LoginPage } from '../features/site/LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from '../features/site/LearnPages';
+import { MacWindowsPage } from '../features/site/MacWindowsPage';
+import { NotFoundPage } from '../features/site/NotFoundPage';
 import { PrivacyPolicyPage, TermsPage } from '../features/site/LegalPage';
 import { SiteHome } from '../features/site/SiteHome';
+import { WebcamPostureCheckerPage } from '../features/site/WebcamPostureCheckerPage';
 import { ProgressPage } from '../features/progress/ProgressPage';
 import { RemindersPage } from '../features/reminders/RemindersPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
@@ -44,6 +47,8 @@ export const router = createBrowserRouter([
   { path: '/learn', element: <LearnIndexPage /> },
   { path: '/learn/stop-slouching-at-your-desk', element: <StopSlouchingPage /> },
   { path: '/learn/afternoon-slump', element: <AfternoonSlumpPage /> },
+  { path: '/webcam-posture-checker', element: <WebcamPostureCheckerPage /> },
+  { path: '/posture-reminder-mac-windows', element: <MacWindowsPage /> },
   // Guests and signed-in people share these routes. Sign-in is optional.
   {
     element: <AppDocumentGate />,
@@ -79,4 +84,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  { path: '*', element: <NotFoundPage /> },
 ]);
