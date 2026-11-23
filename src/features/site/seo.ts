@@ -1,7 +1,7 @@
 /** Search and social metadata for the public pages. Used by the pages and the build-time prerender. */
 
 export const SITE_URL = 'https://www.deskzenapp.com';
-export const OG_IMAGE = `${SITE_URL}/site/og.jpg`;
+export const OG_IMAGE = `${SITE_URL}/site/deskzen-posture-reminders-og.jpg`;
 export const CONTACT = 'sales@deskzenapp.com';
 
 export type PublicPath =
@@ -12,6 +12,9 @@ export type PublicPath =
   | '/learn'
   | '/learn/stop-slouching-at-your-desk'
   | '/learn/afternoon-slump'
+  | '/learn/slouch-detector-vs-sit-up-timer'
+  | '/learn/stand-up-and-stretch-reminders'
+  | '/learn/private-posture-reminder'
   | '/webcam-posture-checker'
   | '/posture-reminder-mac-windows';
 
@@ -49,9 +52,10 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
   '/learn': {
     title: 'Learn | DeskZen Posture Guides',
     description:
-      'Friendly guides on slouching, the 3 PM slump, and desk habits that may help. From DeskZen, a free posture reminder app.',
-    ogTitle: 'Learn with DeskZen',
-    ogDescription: 'Friendly guides on slouching, the 3 PM slump, and desk habits that may help.',
+      'Desk posture guides on slouch detectors, stand-up reminders, webcam privacy, and the 3 PM slump. From DeskZen.',
+    ogTitle: 'Learn | DeskZen Posture Guides',
+    ogDescription:
+      'Desk posture guides on slouch detectors, stand-up reminders, webcam privacy, and the 3 PM slump. From DeskZen.',
   },
   '/learn/stop-slouching-at-your-desk': {
     title: 'How to Stop Slouching at Your Desk | DeskZen',
@@ -64,8 +68,33 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
     title: 'Why You Crash at 3 PM | DeskZen',
     description:
       'Why many people fade around 3 PM, how sitting and slouching may play a part, and simple habits that may help. A DeskZen guide.',
-    ogTitle: 'Why you crash at 3 PM',
-    ogDescription: 'Why afternoons feel heavy, how sitting may play a part, and simple resets that may help.',
+    ogTitle: 'Why You Crash at 3 PM | DeskZen',
+    ogDescription:
+      'Why many people fade around 3 PM, how sitting and slouching may play a part, and simple habits that may help. A DeskZen guide.',
+  },
+  '/learn/slouch-detector-vs-sit-up-timer': {
+    title: 'Webcam Slouch Detector vs a Sit-Up Timer | DeskZen',
+    description:
+      'A slouch detector watches how you sit. A posture timer only rings on a clock. See when a sit up straight reminder should do more.',
+    ogTitle: 'Webcam Slouch Detector vs a Sit-Up Timer | DeskZen',
+    ogDescription:
+      'A slouch detector watches how you sit. A posture timer only rings on a clock. See when a sit up straight reminder should do more.',
+  },
+  '/learn/stand-up-and-stretch-reminders': {
+    title: 'How to Set Stand-Up and Stretch Reminders | DeskZen',
+    description:
+      'Set a stand up reminder and a stretch reminder you will keep. A break reminder app routine for work, plus a nudge when you slouch.',
+    ogTitle: 'How to Set Stand-Up and Stretch Reminders | DeskZen',
+    ogDescription:
+      'Set a stand up reminder and a stretch reminder you will keep. A break reminder app routine for work, plus a nudge when you slouch.',
+  },
+  '/learn/private-posture-reminder': {
+    title: 'A Private Posture Reminder for Your Camera | DeskZen',
+    description:
+      'A private posture app with real webcam privacy. On-device posture checks stay in your browser. Photos and video are never saved or uploaded.',
+    ogTitle: 'A Private Posture Reminder for Your Camera | DeskZen',
+    ogDescription:
+      'A private posture app with real webcam privacy. On-device posture checks stay in your browser. Photos and video are never saved or uploaded.',
   },
   '/webcam-posture-checker': {
     title: 'Free Webcam Posture Checker | DeskZen',
@@ -166,6 +195,114 @@ export const MAC_FAQS: readonly { q: string; a: string }[] = [
   },
 ];
 
+export const SLOUCH_TIMER_FAQS: readonly { q: string; a: string }[] = [
+  {
+    q: 'What is a slouch detector?',
+    a: 'A slouch detector uses your webcam to help you notice when your posture drifts from the outline you set. It is a reminder, not a medical device, and it does not diagnose or treat anything.',
+  },
+  {
+    q: 'How is a slouch detector different from a posture timer?',
+    a: 'A posture timer rings on a clock, even if you are already sitting well. A slouch detector stays quiet until your shape actually changes, then gives you a nudge.',
+  },
+  {
+    q: 'What does a sit up straight reminder do?',
+    a: 'People use that phrase for both clocks and camera nudges. A useful sit up straight reminder tells you when you have left the posture you chose, instead of only beeping on a schedule.',
+  },
+  {
+    q: 'Does the webcam slouch detector save video?',
+    a: 'No. In DeskZen the camera stays on your device. Photos and video are never saved or uploaded. The snapshot stays in memory only.',
+  },
+];
+
+export const STAND_STRETCH_FAQS: readonly { q: string; a: string }[] = [
+  {
+    q: 'How often should a stand up reminder go off?',
+    a: 'A stand up reminder every 30 to 60 minutes is a comfortable range for a lot of desk days. In DeskZen, move breaks can be 30, 45, 60, or 90 minutes. Pick one you will actually follow, and snooze it when you are mid-thought.',
+  },
+  {
+    q: 'What should a stretch reminder include?',
+    a: 'A short stretch you can finish in about a minute: roll your shoulders, reach overhead, or stand and take a few steps. It is a habit cue, not a workout.',
+  },
+  {
+    q: 'Can a break reminder app also watch my posture?',
+    a: 'Yes. A timer can remind you to stand and stretch on a schedule, and a webcam check can nudge you when you slouch between those breaks. DeskZen does both, and the camera stays on your device.',
+  },
+  {
+    q: 'Do I need a standing desk?',
+    a: 'No. A stand up reminder can mean pushing the chair back for a minute. If you do switch between sitting and standing, DeskZen can also remind you to change position so you are not locked in one shape.',
+  },
+];
+
+export const PRIVATE_POSTURE_FAQS: readonly { q: string; a: string }[] = [
+  {
+    q: 'Does this private posture app upload my camera?',
+    a: 'No. DeskZen checks posture inside your browser. The camera stays on your device. Photos and video are never saved or uploaded.',
+  },
+  {
+    q: 'What does on-device posture mean?',
+    a: 'The posture check runs on your computer, in the browser, with an on-device model. The snapshot stays in memory only. It is not sent to DeskZen.',
+  },
+  {
+    q: 'Is webcam privacy the same as never storing anything?',
+    a: 'The camera picture is never saved. DeskZen can keep your outline, settings, and scores in this browser, and an optional account stores an email for sign-in. Those are not photos or video. App progress is not synced to our servers today.',
+  },
+  {
+    q: 'Can I pause the camera?',
+    a: 'Yes. You can pause the camera any time. You can also clear what DeskZen saved in this browser from Settings, or by clearing site data in your browser.',
+  },
+];
+
+export type ArticleSeo = {
+  headline: string;
+  crumb: string;
+  published: string;
+  modified: string;
+  faqs?: readonly { q: string; a: string }[];
+};
+
+export const ARTICLE_SEO: Record<
+  | '/learn/stop-slouching-at-your-desk'
+  | '/learn/afternoon-slump'
+  | '/learn/slouch-detector-vs-sit-up-timer'
+  | '/learn/stand-up-and-stretch-reminders'
+  | '/learn/private-posture-reminder',
+  ArticleSeo
+> = {
+  '/learn/stop-slouching-at-your-desk': {
+    headline: 'How to stop slouching at your desk',
+    crumb: 'How to stop slouching',
+    published: '2026-11-09',
+    modified: '2026-11-23',
+  },
+  '/learn/afternoon-slump': {
+    headline: 'Why you crash at 3 PM (and how your posture plays a part)',
+    crumb: 'Why you crash at 3 PM',
+    published: '2026-11-09',
+    modified: '2026-11-23',
+  },
+  '/learn/slouch-detector-vs-sit-up-timer': {
+    headline: "Webcam slouch detector vs a sit-up timer: what's the difference?",
+    crumb: 'Slouch detector vs a timer',
+    published: '2026-11-23',
+    modified: '2026-11-23',
+    faqs: SLOUCH_TIMER_FAQS,
+  },
+  '/learn/stand-up-and-stretch-reminders': {
+    headline: 'How to set stand-up and stretch reminders while you work',
+    crumb: 'Stand-up and stretch reminders',
+    published: '2026-11-23',
+    modified: '2026-11-23',
+    faqs: STAND_STRETCH_FAQS,
+  },
+  '/learn/private-posture-reminder': {
+    headline: 'A private posture reminder that never saves your camera',
+    crumb: 'Private posture reminder',
+    published: '2026-11-23',
+    modified: '2026-11-23',
+    faqs: PRIVATE_POSTURE_FAQS,
+  },
+};
+
 export function pageUrl(path: PublicPath): string {
   return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`;
 }
@@ -217,10 +354,6 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
       mainEntity: FAQS.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
     });
   }
-  const articleHeadline: Partial<Record<PublicPath, string>> = {
-    '/learn/stop-slouching-at-your-desk': 'How to stop slouching at your desk',
-    '/learn/afternoon-slump': 'Why you crash at 3 PM (and how your posture plays a part)',
-  };
   const landingFaqs: Partial<Record<PublicPath, readonly { q: string; a: string }[]>> = {
     '/webcam-posture-checker': CHECKER_FAQS,
     '/posture-reminder-mac-windows': MAC_FAQS,
@@ -261,21 +394,50 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
       ],
     });
   }
-  const headline = articleHeadline[path];
-  if (headline) {
+  if (path === '/learn' || path in ARTICLE_SEO) {
+    const article = path in ARTICLE_SEO ? ARTICLE_SEO[path as keyof typeof ARTICLE_SEO] : null;
+    const crumbs = article
+      ? [
+          { name: 'Home', item: `${SITE_URL}/` },
+          { name: 'Learn', item: pageUrl('/learn') },
+          { name: article.crumb, item: pageUrl(path) },
+        ]
+      : [
+          { name: 'Home', item: `${SITE_URL}/` },
+          { name: 'Learn', item: pageUrl('/learn') },
+        ];
     graph.push({
-      '@type': 'Article',
-      '@id': `${pageUrl(path)}#article`,
-      headline,
-      description: meta.description,
-      datePublished: '2026-11-09',
-      dateModified: '2026-11-09',
-      author: { '@id': org['@id'] },
-      publisher: { '@id': org['@id'] },
-      image: OG_IMAGE,
-      mainEntityOfPage: { '@id': page['@id'] },
-      inLanguage: 'en-US',
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl(path)}#breadcrumb`,
+      itemListElement: crumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.name,
+        item: crumb.item,
+      })),
     });
+    if (article) {
+      graph.push({
+        '@type': 'Article',
+        '@id': `${pageUrl(path)}#article`,
+        headline: article.headline,
+        description: meta.description,
+        datePublished: article.published,
+        dateModified: article.modified,
+        author: { '@type': 'Organization', name: 'DeskZen team', url: `${SITE_URL}/` },
+        publisher: { '@id': org['@id'] },
+        image: OG_IMAGE,
+        mainEntityOfPage: { '@id': page['@id'] },
+        inLanguage: 'en-US',
+      });
+      if (article.faqs) {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${pageUrl(path)}#faq`,
+          mainEntity: article.faqs.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+        });
+      }
+    }
   }
   return { '@context': 'https://schema.org', '@graph': graph };
 }

@@ -5,6 +5,9 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { LoginPage } from './LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './LearnPages';
+import { PrivatePosturePage } from './PrivatePosturePage';
+import { SlouchTimerPage } from './SlouchTimerPage';
+import { StandStretchPage } from './StandStretchPage';
 import { MacWindowsPage } from './MacWindowsPage';
 import { PrivacyPolicyPage, TermsPage } from './LegalPage';
 import { SiteHome } from './SiteHome';
@@ -45,6 +48,9 @@ describe('public site', () => {
     expect(html).toContain('href="/posture-reminder-mac-windows"');
     expect(html).toContain('href="/learn/stop-slouching-at-your-desk"');
     expect(html).toContain('href="/learn/afternoon-slump"');
+    expect(html).toContain('href="/learn/slouch-detector-vs-sit-up-timer"');
+    expect(html).toContain('href="/learn/stand-up-and-stretch-reminders"');
+    expect(html).toContain('href="/learn/private-posture-reminder"');
     expect(html).toContain('A free webcam posture reminder with no sign-up.');
     expect(html).toContain('Your camera never leaves your device.');
     expect(html).toContain('Free during early access');
@@ -81,7 +87,7 @@ describe('public site', () => {
   });
 
   it('does not client-side route from public pages into the app', () => {
-    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage, LearnIndexPage, StopSlouchingPage, AfternoonSlumpPage, WebcamPostureCheckerPage, MacWindowsPage]) {
+    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage, LearnIndexPage, StopSlouchingPage, AfternoonSlumpPage, SlouchTimerPage, StandStretchPage, PrivatePosturePage, WebcamPostureCheckerPage, MacWindowsPage]) {
       const html = render(createElement(page));
       const hrefs = [...html.matchAll(/href="([^"]+)"[^>]*data-discover="true"|data-discover="true"[^>]*href="([^"]+)"/g)].map(
         (match) => match[1] ?? match[2] ?? '',
@@ -153,10 +159,21 @@ describe('search and AI crawler readiness', () => {
     expect(ld).toContain('"Organization"');
     expect(ld).toContain('sales@deskzenapp.com');
     expect(ld).toContain('"FAQPage"');
+    expect(ld).toContain('"WebSite"');
+    expect(ld).toContain('"Organization"');
     expect(JSON.stringify(jsonLd('/privacy'))).not.toContain('FAQPage');
     expect(JSON.stringify(jsonLd('/learn/stop-slouching-at-your-desk'))).toContain('"Article"');
     expect(JSON.stringify(jsonLd('/learn/afternoon-slump'))).toContain('"Article"');
     expect(JSON.stringify(jsonLd('/learn'))).not.toContain('"Article"');
+    expect(JSON.stringify(jsonLd('/learn'))).toContain('"BreadcrumbList"');
+    for (const path of ['/learn/slouch-detector-vs-sit-up-timer', '/learn/stand-up-and-stretch-reminders', '/learn/private-posture-reminder'] as const) {
+      const articleLd = JSON.stringify(jsonLd(path));
+      expect(articleLd).toContain('"Article"');
+      expect(articleLd).toContain('"FAQPage"');
+      expect(articleLd).toContain('"BreadcrumbList"');
+      expect(articleLd).toContain('DeskZen team');
+    }
+    expect(JSON.stringify(jsonLd('/learn/stop-slouching-at-your-desk'))).not.toContain('FAQPage');
   });
 
   it('renders both Learn articles with sources, a soft CTA, and no medical claims', () => {
@@ -213,7 +230,15 @@ describe('search and AI crawler readiness', () => {
     const committed = readFileSync('public/sitemap.xml', 'utf8');
     expect(committed).toContain('https://www.deskzenapp.com/webcam-posture-checker');
     expect(committed).toContain('https://www.deskzenapp.com/posture-reminder-mac-windows');
+    expect(committed).toContain('https://www.deskzenapp.com/learn/slouch-detector-vs-sit-up-timer');
+    expect(committed).toContain('https://www.deskzenapp.com/learn/stand-up-and-stretch-reminders');
+    expect(committed).toContain('https://www.deskzenapp.com/learn/private-posture-reminder');
     expect(committed).not.toContain('<lastmod>2026-11-09</lastmod>');
+    const homeHtml = readFileSync('index.html', 'utf8');
+    expect(homeHtml).not.toContain('Feel better by 3 PM');
+    expect(homeHtml).toContain('DeskZen posture reminders: a woman smiling at her laptop, with a soft green outline around her.');
+    expect(homeHtml).toContain('https://www.deskzenapp.com/site/deskzen-posture-reminders-og.jpg');
+    expect(homeHtml).toContain('lang="en-US"');
   });
 
   it('server-renders every public page for the build prerender', () => {

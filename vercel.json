@@ -1,5 +1,18 @@
 {
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "deskzenapp.com" }],
+      "destination": "https://www.deskzenapp.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/site/og.jpg",
+      "destination": "/site/deskzen-posture-reminders-og.jpg",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
@@ -7,6 +20,9 @@
     { "source": "/learn", "destination": "/learn.html" },
     { "source": "/learn/stop-slouching-at-your-desk", "destination": "/learn/stop-slouching-at-your-desk.html" },
     { "source": "/learn/afternoon-slump", "destination": "/learn/afternoon-slump.html" },
+    { "source": "/learn/slouch-detector-vs-sit-up-timer", "destination": "/learn/slouch-detector-vs-sit-up-timer.html" },
+    { "source": "/learn/stand-up-and-stretch-reminders", "destination": "/learn/stand-up-and-stretch-reminders.html" },
+    { "source": "/learn/private-posture-reminder", "destination": "/learn/private-posture-reminder.html" },
     { "source": "/webcam-posture-checker", "destination": "/webcam-posture-checker.html" },
     { "source": "/posture-reminder-mac-windows", "destination": "/posture-reminder-mac-windows.html" },
     { "source": "/app", "destination": "/app.html" },

@@ -11,6 +11,9 @@ import { NeckCheckPage } from '../features/neck/NeckCheckPage';
 import { PrivacyPage } from '../features/privacy/PrivacyPage';
 import { LoginPage } from '../features/site/LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from '../features/site/LearnPages';
+import { PrivatePosturePage } from '../features/site/PrivatePosturePage';
+import { SlouchTimerPage } from '../features/site/SlouchTimerPage';
+import { StandStretchPage } from '../features/site/StandStretchPage';
 import { MacWindowsPage } from '../features/site/MacWindowsPage';
 import { NotFoundPage } from '../features/site/NotFoundPage';
 import { PrivacyPolicyPage, TermsPage } from '../features/site/LegalPage';
@@ -47,6 +50,9 @@ export const router = createBrowserRouter([
   { path: '/learn', element: <LearnIndexPage /> },
   { path: '/learn/stop-slouching-at-your-desk', element: <StopSlouchingPage /> },
   { path: '/learn/afternoon-slump', element: <AfternoonSlumpPage /> },
+  { path: '/learn/slouch-detector-vs-sit-up-timer', element: <SlouchTimerPage /> },
+  { path: '/learn/stand-up-and-stretch-reminders', element: <StandStretchPage /> },
+  { path: '/learn/private-posture-reminder', element: <PrivatePosturePage /> },
   { path: '/webcam-posture-checker', element: <WebcamPostureCheckerPage /> },
   { path: '/posture-reminder-mac-windows', element: <MacWindowsPage /> },
   // Guests and signed-in people share these routes. Sign-in is optional.

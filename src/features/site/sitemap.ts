@@ -37,6 +37,24 @@ export const SITEMAP_ENTRIES: readonly SitemapEntry[] = [
     sources: ['src/features/site/LearnPages.tsx'],
   },
   { path: '/learn/afternoon-slump', changefreq: 'monthly', priority: '0.7', sources: ['src/features/site/LearnPages.tsx'] },
+  {
+    path: '/learn/slouch-detector-vs-sit-up-timer',
+    changefreq: 'monthly',
+    priority: '0.7',
+    sources: ['src/features/site/SlouchTimerPage.tsx', 'src/features/site/seo.ts'],
+  },
+  {
+    path: '/learn/stand-up-and-stretch-reminders',
+    changefreq: 'monthly',
+    priority: '0.7',
+    sources: ['src/features/site/StandStretchPage.tsx', 'src/features/site/seo.ts'],
+  },
+  {
+    path: '/learn/private-posture-reminder',
+    changefreq: 'monthly',
+    priority: '0.7',
+    sources: ['src/features/site/PrivatePosturePage.tsx', 'src/features/site/seo.ts'],
+  },
   { path: '/privacy', changefreq: 'monthly', priority: '0.4', sources: ['src/features/site/LegalPage.tsx'] },
   { path: '/terms', changefreq: 'monthly', priority: '0.4', sources: ['src/features/site/LegalPage.tsx'] },
 ];

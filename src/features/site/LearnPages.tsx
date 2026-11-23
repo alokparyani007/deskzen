@@ -4,21 +4,35 @@ import { Link } from 'react-router-dom';
 import { SETUP_BLURB } from '../../lib/copy/setupTime';
 import { GUIDE_LINKS } from './guideLinks';
 import { SitePage, TryLink, ctaClass, siteFocus } from './SiteChrome';
-import { PAGE_META } from './seo';
+import { ARTICLE_SEO, PAGE_META } from './seo';
 import type { PublicPath } from './seo';
 
-const linkClass = `rounded font-semibold text-outline underline underline-offset-2 hover:text-white ${siteFocus}`;
+export const linkClass = `rounded font-semibold text-outline underline underline-offset-2 hover:text-white ${siteFocus}`;
 
 export const STOP_SLOUCHING_PATH = '/learn/stop-slouching-at-your-desk' as const;
 export const AFTERNOON_SLUMP_PATH = '/learn/afternoon-slump' as const;
 
-function ArticleShell({
+/** US long date from a YYYY-MM-DD string. UTC so the prerender does not shift the day. */
+export function formatLongDate(iso: string): string {
+  const [year, month, day] = iso.split('-').map(Number);
+  return new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(Date.UTC(year ?? 2026, (month ?? 1) - 1, day ?? 1)),
+  );
+}
+
+export function ArticleShell({
   path,
   headline,
+  crumb,
+  published,
+  modified,
   children,
 }: {
   path: PublicPath;
   headline: string;
+  crumb: string;
+  published: string;
+  modified: string;
   children: ReactNode;
 }) {
   useEffect(() => {
@@ -28,14 +42,40 @@ function ArticleShell({
   return (
     <SitePage>
       <article className="mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-8 sm:pt-12">
-        <p className="text-sm font-semibold uppercase tracking-[0.14em] text-outline">
-          <Link to="/learn" className={`rounded ${siteFocus}`}>
-            Learn
-          </Link>
-        </p>
+        <nav aria-label="Breadcrumb" className="text-sm font-semibold text-print">
+          <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <li>
+              <Link to="/" className={`rounded ${siteFocus}`}>
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <Link to="/learn" className={`rounded ${siteFocus}`}>
+                Learn
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="font-medium text-white/80">
+              {crumb}
+            </li>
+          </ol>
+        </nav>
         <h1 className="mt-3 text-4xl font-bold tracking-tight">{headline}</h1>
-        <p className="mt-3 text-sm text-white/55">Published November 9, 2026</p>
-        <div className="mt-8 space-y-5 text-base leading-7 text-white/80 [&_h2]:pt-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-white [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
+        <p className="mt-3 text-sm text-white/55">
+          By the DeskZen team
+          <span aria-hidden="true"> · </span>
+          <span className="sr-only">. </span>
+          Published <time dateTime={published}>{formatLongDate(published)}</time>
+          {modified !== published ? (
+            <>
+              <span aria-hidden="true"> · </span>
+              <span className="sr-only">. </span>
+              Updated <time dateTime={modified}>{formatLongDate(modified)}</time>
+            </>
+          ) : null}
+        </p>
+        <div className="mt-8 space-y-5 text-base leading-7 text-white/80 [&_h2]:pt-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-white [&_h3]:mt-4 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-white [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
           {children}
         </div>
       </article>
@@ -43,7 +83,7 @@ function ArticleShell({
   );
 }
 
-function Sources({ items }: { items: readonly { href: string; label: string }[] }) {
+export function Sources({ items }: { items: readonly { href: string; label: string }[] }) {
   return (
     <section>
       <h2>Sources</h2>
@@ -60,12 +100,12 @@ function Sources({ items }: { items: readonly { href: string; label: string }[] 
   );
 }
 
-function ArticleCta({ children }: { children: ReactNode }) {
+export function ArticleCta({ children }: { children: ReactNode }) {
   return (
     <div className="mt-10 rounded-3xl border border-outline/40 bg-print/[0.06] px-6 py-8 text-center shadow-[0_0_40px_rgb(5_150_105/0.25)] sm:px-8">
       <h2 className="text-2xl font-semibold tracking-tight text-white">Try DeskZen free</h2>
       <p className="mx-auto mt-3 max-w-xl text-outline/90">{children}</p>
-      <TryLink className={`${ctaClass} mt-6`} />
+      <TryLink className={`${ctaClass} mt-6`}>Set my Zen</TryLink>
       <p className="mt-3 text-sm text-white/60">{SETUP_BLURB}</p>
       <p className="mt-1 text-sm text-white/70">
         <Link to="/login" className={`rounded font-semibold text-outline underline underline-offset-2 hover:text-white ${siteFocus}`}>
@@ -77,9 +117,69 @@ function ArticleCta({ children }: { children: ReactNode }) {
   );
 }
 
-function Disclaimer() {
+export function Disclaimer() {
   return <p className="mt-10 text-sm text-outline/80">DeskZen is a wellness tool, not a medical device.</p>;
 }
+
+export function ArticleFaqs({ items }: { items: readonly { q: string; a: string }[] }) {
+  return (
+    <section>
+      <h2>Questions</h2>
+      {items.map(({ q, a }) => (
+        <div key={q}>
+          <h3>{q}</h3>
+          <p>{a}</p>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+export function RelatedGuides({ current }: { current: PublicPath }) {
+  const items = GUIDE_LINKS.filter((item) => item.href !== current);
+  return (
+    <section>
+      <h2>Keep reading</h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item.href}>
+            <Link to={item.href} className={linkClass}>
+              {item.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+const LEARN_SUMMARIES: readonly { path: keyof typeof ARTICLE_SEO; summary: string }[] = [
+  {
+    path: STOP_SLOUCHING_PATH,
+    summary:
+      'A practical desk setup guide: chair, screen, and a few small habits that may help you sit taller. It explains a neutral working position in plain language, and why a four-hour freeze in one shape is harder on you than a relaxed posture you can leave.',
+  },
+  {
+    path: AFTERNOON_SLUMP_PATH,
+    summary:
+      'Why many people fade around 3 PM, how a still, rounded posture may make that dip feel heavier, and movement snacks that take a minute. It treats the slump as a normal rhythm, not a character flaw.',
+  },
+  {
+    path: '/learn/slouch-detector-vs-sit-up-timer',
+    summary:
+      'A slouch detector watches your outline and nudges you when you drift. A posture timer only rings on a clock. This guide explains the difference, when a sit up straight reminder should be a camera check, and when a timer is still the right tool.',
+  },
+  {
+    path: '/learn/stand-up-and-stretch-reminders',
+    summary:
+      'How to set a stand up reminder and a stretch reminder you will actually follow while you work. It covers short movement breaks, a sample afternoon, and how a break reminder app can sit beside a posture nudge.',
+  },
+  {
+    path: '/learn/private-posture-reminder',
+    summary:
+      'What a private posture app does with your webcam. On-device posture checks stay in the browser. Photos and video are never saved or uploaded, and the guide is specific about what DeskZen does store.',
+  },
+];
 
 export function LearnIndexPage() {
   useEffect(() => {
@@ -89,40 +189,87 @@ export function LearnIndexPage() {
   return (
     <SitePage>
       <article className="mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-8 sm:pt-12">
-        <h1 className="text-4xl font-bold tracking-tight">Learn</h1>
-        <p className="mt-4 text-lg text-white/75">
-          Friendly guides on desk posture, the 3 PM slump, and small habits that may help you feel better at your desk.
+        <nav aria-label="Breadcrumb" className="text-sm font-semibold text-print">
+          <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <li>
+              <Link to="/" className={`rounded ${siteFocus}`}>
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="font-medium text-white/80">
+              Learn
+            </li>
+          </ol>
+        </nav>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight">Learn</h1>
+        <div className="mt-6 space-y-4 text-base leading-7 text-white/80">
+          <p>
+            These guides are for people who sit at a computer and want a kinder way to notice their posture. They cover desk
+            setup, the afternoon slump, the difference between a slouch detector and a posture timer, stand-up and stretch
+            reminders, and webcam privacy. Read one when you need it. None of them asks you to hold a stiff pose all day.
+          </p>
+          <p>
+            DeskZen is the free tool behind the guides. It is a posture reminder and break reminder app that runs in your
+            browser. You sit your best once to set your Zen. After that, your webcam can help you notice a slouch, and
+            reminders can invite you to stand, stretch, rest your eyes, or drink water. There is nothing to install, and
+            you can try it with no sign-up.
+          </p>
+          <p>
+            The camera stays on your device. Photos and video are never saved or uploaded. The snapshot used for a posture
+            check stays in memory only. Scores, settings, and your outline can stay in this browser. They are numbers, not
+            a recording. The{' '}
+            <Link to="/privacy" className={linkClass}>
+              Privacy Policy
+            </Link>{' '}
+            is the full version of those rules.
+          </p>
+          <p>
+            If you want to try the product before you read, start with the{' '}
+            <Link to="/webcam-posture-checker" className={linkClass}>
+              free webcam posture checker
+            </Link>{' '}
+            or the{' '}
+            <Link to="/posture-reminder-mac-windows" className={linkClass}>
+              posture reminder for Mac and Windows
+            </Link>
+            . Both end at Set my Zen, which takes about 30 seconds.
+          </p>
+          <p>DeskZen is a wellness tool, not a medical device. The guides may help you feel better at your desk. They do not diagnose or treat anything. If something hurts, talk with a health professional.</p>
+        </div>
+
+        <h2 className="mt-12 text-2xl font-semibold tracking-tight text-white">Guides</h2>
+        <ul className="mt-6 space-y-4">
+          {LEARN_SUMMARIES.map((item) => (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                className={`block rounded-3xl border border-white/15 bg-white/[0.03] px-6 py-6 hover:border-outline/40 hover:bg-print/[0.06] ${siteFocus}`}
+              >
+                <h3 className="text-xl font-semibold text-white">{ARTICLE_SEO[item.path].headline}</h3>
+                <p className="mt-2 text-white/70">{item.summary}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <h2 className="mt-12 text-2xl font-semibold tracking-tight text-white">Try DeskZen in your browser</h2>
+        <p className="mt-4 text-base leading-7 text-white/80">
+          The guides explain the habits. These two pages explain the product, with the same privacy rules and a direct way
+          to set your Zen.
         </p>
-        <ul className="mt-10 space-y-4">
-          {GUIDE_LINKS.slice(0, 2).map((item) => (
+        <ul className="mt-6 space-y-4">
+          {GUIDE_LINKS.filter((item) => item.href === '/webcam-posture-checker' || item.href === '/posture-reminder-mac-windows').map((item) => (
             <li key={item.href}>
               <Link
                 to={item.href}
                 className={`block rounded-3xl border border-white/15 bg-white/[0.03] px-6 py-6 hover:border-outline/40 hover:bg-print/[0.06] ${siteFocus}`}
               >
-                <h2 className="text-xl font-semibold text-white">{item.title}</h2>
+                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
                 <p className="mt-2 text-white/70">{item.text}</p>
               </Link>
             </li>
           ))}
-          <li>
-            <Link
-              to={STOP_SLOUCHING_PATH}
-              className={`block rounded-3xl border border-white/15 bg-white/[0.03] px-6 py-6 hover:border-outline/40 hover:bg-print/[0.06] ${siteFocus}`}
-            >
-              <h2 className="text-xl font-semibold text-white">How to stop slouching at your desk</h2>
-              <p className="mt-2 text-white/70">Desk setup and daily habits that may help you sit taller, without turning it into a chore.</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              to={AFTERNOON_SLUMP_PATH}
-              className={`block rounded-3xl border border-white/15 bg-white/[0.03] px-6 py-6 hover:border-outline/40 hover:bg-print/[0.06] ${siteFocus}`}
-            >
-              <h2 className="text-xl font-semibold text-white">Why you crash at 3 PM (and how your posture plays a part)</h2>
-              <p className="mt-2 text-white/70">Why afternoons feel heavy, how sitting still may play a part, and simple resets that may help.</p>
-            </Link>
-          </li>
         </ul>
         <p className="mt-10 text-sm text-outline/80">DeskZen is a wellness tool, not a medical device.</p>
       </article>
@@ -131,8 +278,9 @@ export function LearnIndexPage() {
 }
 
 export function StopSlouchingPage() {
+  const seo = ARTICLE_SEO[STOP_SLOUCHING_PATH];
   return (
-    <ArticleShell path={STOP_SLOUCHING_PATH} headline="How to stop slouching at your desk">
+    <ArticleShell path={STOP_SLOUCHING_PATH} headline={seo.headline} crumb={seo.crumb} published={seo.published} modified={seo.modified}>
       <p>
         If you sit down tall at 9 AM and notice yourself folded into the chair by 3 PM, you are in good company. Most desk
         days start with good intentions and slowly slide. The goal is not a stiff, military pose. It is a setup and a few
@@ -281,7 +429,11 @@ export function StopSlouchingPage() {
         <Link to={AFTERNOON_SLUMP_PATH} className={linkClass}>
           why you crash at 3 PM, and how your posture plays a part
         </Link>
-        , or try the{' '}
+        , the difference between{' '}
+        <Link to="/learn/slouch-detector-vs-sit-up-timer" className={linkClass}>
+          a webcam slouch detector and a sit-up timer
+        </Link>
+        , and the{' '}
         <Link to="/webcam-posture-checker" className={linkClass}>
           free webcam posture checker
         </Link>
@@ -297,8 +449,9 @@ export function StopSlouchingPage() {
 }
 
 export function AfternoonSlumpPage() {
+  const seo = ARTICLE_SEO[AFTERNOON_SLUMP_PATH];
   return (
-    <ArticleShell path={AFTERNOON_SLUMP_PATH} headline="Why you crash at 3 PM (and how your posture plays a part)">
+    <ArticleShell path={AFTERNOON_SLUMP_PATH} headline={seo.headline} crumb={seo.crumb} published={seo.published} modified={seo.modified}>
       <p>
         There is a moment, most workdays, when the words on the screen get a little fuzzy and your chair starts to win.
         For a lot of people that moment arrives around 3 PM. It can feel like your energy just walked out of the room.
@@ -436,6 +589,10 @@ export function AfternoonSlumpPage() {
         You may also like{' '}
         <Link to={STOP_SLOUCHING_PATH} className={linkClass}>
           how to stop slouching at your desk
+        </Link>
+        ,{' '}
+        <Link to="/learn/stand-up-and-stretch-reminders" className={linkClass}>
+          how to set stand-up and stretch reminders
         </Link>
         , or a{' '}
         <Link to="/posture-reminder-mac-windows" className={linkClass}>

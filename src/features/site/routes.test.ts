@@ -15,6 +15,13 @@ describe('public routing, favicon, and robots', () => {
     expect(vercel.rewrites.some((rule) => rule.source.includes('(.*)') || rule.source === '/:path*')).toBe(false);
     expect(vercel.rewrites.some((rule) => rule.source === '/favicon.ico' || rule.destination === '/favicon.ico')).toBe(false);
     expect(vercel.rewrites.some((rule) => rule.source === '/set-my-zen' && rule.destination === '/app.html')).toBe(true);
+    const redirects = (
+      JSON.parse(readFileSync('vercel.json', 'utf8')) as {
+        redirects?: { source: string; destination: string; has?: { value: string }[] }[];
+      }
+    ).redirects;
+    expect(redirects?.some((rule) => rule.has?.some((item) => item.value === 'deskzenapp.com') && rule.destination.startsWith('https://www.deskzenapp.com/'))).toBe(true);
+    expect(redirects?.some((rule) => rule.source === '/site/og.jpg' && rule.destination === '/site/deskzen-posture-reminders-og.jpg')).toBe(true);
     expect(vercel.rewrites.some((rule) => rule.source === '/live' && rule.destination === '/app.html')).toBe(true);
   });
 
