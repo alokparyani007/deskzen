@@ -338,7 +338,9 @@ export function tipFor(result: RuleResult, mirrored: boolean, mode: PoseMode = '
   if (result.id === 'L-tilt') return { title: 'Level your shoulders', helper: 'Let both sink away from your ears.' };
   if (result.id === 'R9' || result.id === 'L-offset') return { title: result.id === 'R9' ? 'Center your body' : 'Center your head over your shoulders', helper: result.id === 'R9' ? 'Head right over your shoulders.' : 'Shift a little left/right.' };
   if (result.id === 'R10' || result.id === 'R11' || result.id === 'L-neck' || result.id === 'L-drop') return { title: tall, helper: 'Lift your chest a little, chin level.' };
-  if (result.id === 'L-face') return { title: 'Sit back into your outline', helper: 'Chin level, shoulders down.' };
+  if (result.id === 'L-face') {
+    return { title: mode === 'stand' ? 'Stand back into your outline' : 'Sit back into your outline', helper: 'Chin level, shoulders down.' };
+  }
   if (result.id === 'L-pitch') return { title: 'Chin level, eyes up', helper: 'Bring your eyes back to the screen.' };
   if (result.issue === 'close' || result.id === 'L-close') return { title: 'Move back a little', helper: 'About an arm\'s length from the screen.' };
   if (result.issue === 'far' || result.id === 'L-far') return { title: 'Come a little closer', helper: 'About an arm\'s length from the screen.' };
@@ -524,7 +526,9 @@ export function rulesRecord(results: readonly RuleResult[]): Record<string, { va
 }
 
 export function liveTip(result: RuleResult | null, mode: PoseMode): CoachCopy {
-  if (!result) return { title: 'Sit back into your outline', helper: 'Chin level, shoulders down.' };
+  if (!result) {
+    return { title: mode === 'stand' ? 'Stand back into your outline' : 'Sit back into your outline', helper: 'Chin level, shoulders down.' };
+  }
   return tipFor(result, true, mode);
 }
 
