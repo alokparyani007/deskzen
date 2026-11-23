@@ -3,6 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 import { Bell, ChevronDown, Laptop, PersonStanding, ShieldCheck } from 'lucide-react';
 import { useAuthSession } from '../../lib/auth';
 import { SitePage, siteFocus } from './SiteChrome';
+import { HomeLearn, ProductShots } from './SiteHomeSections';
 import { trackHomePrimary, type HomePrimaryPath } from './homePrimary';
 import { FAQS, PAGE_META } from './seo';
 import { useSavedZen } from './useSavedZen';
@@ -39,6 +40,8 @@ export function SiteHome({ signedIn, hasZen }: { signedIn?: boolean; hasZen?: bo
     <SitePage signedIn={open} headerAction={false}>
       <Hero zen={zen} />
       <HowItWorks />
+      <ProductShots />
+      <HomeLearn />
       <Privacy />
       <Faq />
       <BottomBand zen={zen} />
@@ -56,7 +59,7 @@ function Hero({ zen }: { zen: boolean }) {
           Gentle webcam nudges when you slouch.
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-base text-white/80 sm:text-xl">
-          Set your Zen once, work as usual, and get a quiet tip when you drift. Right in your browser.
+          A free webcam posture reminder with no sign-up. Set your Zen once, work as usual, and get a quiet tip when you drift. Right in your browser.
         </p>
         <PrimaryActions zen={zen} className="mt-6 sm:mt-8" />
       </div>

@@ -155,7 +155,11 @@ export function LoginPage() {
             <ShieldCheck className="mt-px size-4 shrink-0 text-outline/80" aria-hidden="true" />
             <span>Your camera stays on your device. Photos and video are never saved or uploaded.</span>
           </p>
-          <p className="mt-4 flex justify-center gap-6 text-sm text-white/70">
+          <p className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-white/70">
+            <Link to="/" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Home</Link>
+            <Link to="/webcam-posture-checker" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Webcam checker</Link>
+            <Link to="/posture-reminder-mac-windows" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Mac and Windows</Link>
+            <Link to="/learn" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Learn</Link>
             <Link to="/privacy" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Privacy</Link>
             <Link to="/terms" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Terms</Link>
             <a href={`mailto:${CONTACT_EMAIL}`} className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Contact</a>

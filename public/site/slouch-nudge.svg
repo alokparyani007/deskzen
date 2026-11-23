@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <title>DeskZen slouch nudge</title>
+  <rect width="800" height="500" rx="28" fill="#07140f"/>
+  <rect x="36" y="28" width="728" height="444" rx="24" fill="#0b1f17"/>
+  <rect x="56" y="48" width="688" height="392" rx="18" fill="#060807"/>
+  <circle cx="84" cy="78" r="6" fill="#34d399"/>
+  <text x="100" y="84" fill="#ecfdf5" font-family="system-ui, sans-serif" font-size="15">Camera on, on this device</text>
+  <rect x="120" y="120" width="560" height="250" rx="22" fill="#0f2a20" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="148" y="148" width="88" height="30" rx="15" fill="#f59e0b"/>
+  <text x="192" y="168" text-anchor="middle" fill="#111827" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Slouch</text>
+  <text x="148" y="220" fill="#ffffff" font-family="system-ui, sans-serif" font-size="32" font-weight="700">Sit tall when you can</text>
+  <text x="148" y="256" fill="#ecfdf5" font-family="system-ui, sans-serif" font-size="16">A quiet nudge. Nothing is recorded.</text>
+  <rect x="148" y="286" width="168" height="42" rx="12" fill="#047857"/>
+  <text x="232" y="313" text-anchor="middle" fill="#ffffff" font-family="system-ui, sans-serif" font-size="16" font-weight="700">I am sitting tall</text>
+  <rect x="56" y="404" width="688" height="36" rx="10" fill="#0b1f17"/>
+  <text x="76" y="427" fill="#34d399" font-family="system-ui, sans-serif" font-size="14">Live view. Photos and video stay on this laptop.</text>
+</svg>

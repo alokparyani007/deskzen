@@ -5,10 +5,13 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { LoginPage } from './LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './LearnPages';
+import { MacWindowsPage } from './MacWindowsPage';
 import { PrivacyPolicyPage, TermsPage } from './LegalPage';
 import { SiteHome } from './SiteHome';
+import { WebcamPostureCheckerPage } from './WebcamPostureCheckerPage';
 import { CONTACT_EMAIL } from './SiteChrome';
 import { isPublicPath } from './enterApp';
+import { SITEMAP_ENTRIES, pickLastmod, sitemapXml } from './sitemap';
 import { FAQS, PAGE_META, jsonLd } from './seo';
 import { PRERENDER_PATHS, render as renderPage } from '../../entry-server';
 
@@ -33,6 +36,16 @@ describe('public site', () => {
     expect(html).toContain('Work as usual');
     expect(html).toContain('Get a gentle nudge when you slouch');
     expect(html).not.toContain('/site/hero-maya.webp');
+    expect(html).toContain('/site/slouch-nudge.svg');
+    expect(html).toContain('/site/reminders.webp');
+    expect(html).toContain('/site/progress.webp');
+    expect(html).toContain('loading="lazy"');
+    expect(html).toContain('DeskZen live view on a laptop');
+    expect(html).toContain('href="/webcam-posture-checker"');
+    expect(html).toContain('href="/posture-reminder-mac-windows"');
+    expect(html).toContain('href="/learn/stop-slouching-at-your-desk"');
+    expect(html).toContain('href="/learn/afternoon-slump"');
+    expect(html).toContain('A free webcam posture reminder with no sign-up.');
     expect(html).toContain('Your camera never leaves your device.');
     expect(html).toContain('Free during early access');
     expect(html).toContain('DeskZen is a wellness tool, not a medical device.');
@@ -68,7 +81,7 @@ describe('public site', () => {
   });
 
   it('does not client-side route from public pages into the app', () => {
-    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage, LearnIndexPage, StopSlouchingPage, AfternoonSlumpPage]) {
+    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage, LearnIndexPage, StopSlouchingPage, AfternoonSlumpPage, WebcamPostureCheckerPage, MacWindowsPage]) {
       const html = render(createElement(page));
       const hrefs = [...html.matchAll(/href="([^"]+)"[^>]*data-discover="true"|data-discover="true"[^>]*href="([^"]+)"/g)].map(
         (match) => match[1] ?? match[2] ?? '',
@@ -118,7 +131,11 @@ describe('search and AI crawler readiness', () => {
     for (const meta of Object.values(PAGE_META)) {
       expect(meta.title.length).toBeLessThanOrEqual(60);
       expect(meta.description.length).toBeLessThanOrEqual(180);
+      expect(meta.description).not.toContain('\u2014');
     }
+    expect(PAGE_META['/'].description.length).toBeLessThanOrEqual(160);
+    expect(PAGE_META['/'].ogTitle).toBe(PAGE_META['/'].title);
+    expect(PAGE_META['/'].title.toLowerCase()).toContain('posture reminder');
   });
 
   it('renders one H1, the FAQ and posture headings on the homepage', () => {
@@ -171,13 +188,32 @@ describe('search and AI crawler readiness', () => {
     expect(slump).toContain('https://www.osha.gov/etools/computer-workstations/work-process');
   });
 
-  it('lists Learn in the footer and both articles in the sitemap', () => {
+  it('lists Learn in the footer and every indexable page in the sitemap', () => {
     const home = render(createElement(SiteHome));
     expect(home).toContain('href="/learn"');
     expect(home).toContain('Learn');
-    const sitemap = readFileSync('public/sitemap.xml', 'utf8');
-    expect(sitemap).toContain('https://www.deskzenapp.com/learn/stop-slouching-at-your-desk');
-    expect(sitemap).toContain('https://www.deskzenapp.com/learn/afternoon-slump');
+    const indexed = SITEMAP_ENTRIES.map((entry) => entry.path).sort();
+    const expected = (Object.keys(PAGE_META) as (keyof typeof PAGE_META)[]).filter((path) => path !== '/login').sort();
+    expect(indexed).toEqual(expected);
+    const xml = sitemapXml(
+      SITEMAP_ENTRIES.map((entry) => ({
+        loc: `https://www.deskzenapp.com${entry.path === '/' ? '/' : entry.path}`,
+        lastmod: pickLastmod(['2026-11-16', '2026-11-23'], '2026-11-09'),
+        changefreq: entry.changefreq,
+        priority: entry.priority,
+      })),
+    );
+    expect(xml).toContain('https://www.deskzenapp.com/learn/stop-slouching-at-your-desk');
+    expect(xml).toContain('https://www.deskzenapp.com/webcam-posture-checker');
+    expect(xml).toContain('https://www.deskzenapp.com/posture-reminder-mac-windows');
+    expect(xml).toContain('<lastmod>2026-11-23</lastmod>');
+    expect(xml).not.toContain('<lastmod>2026-11-09</lastmod>');
+    expect(xml).not.toContain('/set-my-zen');
+    expect(xml).not.toContain('/live<');
+    const committed = readFileSync('public/sitemap.xml', 'utf8');
+    expect(committed).toContain('https://www.deskzenapp.com/webcam-posture-checker');
+    expect(committed).toContain('https://www.deskzenapp.com/posture-reminder-mac-windows');
+    expect(committed).not.toContain('<lastmod>2026-11-09</lastmod>');
   });
 
   it('server-renders every public page for the build prerender', () => {

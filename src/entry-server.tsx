@@ -4,11 +4,15 @@ import { renderToString } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { LoginPage } from './features/site/LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './features/site/LearnPages';
+import { MacWindowsPage } from './features/site/MacWindowsPage';
+import { NotFoundPage } from './features/site/NotFoundPage';
 import { PrivacyPolicyPage, TermsPage } from './features/site/LegalPage';
 import { SiteHome } from './features/site/SiteHome';
+import { WebcamPostureCheckerPage } from './features/site/WebcamPostureCheckerPage';
 import type { PublicPath } from './features/site/seo';
 
 export { OG_IMAGE, PAGE_META, SITE_URL, jsonLd, pageUrl } from './features/site/seo';
+export { SITEMAP_ENTRIES, sitemapRecords, sitemapXml } from './features/site/sitemap';
 
 const pages: Record<PublicPath, ComponentType> = {
   '/': SiteHome,
@@ -18,6 +22,8 @@ const pages: Record<PublicPath, ComponentType> = {
   '/learn': LearnIndexPage,
   '/learn/stop-slouching-at-your-desk': StopSlouchingPage,
   '/learn/afternoon-slump': AfternoonSlumpPage,
+  '/webcam-posture-checker': WebcamPostureCheckerPage,
+  '/posture-reminder-mac-windows': MacWindowsPage,
 };
 
 export const PRERENDER_PATHS = Object.keys(pages) as PublicPath[];
@@ -29,6 +35,17 @@ export function render(path: PublicPath): string {
     <StrictMode>
       <MemoryRouter initialEntries={[path]}>
         <Page />
+      </MemoryRouter>
+    </StrictMode>,
+  );
+}
+
+/** Static 404 body. The prerender writes it to dist/404.html and strips the app script. */
+export function renderNotFound(): string {
+  return renderToString(
+    <StrictMode>
+      <MemoryRouter>
+        <NotFoundPage />
       </MemoryRouter>
     </StrictMode>,
   );

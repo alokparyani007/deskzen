@@ -1,32 +1,32 @@
 {
+  "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/privacy",
-      "destination": "/privacy.html"
-    },
-    {
-      "source": "/terms",
-      "destination": "/terms.html"
-    },
-    {
-      "source": "/login",
-      "destination": "/login.html"
-    },
-    {
-      "source": "/learn",
-      "destination": "/learn.html"
-    },
-    {
-      "source": "/learn/stop-slouching-at-your-desk",
-      "destination": "/learn/stop-slouching-at-your-desk.html"
-    },
-    {
-      "source": "/learn/afternoon-slump",
-      "destination": "/learn/afternoon-slump.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/app.html"
-    }
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/learn", "destination": "/learn.html" },
+    { "source": "/learn/stop-slouching-at-your-desk", "destination": "/learn/stop-slouching-at-your-desk.html" },
+    { "source": "/learn/afternoon-slump", "destination": "/learn/afternoon-slump.html" },
+    { "source": "/webcam-posture-checker", "destination": "/webcam-posture-checker.html" },
+    { "source": "/posture-reminder-mac-windows", "destination": "/posture-reminder-mac-windows.html" },
+    { "source": "/app", "destination": "/app.html" },
+    { "source": "/app/privacy", "destination": "/app.html" },
+    { "source": "/eye", "destination": "/app.html" },
+    { "source": "/live", "destination": "/app.html" },
+    { "source": "/live-legacy", "destination": "/app.html" },
+    { "source": "/progress", "destination": "/app.html" },
+    { "source": "/reminders", "destination": "/app.html" },
+    { "source": "/settings", "destination": "/app.html" },
+    { "source": "/spot-fix", "destination": "/app.html" },
+    { "source": "/calibrate", "destination": "/app.html" },
+    { "source": "/calibrate/:path*", "destination": "/app.html" },
+    { "source": "/set-my-zen", "destination": "/app.html" },
+    { "source": "/set-my-zen-legacy", "destination": "/app.html" },
+    { "source": "/welcome", "destination": "/app.html" },
+    { "source": "/break", "destination": "/app.html" },
+    { "source": "/stretches", "destination": "/app.html" },
+    { "source": "/stretches/:path*", "destination": "/app.html" },
+    { "source": "/neck", "destination": "/app.html" },
+    { "source": "/debug", "destination": "/app.html" }
   ]
 }
