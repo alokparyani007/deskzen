@@ -8,6 +8,8 @@ import { CameraPausedBar } from '../print/CameraPausedBar';
 import { PrivacyCard } from '../print/PrivacyCard';
 import { OutlineSvg, useStageBox } from '../zen2/OutlineSvg';
 import { StepPill, ZenStage } from '../zen2/ZenStage';
+import { phoneFrameStyle } from '../zen2/phoneFrame';
+import { useNarrowPhone } from '../zen2/useNarrowPhone';
 import { zenConfig } from '../zen2/zenConfig';
 import { SaveSetupPrompt } from '../auth/SaveSetupPrompt';
 import { CoachLine, CornerMatchRing, TrackStatusPill } from './LiveChrome';
@@ -29,6 +31,7 @@ export function LiveViewV2() {
   const model = useLiveV2(debugOn);
   useLiveUsage(camera.status === 'live');
   const stage = useStageBox();
+  const narrow = useNarrowPhone();
   const [voice, setVoiceState] = useState(() => window.localStorage.getItem(MUTE_KEY) !== '1');
 
   const setVoice = (value: boolean) => {
@@ -84,8 +87,8 @@ export function LiveViewV2() {
       debug={model.debug}
     >
       <SaveSetupPrompt />
-      <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)] px-[2%] pb-2">
-        <div ref={stage.ref} className="relative h-full min-h-0 overflow-hidden rounded-2xl bg-black">
+      <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)] px-[2%] pb-2 max-[599px]:flex-none max-[599px]:grid-rows-[auto] max-[599px]:px-3">
+        <div ref={stage.ref} className="relative h-full min-h-0 overflow-hidden rounded-2xl bg-black max-[599px]:h-auto max-[599px]:w-full" style={phoneFrameStyle(narrow, videoW, videoH)}>
           <CameraStage landmarks={model.landmarks} alignment={null} showGuides={false} showLandmarks={false} frame="fill" chrome="bare" />
           {model.outline ? (
             <OutlineSvg

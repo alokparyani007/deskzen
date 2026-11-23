@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { NormPoint } from '../../lib/posture/types';
-import { coachCaption, formatTrackLabel, liveCaption, raisedShoulder, stepTrackClock } from './liveCaption';
+import { coachCaption, formatTrackLabel, liveCaption, raisedShoulder, stepIntoViewHelper, stepTrackClock } from './liveCaption';
 import type { RuleResult } from './poseRules';
 
 function rule(id: string): RuleResult {
@@ -44,6 +44,10 @@ describe('live captions', () => {
   it('uses the mockup lines for a tall sit and a raised shoulder', () => {
     expect(liveCaption(rule('L-neck'), 'sit', null)).toBe('Sit tall, lift your head back up');
     expect(liveCaption(rule('L-drop'), 'stand', null)).toBe('Stand tall, lift your head back up');
+    expect(liveCaption(null, 'stand', null)).toBe('Stand back into your outline');
+    expect(liveCaption(null, 'sit', null)).toBe('Sit back into your outline');
+    expect(stepIntoViewHelper('stand')).toBe('Stand where the camera can see your head and shoulders.');
+    expect(stepIntoViewHelper('sit')).toBe('Sit where the camera can see your head and shoulders.');
     expect(liveCaption(rule('L-tilt'), 'sit', 'right')).toBe('Relax your right shoulder down');
     expect(liveCaption(rule('L-tilt'), 'sit', 'left')).toBe('Relax your left shoulder down');
   });

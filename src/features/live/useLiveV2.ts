@@ -9,7 +9,8 @@ import { useBaseline } from '../posture/baseline-context';
 import { useSession } from '../session/session-context';
 import { formatZenDebug } from '../zen2/debugLine';
 import { fitScore, smoothFit, type FitParts } from '../zen2/fitScore';
-import { coachCaption, highestPoint, liveCaption, raisedShoulder, stepTrackClock, trackKind, type TrackClock } from '../zen2/liveCaption';
+import { coachCaption, highestPoint, liveCaption, raisedShoulder, stepIntoViewHelper, stepTrackClock, trackKind, type TrackClock } from '../zen2/liveCaption';
+import { liveDisplayMode, liveRequestMode, rememberedZenMode, rememberZenMode } from '../zen2/liveMode';
 import { beginGuide, initialLiveCoach, poseIsVisible, stepLiveCoach, type CoachPhase } from '../zen2/liveCoach2';
 import type { OutlineMarks } from '../zen2/OutlineSvg';
 import { liveRules, measurePose, worstLiveRule, type PoseMeasures, type RuleResult } from '../zen2/poseRules';
@@ -55,8 +56,14 @@ export function useLiveV2(debugOn: boolean): LiveModel & {
   const { landmarks, wallMs } = useLandmarks(camera.videoElement, live);
   const { activeProfileId } = useBaseline();
   const session = useSession();
-  const mode: PoseMode = session.posture === 'standing' ? 'stand' : 'sit';
+  const sessionMode: PoseMode = session.posture === 'standing' ? 'stand' : 'sit';
+  const requested = liveRequestMode({
+    workStyle: session.settings.workStyle,
+    sessionMode,
+    remembered: rememberedZenMode(),
+  });
   const [print, setPrint] = useState<PosturePrint | null>(null);
+  const mode = liveDisplayMode(print, requested);
   const [ready, setReady] = useState(false);
   const [fit, setFit] = useState<number | null>(null);
   const [parts, setParts] = useState<FitParts | null>(null);
@@ -86,7 +93,7 @@ export function useLiveV2(debugOn: boolean): LiveModel & {
   useEffect(() => {
     let cancelled = false;
     setReady(false);
-    void loadZenPrint(mode, activeProfileId, !session.postureManual).then((found) => {
+    void loadZenPrint(requested, activeProfileId, !session.postureManual).then((found) => {
       if (cancelled) return;
       setPrint(found);
       setReady(true);
@@ -94,7 +101,7 @@ export function useLiveV2(debugOn: boolean): LiveModel & {
     return () => {
       cancelled = true;
     };
-  }, [activeProfileId, mode, session.postureManual]);
+  }, [activeProfileId, requested, session.postureManual]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -194,7 +201,7 @@ export function useLiveV2(debugOn: boolean): LiveModel & {
       ? { left: liveLeft, right: liveRight, label: 'Shoulders level', tone: 'amber' }
       : null);
     setTitle(line.text);
-    setHelper(view.stepIntoView ? 'Sit where the camera can see your head and shoulders.' : line.loud ? speakLine : "I'll nudge you if you drift.");
+    setHelper(view.stepIntoView ? stepIntoViewHelper(mode) : line.loud ? speakLine : "I'll nudge you if you drift.");
     if (view.speak) {
       const spokenLine = { text: view.speak, at: now };
       spokenRef.current = spokenLine;
@@ -272,7 +279,10 @@ export function useLiveV2(debugOn: boolean): LiveModel & {
           segHz: body.hz,
         })
       : null,
-    setMode: (next) => session.choosePosture(next === 'stand' ? 'standing' : 'sitting'),
+    setMode: (next) => {
+      rememberZenMode(next);
+      session.choosePosture(next === 'stand' ? 'standing' : 'sitting');
+    },
     landmarks,
     wallMs,
     live,
