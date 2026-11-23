@@ -75,7 +75,7 @@ export function LoginPage() {
       <main className="relative w-full max-w-md">
         <div className="rounded-3xl border border-white/12 bg-white/[0.04] px-6 py-9 shadow-[0_0_60px_rgb(5_150_105/0.18)] backdrop-blur-sm sm:px-9">
           <Link to="/" aria-label="DeskZen home" className={`mx-auto block w-fit rounded-2xl ${siteFocus}`}>
-            <img src="/brand/deskzen-icon.svg" alt="" width={64} height={64} className="size-16" />
+            <img src="/brand/deskzen-icon.svg" alt="" width={64} height={64} className="size-16" aria-hidden="true" />
           </Link>
           <h1 className="mt-5 text-center text-[1.7rem] font-semibold tracking-tight sm:text-3xl">Welcome to DeskZen</h1>
           <p className="mt-2 text-center text-white/70">Try it right away. Sign in is optional.</p>
@@ -157,8 +157,8 @@ export function LoginPage() {
           </p>
           <p className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-white/70">
             <Link to="/" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Home</Link>
-            <Link to="/webcam-posture-checker" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Webcam checker</Link>
-            <Link to="/posture-reminder-mac-windows" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Mac and Windows</Link>
+            <Link to="/webcam-posture-checker" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Webcam posture checker</Link>
+            <Link to="/posture-reminder-mac-windows" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Posture reminder for Mac and Windows</Link>
             <Link to="/learn" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Learn</Link>
             <Link to="/privacy" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Privacy</Link>
             <Link to="/terms" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Terms</Link>

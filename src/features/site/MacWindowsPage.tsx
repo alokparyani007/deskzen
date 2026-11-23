@@ -9,7 +9,7 @@ export function MacWindowsPage() {
   return (
     <GuidePage
       path="/posture-reminder-mac-windows"
-      crumb="Mac and Windows"
+      crumb="Posture reminder for Mac and Windows"
       title="Posture reminder for Mac and Windows"
       lede="A free posture reminder for Mac, Windows, and any laptop with a webcam. Nothing to download. DeskZen runs in the browser, and the camera stays on your device."
       faqs={MAC_FAQS}

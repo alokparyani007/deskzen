@@ -39,6 +39,7 @@ for (const path of ssr.PRERENDER_PATHS) {
   let html = shell;
   html = replaceOnce(html, /<title>[^<]*<\/title>/, `<title>${esc(meta.title)}</title>`, '<title>');
   html = setMeta(html, 'name', 'description', meta.description);
+  if (path.startsWith('/learn/')) html = setMeta(html, 'property', 'og:type', 'article');
   html = setMeta(html, 'property', 'og:title', meta.ogTitle);
   html = setMeta(html, 'property', 'og:description', meta.ogDescription);
   html = setMeta(html, 'property', 'og:url', url);

@@ -2,6 +2,9 @@ import { useLocation, createBrowserRouter } from 'react-router-dom';
 import { HandOffToApp } from './HandOffToApp';
 import { LoginPage } from './LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './LearnPages';
+import { PrivatePosturePage } from './PrivatePosturePage';
+import { SlouchTimerPage } from './SlouchTimerPage';
+import { StandStretchPage } from './StandStretchPage';
 import { MacWindowsPage } from './MacWindowsPage';
 import { NotFoundPage } from './NotFoundPage';
 import { PrivacyPolicyPage, TermsPage } from './LegalPage';
@@ -17,6 +20,9 @@ const publicRoutes = [
   { path: '/learn', element: <LearnIndexPage /> },
   { path: '/learn/stop-slouching-at-your-desk', element: <StopSlouchingPage /> },
   { path: '/learn/afternoon-slump', element: <AfternoonSlumpPage /> },
+  { path: '/learn/slouch-detector-vs-sit-up-timer', element: <SlouchTimerPage /> },
+  { path: '/learn/stand-up-and-stretch-reminders', element: <StandStretchPage /> },
+  { path: '/learn/private-posture-reminder', element: <PrivatePosturePage /> },
   { path: '/webcam-posture-checker', element: <WebcamPostureCheckerPage /> },
   { path: '/posture-reminder-mac-windows', element: <MacWindowsPage /> },
 ];

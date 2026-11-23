@@ -4,6 +4,9 @@ import { renderToString } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { LoginPage } from './features/site/LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './features/site/LearnPages';
+import { PrivatePosturePage } from './features/site/PrivatePosturePage';
+import { SlouchTimerPage } from './features/site/SlouchTimerPage';
+import { StandStretchPage } from './features/site/StandStretchPage';
 import { MacWindowsPage } from './features/site/MacWindowsPage';
 import { NotFoundPage } from './features/site/NotFoundPage';
 import { PrivacyPolicyPage, TermsPage } from './features/site/LegalPage';
@@ -22,6 +25,9 @@ const pages: Record<PublicPath, ComponentType> = {
   '/learn': LearnIndexPage,
   '/learn/stop-slouching-at-your-desk': StopSlouchingPage,
   '/learn/afternoon-slump': AfternoonSlumpPage,
+  '/learn/slouch-detector-vs-sit-up-timer': SlouchTimerPage,
+  '/learn/stand-up-and-stretch-reminders': StandStretchPage,
+  '/learn/private-posture-reminder': PrivatePosturePage,
   '/webcam-posture-checker': WebcamPostureCheckerPage,
   '/posture-reminder-mac-windows': MacWindowsPage,
 };

@@ -46,7 +46,7 @@ export function OpenAppLink({ className = ctaClass, href = '/app', children = OP
 export function SiteLogo({ className = '' }: { className?: string }) {
   return (
     <Link to="/" aria-label="DeskZen home" className={`inline-flex items-center gap-2.5 rounded-lg ${siteFocus} ${className}`}>
-      <img src="/brand/deskzen-icon.svg" alt="" width={36} height={36} className="size-9 shrink-0" />
+      <img src="/brand/deskzen-icon.svg" alt="" width={36} height={36} className="size-9 shrink-0" aria-hidden="true" />
       <span className="text-xl font-semibold tracking-tight text-white">
         Desk<span className="text-outline">Zen</span>
       </span>
@@ -88,12 +88,12 @@ export function SiteFooter() {
           <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/75">
             <li>
               <Link to="/webcam-posture-checker" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
-                Webcam checker
+                Webcam posture checker
               </Link>
             </li>
             <li>
               <Link to="/posture-reminder-mac-windows" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
-                Mac and Windows
+                Posture reminder for Mac and Windows
               </Link>
             </li>
             <li>
