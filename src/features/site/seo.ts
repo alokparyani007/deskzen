@@ -1,5 +1,6 @@
 /** Search and social metadata for the public pages. Used by the pages and the build-time prerender. */
 
+import { FOUNDER_PHOTO_SRC } from './founderCopy';
 import { PAGE_ART } from './pageArt';
 
 export const SITE_URL = 'https://www.deskzenapp.com';
@@ -359,6 +360,7 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
     name: 'Alok Paryani',
     jobTitle: 'Founder',
     url: pageUrl('/about'),
+    image: `${SITE_URL}${FOUNDER_PHOTO_SRC}`,
     worksFor: { '@id': org['@id'] },
   };
   const website = { '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'DeskZen', url: `${SITE_URL}/`, publisher: { '@id': org['@id'] }, inLanguage: 'en-US' };

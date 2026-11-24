@@ -16,6 +16,8 @@ import {
   CONTACT_PARAGRAPHS,
   FOUNDER_HEADING,
   FOUNDER_PARAGRAPHS,
+  FOUNDER_PHOTO_ALT,
+  FOUNDER_PHOTO_SRC,
   FOUNDER_SIGN_NAME,
   FOUNDER_SIGN_ROLE,
 } from './founderCopy';
@@ -35,6 +37,17 @@ describe('about, contact, and page art', () => {
     for (const paragraph of FOUNDER_PARAGRAPHS) expect(html).toContain(paragraph);
     expect(html).toContain(FOUNDER_SIGN_NAME);
     expect(html).toContain(FOUNDER_SIGN_ROLE);
+    expect(FOUNDER_PHOTO_ALT).toBe('Alok Paryani, founder of DeskZen');
+    expect(html).toContain(`src="${FOUNDER_PHOTO_SRC}"`);
+    expect(html).toContain(`alt="${FOUNDER_PHOTO_ALT}"`);
+    expect(html).toContain('id="alok-paryani"');
+    const photo = readFileSync(`public${FOUNDER_PHOTO_SRC}`);
+    expect(photo.subarray(0, 4).toString('ascii')).toBe('RIFF');
+    expect(photo.subarray(8, 12).toString('ascii')).toBe('WEBP');
+    expect(photo.subarray(12, 16).toString('ascii')).toBe('VP8X');
+    expect(1 + photo.readUIntLE(24, 3)).toBe(400);
+    expect(1 + photo.readUIntLE(27, 3)).toBe(400);
+    expect(photo.length).toBeLessThan(20_000);
     expect(html).toContain(PAGE_ART['/about'].src);
     expect(html).toContain(ABOUT_CTA_HEADING);
     expect(html).toContain(ABOUT_CTA_LEAD);
@@ -88,6 +101,7 @@ describe('about, contact, and page art', () => {
     expect(about).toContain('"AboutPage"');
     expect(about).toContain('Alok Paryani');
     expect(about).toContain('"jobTitle":"Founder"');
+    expect(about).toContain(`https://www.deskzenapp.com${FOUNDER_PHOTO_SRC}`);
     expect(JSON.stringify(jsonLd('/contact'))).toContain('"ContactPage"');
     const article = JSON.stringify(jsonLd('/learn/afternoon-slump'));
     expect(article).toContain('https://www.deskzenapp.com/about#alok-paryani');

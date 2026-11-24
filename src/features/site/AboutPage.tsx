@@ -13,6 +13,7 @@ import {
   FOUNDER_SIGN_NAME,
   FOUNDER_SIGN_ROLE,
 } from './founderCopy';
+import { FounderPhoto } from './FounderPhoto';
 import { PAGE_ART } from './pageArt';
 import { ProductFigure } from './GuidePage';
 import { SitePage, TryLink, ctaClass, siteFocus } from './SiteChrome';
@@ -50,8 +51,13 @@ export function AboutPage() {
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
-        <p className="mt-8 font-semibold text-white">{FOUNDER_SIGN_NAME}</p>
-        <p className="text-white/70">{FOUNDER_SIGN_ROLE}</p>
+        <div id="alok-paryani" className="mt-8 flex items-center gap-4">
+          <FounderPhoto className="size-20 sm:size-32" />
+          <div>
+            <p className="font-semibold text-white">{FOUNDER_SIGN_NAME}</p>
+            <p className="text-white/70">{FOUNDER_SIGN_ROLE}</p>
+          </div>
+        </div>
         <section aria-labelledby="about-try-title" className="mt-12">
           <h2 id="about-try-title" className="text-2xl font-semibold tracking-tight text-white">
             {ABOUT_CTA_HEADING}

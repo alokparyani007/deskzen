@@ -15,7 +15,7 @@ export const SITEMAP_ENTRIES: readonly SitemapEntry[] = [
     path: '/',
     changefreq: 'weekly',
     priority: '1.0',
-    sources: ['src/features/site/SiteHome.tsx', 'src/features/site/SiteHomeSections.tsx', 'index.html'],
+    sources: ['src/features/site/SiteHome.tsx', 'src/features/site/SiteHomeSections.tsx', 'index.html', 'public/site/alok-paryani.webp'],
   },
   {
     path: '/webcam-posture-checker',
@@ -33,7 +33,7 @@ export const SITEMAP_ENTRIES: readonly SitemapEntry[] = [
     path: '/about',
     changefreq: 'monthly',
     priority: '0.6',
-    sources: ['src/features/site/AboutPage.tsx', 'src/features/site/founderCopy.ts'],
+    sources: ['src/features/site/AboutPage.tsx', 'src/features/site/founderCopy.ts', 'public/site/alok-paryani.webp'],
   },
   {
     path: '/contact',

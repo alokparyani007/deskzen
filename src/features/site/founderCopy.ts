@@ -13,6 +13,10 @@ export const FOUNDER_PARAGRAPHS = [
 export const FOUNDER_SIGN_NAME = 'Alok Paryani';
 export const FOUNDER_SIGN_ROLE = 'Founder, DeskZen';
 
+/** Approved public headshot. Square WebP, transparent outside the circle. */
+export const FOUNDER_PHOTO_SRC = '/site/alok-paryani.webp';
+export const FOUNDER_PHOTO_ALT = 'Alok Paryani, founder of DeskZen';
+
 export const ABOUT_CTA_HEADING = 'Try it, and help me make it better';
 
 export const ABOUT_CTA_LEAD =
