@@ -39,6 +39,7 @@ describe('public site', () => {
     expect(html).toContain('Why I made DeskZen');
     expect(html).toContain("I didn't need another gadget.");
     expect(html).toContain('Alok, Founder');
+    expect(html).toContain('src="/site/alok-paryani.webp"');
     expect(html).toContain('>Try DeskZen free<');
     expect(html).toContain('>Read my story<');
     expect(html.indexOf('How it works')).toBeLessThan(html.indexOf('Why I made DeskZen'));

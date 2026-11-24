@@ -3,6 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 import { Bell, ChevronDown, Laptop, PersonStanding, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuthSession } from '../../lib/auth';
+import { FounderPhoto } from './FounderPhoto';
 import { HOME_FOUNDER_HEADING, HOME_FOUNDER_PARAGRAPHS, HOME_FOUNDER_SIGN, HOME_FOUNDER_STORY_LINK, ABOUT_CTA_BUTTON } from './founderCopy';
 import { SitePage, TryLink, ctaClass, siteFocus } from './SiteChrome';
 import { HomeLearn, ProductShots } from './SiteHomeSections';
@@ -131,7 +132,10 @@ function FounderNote() {
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
-        <p className="mt-5 font-semibold text-white">{HOME_FOUNDER_SIGN}</p>
+        <p className="mt-5 flex items-center gap-3 font-semibold text-white">
+          <FounderPhoto alt="" className="size-10" />
+          {HOME_FOUNDER_SIGN}
+        </p>
         <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
           <TryLink className={ctaClass}>{ABOUT_CTA_BUTTON}</TryLink>
           <Link
