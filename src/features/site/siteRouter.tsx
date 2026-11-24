@@ -1,5 +1,7 @@
 import { useLocation, createBrowserRouter } from 'react-router-dom';
 import { HandOffToApp } from './HandOffToApp';
+import { AboutPage } from './AboutPage';
+import { ContactPage } from './ContactPage';
 import { LoginPage } from './LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './LearnPages';
 import { PrivatePosturePage } from './PrivatePosturePage';
@@ -15,6 +17,8 @@ import { WebcamPostureCheckerPage } from './WebcamPostureCheckerPage';
 const publicRoutes = [
   { path: '/', element: <SiteHome /> },
   { path: '/login', element: <LoginPage /> },
+  { path: '/about', element: <AboutPage /> },
+  { path: '/contact', element: <ContactPage /> },
   { path: '/privacy', element: <PrivacyPolicyPage /> },
   { path: '/terms', element: <TermsPage /> },
   { path: '/learn', element: <LearnIndexPage /> },

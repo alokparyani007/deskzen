@@ -65,7 +65,9 @@ export function HomeLearn() {
     <section aria-labelledby="learn-title" className="px-5 pb-12 sm:px-8 sm:pb-16">
       <div className="mx-auto max-w-5xl">
         <h2 id="learn-title" className="text-center text-2xl font-bold tracking-tight text-white sm:text-4xl">
-          Learn
+          <Link to="/learn" className={`rounded-lg hover:text-outline ${siteFocus}`}>
+            Learn
+          </Link>
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-center text-white/70">
           Ways to try DeskZen, and short guides on desk habits that may help.

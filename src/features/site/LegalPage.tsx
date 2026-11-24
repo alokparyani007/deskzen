@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { CONTACT_EMAIL, SitePage, siteFocus } from './SiteChrome';
+import { Link } from 'react-router-dom';
+import { SitePage, siteFocus } from './SiteChrome';
 import { PAGE_META } from './seo';
 import type { PublicPath } from './seo';
 
-function ContactLink() {
+function ContactFormLink({ children }: { children: string }) {
   return (
-    <a href={`mailto:${CONTACT_EMAIL}`} className={`rounded font-semibold text-outline underline-offset-2 hover:underline ${siteFocus}`}>
-      {CONTACT_EMAIL}
-    </a>
+    <Link to="/contact" className={`rounded font-semibold text-outline underline-offset-2 hover:underline ${siteFocus}`}>
+      {children}
+    </Link>
   );
 }
 
@@ -32,7 +33,7 @@ function LegalPage({ title, path, updated, children }: { title: string; path: Pu
 
 export function PrivacyPolicyPage() {
   return (
-    <LegalPage title="Privacy Policy" path="/privacy" updated="November 16, 2026">
+    <LegalPage title="Privacy Policy" path="/privacy" updated="November 24, 2026">
       <section>
         <h2>Your camera stays on your device</h2>
         <ul>
@@ -64,6 +65,10 @@ export function PrivacyPolicyPage() {
             no personal info and no camera data. We do not store your email, account id, or IP address with these counts.
           </li>
           <li>Optional feedback answers and any note you write are stored without your name or email.</li>
+          <li>
+            If you write through the contact form, we store your name, the email address you type, and your message so
+            we can reply. That note is not a photo or a video, and we do not use it for advertising.
+          </li>
           <li>We do not use advertising cookies.</li>
         </ul>
       </section>
@@ -72,13 +77,13 @@ export function PrivacyPolicyPage() {
         <ul>
           <li>You can pause the camera any time.</li>
           <li>You can clear what DeskZen saved in this browser from Settings in the app, or by clearing site data in your browser.</li>
-          <li>To delete your account or ask a privacy question, email us at <ContactLink />.</li>
+          <li>To delete your account or ask a privacy question, use the <ContactFormLink>contact form</ContactFormLink>.</li>
         </ul>
       </section>
       <section>
         <h2>Questions</h2>
         <p>
-          Email us at <ContactLink />. You can also find us at @deskzenapp.
+          Questions? Use the <ContactFormLink>contact form</ContactFormLink>. You can also find us at @deskzenapp.
         </p>
       </section>
     </LegalPage>
@@ -87,7 +92,7 @@ export function PrivacyPolicyPage() {
 
 export function TermsPage() {
   return (
-    <LegalPage title="Terms of Use" path="/terms" updated="November 9, 2026">
+    <LegalPage title="Terms of Use" path="/terms" updated="November 24, 2026">
       <section>
         <h2>Using DeskZen</h2>
         <p>
@@ -116,7 +121,7 @@ export function TermsPage() {
       <section>
         <h2>Contact</h2>
         <p>
-          Questions about these terms? Email us at <ContactLink />.
+          Questions about these terms? Use the <ContactFormLink>contact form</ContactFormLink>.
         </p>
       </section>
     </LegalPage>

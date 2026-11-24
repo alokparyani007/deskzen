@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#060807"/>
+  <circle cx="920" cy="250" r="300" fill="#065f46" opacity="0.55"/>
+  <circle cx="260" cy="520" r="180" fill="#047857" opacity="0.35"/>
+  <rect x="64" y="48" width="1072" height="534" rx="36" fill="#0b1f17"/>
+  
+    <g transform="translate(200 60) rotate(0 190 180)">
+    <path d="M168 96 C112 108 96 168 132 196" fill="none" stroke="#1C1917" stroke-width="18" stroke-linecap="round"/>
+    <path d="M150 92 C142 28 236 8 252 78 C262 118 236 142 214 128 C188 150 146 140 144 100 Z" fill="#1C1917"/>
+    <circle cx="196" cy="86" r="38" fill="#F0C7AE"/>
+    <circle cx="226" cy="90" r="7" fill="#E2B498"/>
+    <path d="M176 70 Q196 78 214 68" fill="none" stroke="#1C1917" stroke-width="6" stroke-linecap="round"/>
+    <rect x="182" y="118" width="26" height="26" rx="10" fill="#F0C7AE"/>
+    <path d="M142 150 C168 132 236 134 268 164 L292 292 L132 292 Z" fill="#ECFDF5"/>
+    <path d="M236 176 C300 196 330 214 318 236" fill="none" stroke="#F0C7AE" stroke-width="16" stroke-linecap="round"/>
+    <path d="M156 290 L142 392 L196 392 L206 290 Z" fill="#065f46"/>
+    <path d="M206 290 L236 386 L286 372 L246 288 Z" fill="#047857"/>
+    <path d="M142 392 H200" stroke="#0F172A" stroke-width="8" stroke-linecap="round"/>
+    <path d="M128 150 C150 118 250 116 286 168" fill="none" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.95"/>
+  </g>
+    <rect x="140" y="400" width="920" height="28" rx="10" fill="#065f46"/>
+    <rect x="190" y="428" width="16" height="90" rx="4" fill="#047857"/>
+    <rect x="990" y="428" width="16" height="90" rx="4" fill="#047857"/>
+    <g transform="translate(600 232) scale(1.15)">
+    <rect x="0" y="0" width="210" height="132" rx="12" fill="#0F172A" stroke="#059669" stroke-width="4"/>
+    <rect x="12" y="12" width="186" height="108" rx="8" fill="#06281d"/>
+    <circle cx="104" cy="58" r="10" fill="#059669"/>
+    <rect x="-18" y="132" width="246" height="14" rx="6" fill="#065f46"/>
+  </g>
+    <g transform="translate(920 140)">
+      <path d="M70 20 L130 44 V100 C130 140 70 164 70 164 C70 164 10 140 10 100 V44 Z" fill="#ECFDF5"/>
+      <path d="M70 48 L112 66 V102 C112 128 70 146 70 146 C70 146 28 128 28 102 V66 Z" fill="#059669"/>
+    </g>
+    <text x="120" y="140" fill="#ECFDF5" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="700">On this device</text>
+    <text x="120" y="184" fill="#ECFDF5" font-family="Inter, system-ui, sans-serif" font-size="22" opacity="0.85">Nothing uploaded</text>
+  
+</svg>

@@ -42,11 +42,14 @@ for (const path of ssr.PRERENDER_PATHS) {
   if (path.startsWith('/learn/')) html = setMeta(html, 'property', 'og:type', 'article');
   html = setMeta(html, 'property', 'og:title', meta.ogTitle);
   html = setMeta(html, 'property', 'og:description', meta.ogDescription);
+  const og = ssr.pageOg(path);
   html = setMeta(html, 'property', 'og:url', url);
-  html = setMeta(html, 'property', 'og:image', ssr.OG_IMAGE);
+  html = setMeta(html, 'property', 'og:image', og.url);
+  html = setMeta(html, 'property', 'og:image:alt', og.alt);
   html = setMeta(html, 'name', 'twitter:title', meta.ogTitle);
   html = setMeta(html, 'name', 'twitter:description', meta.ogDescription);
-  html = setMeta(html, 'name', 'twitter:image', ssr.OG_IMAGE);
+  html = setMeta(html, 'name', 'twitter:image', og.url);
+  html = setMeta(html, 'name', 'twitter:image:alt', og.alt);
   // Only the homepage needs the big hero image early.
   if (path !== '/') html = html.replace(/\s*<link rel="preload" as="image"[^>]*>/, '');
   const ld = JSON.stringify(ssr.jsonLd(path)).replace(/</g, '\\u003c');

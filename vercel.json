@@ -17,6 +17,8 @@
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/login", "destination": "/login.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/contact", "destination": "/contact.html" },
     { "source": "/learn", "destination": "/learn.html" },
     { "source": "/learn/stop-slouching-at-your-desk", "destination": "/learn/stop-slouching-at-your-desk.html" },
     { "source": "/learn/afternoon-slump", "destination": "/learn/afternoon-slump.html" },

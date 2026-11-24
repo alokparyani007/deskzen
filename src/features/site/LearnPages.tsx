@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { SETUP_BLURB } from '../../lib/copy/setupTime';
 import { GUIDE_LINKS } from './guideLinks';
+import { ProductFigure } from './GuidePage';
+import { PAGE_ART, artForPath } from './pageArt';
 import { SitePage, TryLink, ctaClass, siteFocus } from './SiteChrome';
 import { ARTICLE_SEO, PAGE_META } from './seo';
 import type { PublicPath } from './seo';
@@ -38,6 +40,7 @@ export function ArticleShell({
   useEffect(() => {
     document.title = PAGE_META[path].title;
   }, [path]);
+  const art = artForPath(path);
 
   return (
     <SitePage>
@@ -63,7 +66,10 @@ export function ArticleShell({
         </nav>
         <h1 className="mt-3 text-4xl font-bold tracking-tight">{headline}</h1>
         <p className="mt-3 text-sm text-white/55">
-          By the DeskZen team
+          By{' '}
+          <Link to="/about" className={linkClass}>
+            Alok Paryani, Founder
+          </Link>
           <span aria-hidden="true"> · </span>
           <span className="sr-only">. </span>
           Published <time dateTime={published}>{formatLongDate(published)}</time>
@@ -75,6 +81,9 @@ export function ArticleShell({
             </>
           ) : null}
         </p>
+        {art ? (
+          <ProductFigure src={art.src} alt={art.alt} width={art.width} height={art.height} caption={art.caption} loading="eager" />
+        ) : null}
         <div className="mt-8 space-y-5 text-base leading-7 text-white/80 [&_h2]:pt-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-white [&_h3]:mt-4 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-white [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
           {children}
         </div>
@@ -203,9 +212,21 @@ export function LearnIndexPage() {
           </ol>
         </nav>
         <h1 className="mt-3 text-4xl font-bold tracking-tight">Learn</h1>
+        <ProductFigure
+          src={PAGE_ART['/learn'].src}
+          alt={PAGE_ART['/learn'].alt}
+          width={PAGE_ART['/learn'].width}
+          height={PAGE_ART['/learn'].height}
+          caption={PAGE_ART['/learn'].caption}
+          loading="eager"
+        />
         <div className="mt-6 space-y-4 text-base leading-7 text-white/80">
           <p>
-            These guides are for people who sit at a computer and want a kinder way to notice their posture. They cover desk
+            These guides are written by{' '}
+            <Link to="/about" className={linkClass}>
+              Alok Paryani, Founder
+            </Link>
+            . They are for people who sit at a computer and want a kinder way to notice their posture. They cover desk
             setup, the afternoon slump, the difference between a slouch detector and a posture timer, stand-up and stretch
             reminders, and webcam privacy. Read one when you need it. None of them asks you to hold a stiff pose all day.
           </p>
@@ -424,6 +445,8 @@ export function StopSlouchingPage() {
         ]}
       />
 
+      <RelatedGuides current={STOP_SLOUCHING_PATH} />
+
       <p>
         You may also like{' '}
         <Link to={AFTERNOON_SLUMP_PATH} className={linkClass}>
@@ -584,6 +607,8 @@ export function AfternoonSlumpPage() {
           { href: 'https://www.osha.gov/etools/computer-workstations/positions', label: 'OSHA, Computer Workstations: Positions' },
         ]}
       />
+
+      <RelatedGuides current={AFTERNOON_SLUMP_PATH} />
 
       <p>
         You may also like{' '}

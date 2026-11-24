@@ -29,6 +29,18 @@ export const SITEMAP_ENTRIES: readonly SitemapEntry[] = [
     priority: '0.9',
     sources: ['src/features/site/MacWindowsPage.tsx', 'src/features/site/seo.ts'],
   },
+  {
+    path: '/about',
+    changefreq: 'monthly',
+    priority: '0.6',
+    sources: ['src/features/site/AboutPage.tsx', 'src/features/site/founderCopy.ts'],
+  },
+  {
+    path: '/contact',
+    changefreq: 'monthly',
+    priority: '0.5',
+    sources: ['src/features/site/ContactPage.tsx', 'src/features/site/ContactForm.tsx'],
+  },
   { path: '/learn', changefreq: 'weekly', priority: '0.8', sources: ['src/features/site/LearnPages.tsx'] },
   {
     path: '/learn/stop-slouching-at-your-desk',

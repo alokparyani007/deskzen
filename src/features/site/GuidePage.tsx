@@ -15,12 +15,14 @@ export function ProductFigure({
   width,
   height,
   caption,
+  loading = 'lazy',
 }: {
   src: string;
   alt: string;
   width: number;
   height: number;
   caption: string;
+  loading?: 'lazy' | 'eager';
 }) {
   return (
     <figure className="my-8">
@@ -29,7 +31,7 @@ export function ProductFigure({
         alt={alt}
         width={width}
         height={height}
-        loading="lazy"
+        loading={loading}
         decoding="async"
         className="h-auto w-full rounded-2xl border border-white/10 bg-stage"
       />

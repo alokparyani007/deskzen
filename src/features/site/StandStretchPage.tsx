@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { ProductFigure } from './GuidePage';
 import { ArticleCta, ArticleFaqs, ArticleShell, Disclaimer, RelatedGuides, Sources, linkClass } from './LearnPages';
 import { ARTICLE_SEO, STAND_STRETCH_FAQS } from './seo';
 
@@ -77,13 +76,6 @@ export function StandStretchPage() {
         move break arrives, or ignore the library and just stand. The point is the change of position. You are not
         training for anything.
       </p>
-      <ProductFigure
-        src="/site/reminders.webp"
-        alt="DeskZen reminders screen with an upcoming spot check and a day list of eye breaks and water tips."
-        width={1150}
-        height={498}
-        caption="Break reminders for eyes, water, and a short reset, on the same day as the posture check."
-      />
 
       <h2>Put the timer next to a slouch check</h2>
       <p>

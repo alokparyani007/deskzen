@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { PAGE_ART } from './pageArt';
 import { GuidePage, ProductFigure } from './GuidePage';
 import { CHECKER_FAQS } from './seo';
 import { siteFocus } from './SiteChrome';
@@ -30,11 +31,12 @@ export function WebcamPostureCheckerPage() {
       </p>
 
       <ProductFigure
-        src="/site/slouch-nudge.svg"
-        alt="DeskZen live view on a laptop, with an amber slouch label and a nudge that says to sit tall. The caption says photos and video stay on the laptop."
-        width={800}
-        height={500}
-        caption="Amber means a slouch. The nudge is a reminder, and the camera picture never leaves the laptop."
+        src={PAGE_ART['/webcam-posture-checker'].src}
+        alt={PAGE_ART['/webcam-posture-checker'].alt}
+        width={PAGE_ART['/webcam-posture-checker'].width}
+        height={PAGE_ART['/webcam-posture-checker'].height}
+        caption={PAGE_ART['/webcam-posture-checker'].caption}
+        loading="eager"
       />
 
       <h2>No download, and no account</h2>

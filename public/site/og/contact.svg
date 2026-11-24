@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#060807"/>
+  <circle cx="920" cy="250" r="300" fill="#065f46" opacity="0.55"/>
+  <circle cx="260" cy="520" r="180" fill="#047857" opacity="0.35"/>
+  <rect x="64" y="48" width="1072" height="534" rx="36" fill="#0b1f17"/>
+  
+    <g transform="translate(360 150)">
+      <rect x="0" y="40" width="480" height="300" rx="28" fill="#ECFDF5"/>
+      <path d="M0 70 L240 230 L480 70" fill="none" stroke="#059669" stroke-width="18" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M0 40 H480 L240 210 Z" fill="#059669"/>
+    </g>
+    <text x="600" y="130" text-anchor="middle" fill="#ECFDF5" font-family="Inter, system-ui, sans-serif" font-size="40" font-weight="700">Write to Alok</text>
+  
+</svg>

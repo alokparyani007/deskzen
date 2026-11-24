@@ -6,7 +6,7 @@ import { auth, isValidEmail, stubAllowed, useAuthSession } from '../../lib/auth'
 import type { AuthResult } from '../../lib/auth';
 import { clearReturnPath, rememberReturnPath, returnPathFrom } from '../../lib/auth/returnPath';
 import { SETUP_TIME } from '../../lib/copy/setupTime';
-import { CONTACT_EMAIL, OpenAppLink, TryLink, ctaClass, siteFocus } from './SiteChrome';
+import { OpenAppLink, TryLink, ctaClass, siteFocus } from './SiteChrome';
 import { enterApp } from './enterApp';
 import { PAGE_META } from './seo';
 
@@ -162,7 +162,7 @@ export function LoginPage() {
             <Link to="/learn" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Learn</Link>
             <Link to="/privacy" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Privacy</Link>
             <Link to="/terms" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Terms</Link>
-            <a href={`mailto:${CONTACT_EMAIL}`} className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Contact</a>
+            <Link to="/contact" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>Contact</Link>
           </p>
           {auth.isStub && stubAllowed ? (
             <p className="mt-5 text-center text-xs text-white/40">Preview: accounts aren&rsquo;t connected yet, so this opens the app on this device.</p>

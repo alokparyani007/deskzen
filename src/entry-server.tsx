@@ -2,6 +2,8 @@ import { StrictMode } from 'react';
 import type { ComponentType } from 'react';
 import { renderToString } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
+import { AboutPage } from './features/site/AboutPage';
+import { ContactPage } from './features/site/ContactPage';
 import { LoginPage } from './features/site/LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './features/site/LearnPages';
 import { PrivatePosturePage } from './features/site/PrivatePosturePage';
@@ -14,7 +16,7 @@ import { SiteHome } from './features/site/SiteHome';
 import { WebcamPostureCheckerPage } from './features/site/WebcamPostureCheckerPage';
 import type { PublicPath } from './features/site/seo';
 
-export { OG_IMAGE, PAGE_META, SITE_URL, jsonLd, pageUrl } from './features/site/seo';
+export { OG_IMAGE, PAGE_META, SITE_URL, jsonLd, pageOg, pageUrl } from './features/site/seo';
 export { SITEMAP_ENTRIES, sitemapRecords, sitemapXml } from './features/site/sitemap';
 
 const pages: Record<PublicPath, ComponentType> = {
@@ -22,6 +24,8 @@ const pages: Record<PublicPath, ComponentType> = {
   '/privacy': PrivacyPolicyPage,
   '/terms': TermsPage,
   '/login': LoginPage,
+  '/about': AboutPage,
+  '/contact': ContactPage,
   '/learn': LearnIndexPage,
   '/learn/stop-slouching-at-your-desk': StopSlouchingPage,
   '/learn/afternoon-slump': AfternoonSlumpPage,

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#060807"/>
+  <circle cx="920" cy="250" r="300" fill="#065f46" opacity="0.55"/>
+  <circle cx="260" cy="520" r="180" fill="#047857" opacity="0.35"/>
+  <rect x="64" y="48" width="1072" height="534" rx="36" fill="#0b1f17"/>
+  
+    <g transform="translate(160 110)">
+    <path d="M118 70 C70 84 58 140 92 166" fill="none" stroke="#1C1917" stroke-width="16" stroke-linecap="round"/>
+    <path d="M104 66 C98 10 186 -6 200 58 C210 96 186 116 166 104 C144 124 100 114 98 74 Z" fill="#1C1917"/>
+    <circle cx="150" cy="62" r="34" fill="#F0C7AE"/>
+    <circle cx="176" cy="66" r="6" fill="#E2B498"/>
+    <rect x="138" y="92" width="22" height="22" rx="8" fill="#F0C7AE"/>
+    <path d="M108 116 C128 104 184 106 206 132 L214 250 L96 250 Z" fill="#ECFDF5"/>
+    <path d="M120 140 C70 70 40 20 78 8" fill="none" stroke="#F0C7AE" stroke-width="14" stroke-linecap="round"/>
+    <path d="M186 136 C240 60 280 16 250 4" fill="none" stroke="#F0C7AE" stroke-width="14" stroke-linecap="round"/>
+    <path d="M112 248 L96 360 L142 360 L150 248 Z" fill="#065f46"/>
+    <path d="M156 248 L176 360 L224 360 L206 248 Z" fill="#047857"/>
+    <path d="M92 360 H230" stroke="#0F172A" stroke-width="8" stroke-linecap="round"/>
+  </g>
+    <rect x="140" y="500" width="920" height="10" rx="5" fill="#065f46"/>
+    <g transform="translate(980 436)">
+    <rect x="18" y="36" width="36" height="28" rx="6" fill="#ECFDF5"/>
+    <path d="M36 36 C20 10 8 16 16 34" fill="#059669"/>
+    <path d="M36 36 C52 8 70 16 58 36" fill="#047857"/>
+    <path d="M36 36 C30 6 44 0 40 34" fill="#10B981"/>
+  </g>
+    <text x="620" y="200" fill="#ECFDF5" font-family="Inter, system-ui, sans-serif" font-size="40" font-weight="700">One minute</text>
+    <text x="620" y="246" fill="#ECFDF5" font-family="Inter, system-ui, sans-serif" font-size="22" opacity="0.85">Stand and reach</text>
+  
+</svg>
