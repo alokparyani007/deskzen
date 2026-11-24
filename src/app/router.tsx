@@ -9,6 +9,8 @@ import { EyeBreakPage } from '../features/home/EyeBreakPage';
 import { HomePage } from '../features/home/HomePage';
 import { NeckCheckPage } from '../features/neck/NeckCheckPage';
 import { PrivacyPage } from '../features/privacy/PrivacyPage';
+import { AboutPage } from '../features/site/AboutPage';
+import { ContactPage } from '../features/site/ContactPage';
 import { LoginPage } from '../features/site/LoginPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from '../features/site/LearnPages';
 import { PrivatePosturePage } from '../features/site/PrivatePosturePage';
@@ -45,6 +47,8 @@ export const router = createBrowserRouter([
   // They stay here too so in-app links, like Settings → Sign in, still resolve.
   { path: '/', element: <SiteHome /> },
   { path: '/login', element: <LoginPage /> },
+  { path: '/about', element: <AboutPage /> },
+  { path: '/contact', element: <ContactPage /> },
   { path: '/privacy', element: <PrivacyPolicyPage /> },
   { path: '/terms', element: <TermsPage /> },
   { path: '/learn', element: <LearnIndexPage /> },

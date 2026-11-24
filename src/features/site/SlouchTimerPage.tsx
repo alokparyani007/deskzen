@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { ProductFigure } from './GuidePage';
 import { ArticleCta, ArticleFaqs, ArticleShell, Disclaimer, RelatedGuides, Sources, linkClass } from './LearnPages';
 import { ARTICLE_SEO, SLOUCH_TIMER_FAQS } from './seo';
 
@@ -60,13 +59,6 @@ export function SlouchTimerPage() {
         have chosen at 9 AM. A detector is there for that gap. It helps you notice. It does not force a military pose,
         and it should not scold you.
       </p>
-      <ProductFigure
-        src="/site/slouch-nudge.svg"
-        alt="DeskZen on a laptop showing an amber slouch label and a short nudge to sit tall. The caption says photos and video stay on the laptop."
-        width={800}
-        height={500}
-        caption="Amber marks a slouch. The nudge is a reminder, and the camera picture stays on the laptop."
-      />
       <p>
         In DeskZen, amber is reserved for that slouch cue so you can tell it apart from an ordinary break. The picture
         itself is not the product. The camera stays on your device. Photos and video are never saved or uploaded. The

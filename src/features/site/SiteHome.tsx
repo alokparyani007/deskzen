@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Bell, ChevronDown, Laptop, PersonStanding, ShieldCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAuthSession } from '../../lib/auth';
-import { SitePage, siteFocus } from './SiteChrome';
+import { HOME_FOUNDER_HEADING, HOME_FOUNDER_PARAGRAPHS, HOME_FOUNDER_SIGN, HOME_FOUNDER_STORY_LINK, ABOUT_CTA_BUTTON } from './founderCopy';
+import { SitePage, TryLink, ctaClass, siteFocus } from './SiteChrome';
 import { HomeLearn, ProductShots } from './SiteHomeSections';
 import { trackHomePrimary, type HomePrimaryPath } from './homePrimary';
 import { FAQS, PAGE_META } from './seo';
@@ -40,6 +42,7 @@ export function SiteHome({ signedIn, hasZen }: { signedIn?: boolean; hasZen?: bo
     <SitePage signedIn={open} headerAction={false}>
       <Hero zen={zen} />
       <HowItWorks />
+      <FounderNote />
       <ProductShots />
       <HomeLearn />
       <Privacy />
@@ -112,6 +115,33 @@ function HowItWorks() {
           );
         })}
       </ol>
+    </section>
+  );
+}
+
+function FounderNote() {
+  return (
+    <section aria-labelledby="founder-home-title" className="px-5 pb-12 sm:px-8 sm:pb-16">
+      <div className="mx-auto max-w-3xl rounded-3xl border border-outline/35 bg-gradient-to-br from-[#143528] to-[#0c1f18] px-6 py-8 shadow-[0_0_40px_rgb(5_150_105/0.18)] sm:px-10 sm:py-10">
+        <h2 id="founder-home-title" className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          {HOME_FOUNDER_HEADING}
+        </h2>
+        <div className="mt-4 space-y-4 text-base leading-7 text-white/80">
+          {HOME_FOUNDER_PARAGRAPHS.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+        <p className="mt-5 font-semibold text-white">{HOME_FOUNDER_SIGN}</p>
+        <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+          <TryLink className={ctaClass}>{ABOUT_CTA_BUTTON}</TryLink>
+          <Link
+            to="/about"
+            className={`inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/25 px-6 py-3 text-base font-semibold text-brand-tint hover:bg-white/10 ${siteFocus}`}
+          >
+            {HOME_FOUNDER_STORY_LINK}
+          </Link>
+        </div>
+      </div>
     </section>
   );
 }

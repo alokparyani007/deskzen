@@ -4,6 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { LoginPage } from './LoginPage';
+import { AboutPage } from './AboutPage';
+import { ContactPage } from './ContactPage';
 import { AfternoonSlumpPage, LearnIndexPage, StopSlouchingPage } from './LearnPages';
 import { PrivatePosturePage } from './PrivatePosturePage';
 import { SlouchTimerPage } from './SlouchTimerPage';
@@ -12,7 +14,6 @@ import { MacWindowsPage } from './MacWindowsPage';
 import { PrivacyPolicyPage, TermsPage } from './LegalPage';
 import { SiteHome } from './SiteHome';
 import { WebcamPostureCheckerPage } from './WebcamPostureCheckerPage';
-import { CONTACT_EMAIL } from './SiteChrome';
 import { isPublicPath } from './enterApp';
 import { SITEMAP_ENTRIES, pickLastmod, sitemapXml } from './sitemap';
 import { FAQS, PAGE_META, jsonLd } from './seo';
@@ -35,6 +36,13 @@ describe('public site', () => {
     expect(html).not.toContain('Open DeskZen');
     expect(html).not.toMatch(/href="\/set-my-zen"[^>]*data-discover="true"|data-discover="true"[^>]*href="\/set-my-zen"/);
     expect(html).toContain('How it works');
+    expect(html).toContain('Why I made DeskZen');
+    expect(html).toContain("I didn't need another gadget.");
+    expect(html).toContain('Alok, Founder');
+    expect(html).toContain('>Try DeskZen free<');
+    expect(html).toContain('>Read my story<');
+    expect(html.indexOf('How it works')).toBeLessThan(html.indexOf('Why I made DeskZen'));
+    expect(html.indexOf('Why I made DeskZen')).toBeLessThan(html.indexOf('>Learn<'));
     expect(html).toContain('Set my Zen');
     expect(html).toContain('Work as usual');
     expect(html).toContain('Get a gentle nudge when you slouch');
@@ -55,7 +63,9 @@ describe('public site', () => {
     expect(html).toContain('Your camera never leaves your device.');
     expect(html).toContain('Free during early access');
     expect(html).toContain('DeskZen is a wellness tool, not a medical device.');
-    expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
+    expect(html).toContain('href="/about"');
+    expect(html).toContain('href="/contact"');
+    expect(html).not.toContain('mailto:');
     expect(html).toContain('href="/login"');
     expect(html).not.toContain('\u2014');
     const signedIn = render(createElement(SiteHome, { signedIn: true }));
@@ -83,11 +93,12 @@ describe('public site', () => {
     expect(html).toContain('or sign in');
     expect(html).not.toContain('Apple');
     expect(html).toContain('Your camera stays on your device.');
-    expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
+    expect(html).toContain('href="/contact"');
+    expect(html).not.toContain('mailto:');
   });
 
   it('does not client-side route from public pages into the app', () => {
-    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage, LearnIndexPage, StopSlouchingPage, AfternoonSlumpPage, SlouchTimerPage, StandStretchPage, PrivatePosturePage, WebcamPostureCheckerPage, MacWindowsPage]) {
+    for (const page of [SiteHome, LoginPage, PrivacyPolicyPage, TermsPage, AboutPage, ContactPage, LearnIndexPage, StopSlouchingPage, AfternoonSlumpPage, SlouchTimerPage, StandStretchPage, PrivatePosturePage, WebcamPostureCheckerPage, MacWindowsPage]) {
       const html = render(createElement(page));
       const hrefs = [...html.matchAll(/href="([^"]+)"[^>]*data-discover="true"|data-discover="true"[^>]*href="([^"]+)"/g)].map(
         (match) => match[1] ?? match[2] ?? '',
@@ -103,11 +114,14 @@ describe('public site', () => {
       const html = render(createElement(page));
       expect(html).not.toMatch(/\bDraft\b/i);
       expect(html).not.toMatch(/coming soon|before accounts open|when sign-in opens/i);
-      expect(html).toContain(CONTACT_EMAIL);
+      expect(html).toContain('href="/contact"');
+      expect(html.toLowerCase()).not.toContain('sales@');
+      expect(html).not.toContain('mailto:');
       expect(html).toContain('wellness tool, not a medical device');
     }
     const privacy = render(createElement(PrivacyPolicyPage));
-    expect(privacy).toContain('Last updated November 16, 2026');
+    expect(privacy).toContain('Last updated November 24, 2026');
+    expect(privacy).toContain('If you write through the contact form, we store your name');
     expect(privacy).toContain('Privacy Policy');
     expect(privacy).toContain('Your camera stays on your device');
     expect(privacy).toContain('Supabase');
@@ -123,7 +137,7 @@ describe('public site', () => {
     expect(privacy).not.toContain('We do not use third-party analytics');
     expect(privacy).not.toContain('\u2014');
     const terms = render(createElement(TermsPage));
-    expect(terms).toContain('Last updated November 9, 2026');
+    expect(terms).toContain('Last updated November 24, 2026');
     expect(terms).toContain('Terms of Use');
     expect(terms).toContain('email magic link');
   });
@@ -157,7 +171,9 @@ describe('search and AI crawler readiness', () => {
     expect(ld).toContain('"price":"0"');
     expect(ld).toContain('"priceCurrency":"USD"');
     expect(ld).toContain('"Organization"');
-    expect(ld).toContain('sales@deskzenapp.com');
+    expect(ld).toContain('Alok Paryani');
+    expect(ld).toContain('https://www.deskzenapp.com/about');
+    expect(ld).not.toContain('sales@');
     expect(ld).toContain('"FAQPage"');
     expect(ld).toContain('"WebSite"');
     expect(ld).toContain('"Organization"');
@@ -171,7 +187,8 @@ describe('search and AI crawler readiness', () => {
       expect(articleLd).toContain('"Article"');
       expect(articleLd).toContain('"FAQPage"');
       expect(articleLd).toContain('"BreadcrumbList"');
-      expect(articleLd).toContain('DeskZen team');
+      expect(articleLd).toContain('Alok Paryani');
+      expect(articleLd).not.toContain('DeskZen team');
     }
     expect(JSON.stringify(jsonLd('/learn/stop-slouching-at-your-desk'))).not.toContain('FAQPage');
   });
@@ -235,6 +252,8 @@ describe('search and AI crawler readiness', () => {
     expect(committed).toContain('https://www.deskzenapp.com/learn/private-posture-reminder');
     expect(committed).not.toContain('<lastmod>2026-11-09</lastmod>');
     const homeHtml = readFileSync('index.html', 'utf8');
+    expect(committed).toContain('https://www.deskzenapp.com/about');
+    expect(committed).toContain('https://www.deskzenapp.com/contact');
     expect(homeHtml).not.toContain('Feel better by 3 PM');
     expect(homeHtml).toContain('DeskZen posture reminders: a woman smiling at her laptop, with a soft green outline around her.');
     expect(homeHtml).toContain('https://www.deskzenapp.com/site/deskzen-posture-reminders-og.jpg');

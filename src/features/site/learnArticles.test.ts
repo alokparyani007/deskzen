@@ -53,7 +53,9 @@ describe('new Learn articles', () => {
       const seo = ARTICLE_SEO[article.path];
       expect(html.match(/<h1[\s>]/g)?.length, article.path).toBe(1);
       expect(html).toContain(seo.headline);
-      expect(html).toContain('By the DeskZen team');
+      expect(html).toContain('Alok Paryani, Founder');
+      expect(html).toContain('href="/about"');
+      expect(html).not.toContain('DeskZen team');
       expect(html).toContain(`dateTime="${seo.published}"`);
       expect(html).toContain('aria-label="Breadcrumb"');
       expect(html).toContain('aria-current="page"');

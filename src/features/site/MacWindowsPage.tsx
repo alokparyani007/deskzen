@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { siteFocus } from './SiteChrome';
+import { PAGE_ART } from './pageArt';
 import { GuidePage, ProductFigure } from './GuidePage';
 import { MAC_FAQS } from './seo';
 
@@ -47,11 +48,12 @@ export function MacWindowsPage() {
       </p>
 
       <ProductFigure
-        src="/site/reminders.webp"
-        alt="DeskZen reminders screen on a dark background, with a spot check next and a day list of eye breaks and water tips."
-        width={1150}
-        height={498}
-        caption="Break reminders run beside the posture check, on a Mac or a Windows laptop."
+        src={PAGE_ART['/posture-reminder-mac-windows'].src}
+        alt={PAGE_ART['/posture-reminder-mac-windows'].alt}
+        width={PAGE_ART['/posture-reminder-mac-windows'].width}
+        height={PAGE_ART['/posture-reminder-mac-windows'].height}
+        caption={PAGE_ART['/posture-reminder-mac-windows'].caption}
+        loading="eager"
       />
 
       <h2>How to start on this computer</h2>

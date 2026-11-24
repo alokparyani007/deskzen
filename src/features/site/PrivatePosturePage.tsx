@@ -48,16 +48,9 @@ export function PrivatePosturePage() {
       <p>
         Webcam privacy, in this product, is that boundary. The camera is on so the slouch detector can help you notice
         a change in your outline. The camera is not on so anyone can watch you back. Amber on the screen means a slouch
-        cue, not a saved moment. The illustration below is a drawing of that screen, not a photo from someone&apos;s
+        cue, not a saved moment. The drawing at the top of this page is an illustration, not a photo from someone&apos;s
         laptop.
       </p>
-      <ProductFigure
-        src="/site/slouch-nudge.svg"
-        alt="Illustrated DeskZen laptop screen with an amber slouch nudge. The caption says photos and video stay on the laptop and are not uploaded."
-        width={800}
-        height={500}
-        caption="The nudge is drawn on your screen. The camera picture that produced it is not saved."
-      />
 
       <h2>What can stay on this computer, and what an account is</h2>
       <p>

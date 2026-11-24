@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom';
 import { useAuthSession } from '../../lib/auth';
 import { trackUsage } from '../../lib/usage/track';
 
-/** Contact address used across the public site. */
-export const CONTACT_EMAIL = 'sales@deskzenapp.com';
-
 export const siteFocus = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline';
 
 /** Big emerald call to action with a soft glow. White text on #047857 for WCAG AA contrast. */
@@ -112,9 +109,14 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <a href={`mailto:${CONTACT_EMAIL}`} className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
+              <Link to="/about" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
+                About
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className={`inline-flex min-h-11 items-center rounded hover:text-white ${siteFocus}`}>
                 Contact
-              </a>
+              </Link>
             </li>
             <li>@deskzenapp</li>
           </ul>

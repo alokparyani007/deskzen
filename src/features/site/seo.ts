@@ -1,14 +1,20 @@
 /** Search and social metadata for the public pages. Used by the pages and the build-time prerender. */
 
+import { PAGE_ART } from './pageArt';
+
 export const SITE_URL = 'https://www.deskzenapp.com';
 export const OG_IMAGE = `${SITE_URL}/site/deskzen-posture-reminders-og.jpg`;
-export const CONTACT = 'sales@deskzenapp.com';
+export const OG_IMAGE_ALT = 'DeskZen posture reminders: a woman smiling at her laptop, with a soft green outline around her.';
+
+export const FOUNDER_ID = `${SITE_URL}/about#alok-paryani`;
 
 export type PublicPath =
   | '/'
   | '/privacy'
   | '/terms'
   | '/login'
+  | '/about'
+  | '/contact'
   | '/learn'
   | '/learn/stop-slouching-at-your-desk'
   | '/learn/afternoon-slump'
@@ -48,6 +54,20 @@ export const PAGE_META: Record<PublicPath, PageMeta> = {
     description: 'Try DeskZen with no sign-up, or sign in with an email link. Free during early access. Your camera stays on your device.',
     ogTitle: 'Log in to DeskZen',
     ogDescription: 'Try it with no sign-up, or sign in with an email link.',
+  },
+  '/about': {
+    title: 'About Alok Paryani | DeskZen',
+    description:
+      'Alok Paryani, founder of DeskZen, on why he built a free posture coach that runs in your browser. The camera stays on your device.',
+    ogTitle: 'About Alok Paryani | DeskZen',
+    ogDescription:
+      'Alok Paryani, founder of DeskZen, on why he built a free posture coach that runs in your browser. The camera stays on your device.',
+  },
+  '/contact': {
+    title: 'Contact Alok Paryani | DeskZen',
+    description: 'Write to Alok Paryani, founder of DeskZen. Share your desk day, or a way DeskZen could help you. He reads every note.',
+    ogTitle: 'Contact Alok Paryani | DeskZen',
+    ogDescription: 'Write to Alok Paryani, founder of DeskZen. Share your desk day, or a way DeskZen could help you. He reads every note.',
   },
   '/learn': {
     title: 'Learn | DeskZen Posture Guides',
@@ -307,6 +327,15 @@ export function pageUrl(path: PublicPath): string {
   return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`;
 }
 
+/** Social image for a public page. Guides have their own picture. Home keeps the shared card. */
+export function pageOg(path: PublicPath): { url: string; alt: string } {
+  if (Object.prototype.hasOwnProperty.call(PAGE_ART, path)) {
+    const art = PAGE_ART[path as keyof typeof PAGE_ART];
+    return { url: `${SITE_URL}${art.src}`, alt: art.alt };
+  }
+  return { url: OG_IMAGE, alt: OG_IMAGE_ALT };
+}
+
 /** schema.org structured data for a page (JSON-LD). */
 export function jsonLd(path: PublicPath): Record<string, unknown> {
   const org = {
@@ -315,22 +344,38 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
     name: 'DeskZen',
     url: `${SITE_URL}/`,
     logo: `${SITE_URL}/pwa-512x512.png`,
-    email: CONTACT,
+    founder: { '@id': FOUNDER_ID },
     sameAs: ['https://x.com/deskzenapp'],
-    contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', email: CONTACT, availableLanguage: 'English' },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      url: pageUrl('/contact'),
+      availableLanguage: 'English',
+    },
+  };
+  const founder = {
+    '@type': 'Person',
+    '@id': FOUNDER_ID,
+    name: 'Alok Paryani',
+    jobTitle: 'Founder',
+    url: pageUrl('/about'),
+    worksFor: { '@id': org['@id'] },
   };
   const website = { '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'DeskZen', url: `${SITE_URL}/`, publisher: { '@id': org['@id'] }, inLanguage: 'en-US' };
   const meta = PAGE_META[path];
+  const og = pageOg(path);
+  const pageType = path === '/about' ? 'AboutPage' : path === '/contact' ? 'ContactPage' : 'WebPage';
   const page = {
-    '@type': 'WebPage',
+    '@type': pageType,
     '@id': `${pageUrl(path)}#webpage`,
     url: pageUrl(path),
     name: meta.title,
     description: meta.description,
     isPartOf: { '@id': website['@id'] },
     inLanguage: 'en-US',
+    primaryImageOfPage: og.url,
   };
-  const graph: Record<string, unknown>[] = [org, website, page];
+  const graph: Record<string, unknown>[] = [org, founder, website, page];
   if (path === '/') {
     graph.push({
       '@type': 'WebApplication',
@@ -342,7 +387,7 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
       applicationSubCategory: 'Posture and break reminders',
       operatingSystem: 'Web browser (Windows, macOS)',
       browserRequirements: 'Requires a modern browser and a webcam.',
-      image: OG_IMAGE,
+      image: og.url,
       screenshot: [`${SITE_URL}/site/slouch-nudge.svg`, `${SITE_URL}/site/reminders.webp`, `${SITE_URL}/site/progress.webp`],
       featureList: ['Webcam posture reminders', 'Sit up straight nudges', 'Break reminders', 'Stretch and eye breaks', 'Weekly progress tracker', 'Runs on your device'],
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
@@ -371,7 +416,7 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
       applicationSubCategory: 'Posture and break reminders',
       operatingSystem: mac ? 'macOS, Windows' : 'Web browser (Windows, macOS)',
       browserRequirements: 'Requires a modern browser and a webcam. No download.',
-      image: OG_IMAGE,
+      image: og.url,
       screenshot: [`${SITE_URL}/site/slouch-nudge.svg`, `${SITE_URL}/site/reminders.webp`, `${SITE_URL}/site/progress.webp`],
       featureList: mac
         ? ['Posture reminder for Mac', 'Posture reminder for Windows', 'Laptop webcam nudges', 'Break reminders', 'No install', 'Camera stays on your device']
@@ -391,6 +436,16 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
         { '@type': 'ListItem', position: 2, name: mac ? 'Posture reminder for Mac and Windows' : 'Webcam posture checker', item: pageUrl(path) },
+      ],
+    });
+  }
+  if (path === '/about' || path === '/contact') {
+    graph.push({
+      '@type': 'BreadcrumbList',
+      '@id': `${pageUrl(path)}#breadcrumb`,
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name: path === '/about' ? 'About' : 'Contact', item: pageUrl(path) },
       ],
     });
   }
@@ -424,9 +479,9 @@ export function jsonLd(path: PublicPath): Record<string, unknown> {
         description: meta.description,
         datePublished: article.published,
         dateModified: article.modified,
-        author: { '@type': 'Organization', name: 'DeskZen team', url: `${SITE_URL}/` },
+        author: { '@id': FOUNDER_ID },
         publisher: { '@id': org['@id'] },
-        image: OG_IMAGE,
+        image: og.url,
         mainEntityOfPage: { '@id': page['@id'] },
         inLanguage: 'en-US',
       });
